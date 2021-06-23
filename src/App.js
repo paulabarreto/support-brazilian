@@ -3,13 +3,10 @@ import '@fontsource/roboto';
 import SearchAppBar from './components/AppBar';
 import MediaCard from './components/Card';
 import brazilianBusiness from './db/brazilianBusiness'
-import CenteredGrid from './components/test'
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import React, { useState, useEffect } from 'react';
-
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
