@@ -7,6 +7,8 @@ import CenteredGrid from './components/test'
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import React, { useState, useEffect } from 'react';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -18,15 +20,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+  const [list, setList] = useState(brazilianBusiness);
   const classes = useStyles();
+
+  const updateInput = async (input) => {
+    const filtered = brazilianBusiness.filter(business => {
+     return business.title.toLowerCase().includes(input.toLowerCase())
+    })
+    setList(filtered);
+ }
 
   return (
     <div className={classes.root}>
-      <SearchAppBar/>
+      <SearchAppBar onChange={(e) => updateInput(e.target.value)}/>
       <Container maxWidth="md">
         <Grid container justify="center">
           {
-            brazilianBusiness.map((business, index) => (
+            list.map((business, index) => (
               <MediaCard
                 business={business}
                 key={index}
