@@ -48,12 +48,18 @@ export default function MediaCard(props) {
             </CardContent>
             </CardActionArea>
             <CardActions>
-            <Button size="small" color="primary">
-                <LanguageIcon/>
-            </Button>
-            <Button size="small" color="primary">
-                <InstagramIcon/>
-            </Button>
+            {business.website ?
+              <a target="_blank" href={business.website}>
+                <Button size="small" color="primary">
+                    <LanguageIcon/>
+                </Button>
+              </a> : ''
+            }
+            <a target="_blank" href={business.instagram}>
+              <Button size="small" color="primary">
+                  <InstagramIcon/>
+              </Button>
+            </a>
             </CardActions>
         </Card>
     </Grid>

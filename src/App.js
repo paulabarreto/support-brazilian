@@ -28,7 +28,10 @@ function App() {
  }
 
   const handleMenuItemClick = (event, index) => {
-    console.log("🚀 ~ file: App.js ~ line 31 ~ handleMenuItemClick ~ index", index)
+    const filtered = index === 0 ? brazilianBusiness : brazilianBusiness.filter(business => {
+      return business.category.includes(index)
+     })
+     setList(filtered);
   };
 
   return (

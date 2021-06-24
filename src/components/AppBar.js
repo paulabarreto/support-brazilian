@@ -69,6 +69,7 @@ export default function SearchAppBar({onMenuClick, onChange}) {
   const classes = useStyles();
 
   const options = [
+    'All',
     'Food',
     'Groceries',
     'Services',
