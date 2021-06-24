@@ -27,9 +27,13 @@ function App() {
     setList(filtered);
  }
 
+  const handleMenuItemClick = (event, index) => {
+    console.log("🚀 ~ file: App.js ~ line 31 ~ handleMenuItemClick ~ index", index)
+  };
+
   return (
     <div className={classes.root}>
-      <SearchAppBar onChange={(e) => updateInput(e.target.value)}/>
+      <SearchAppBar onMenuClick={(e, index) => handleMenuItemClick(e, index)} onChange={(e) => updateInput(e.target.value)}/>
       <Container maxWidth="md">
         <Grid container justify="center">
           {

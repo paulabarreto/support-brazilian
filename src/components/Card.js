@@ -30,7 +30,7 @@ export default function MediaCard(props) {
   const classes = useStyles();
   const business = props.business;
   return (
-    <Grid item md={6} sm={12}>
+    <Grid item sm={6} xs={12}>
         <Card className={classes.root}>
             <CardActionArea>
             <CardMedia

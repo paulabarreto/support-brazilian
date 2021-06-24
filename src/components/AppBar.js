@@ -65,13 +65,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SearchAppBar({onChange}) {
+export default function SearchAppBar({onMenuClick, onChange}) {
   const classes = useStyles();
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const options = [
+    'Food',
+    'Groceries',
+    'Services',
+  ];
 
-  const handleClick = (event) => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selectedIndex, setSelectedIndex] = React.useState(1);
+
+  const handleClickListItem = (event) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuItemClick = (event, index) => {
+    setSelectedIndex(index);
+    setAnchorEl(null);
+    onMenuClick(event, index)
   };
 
   const handleClose = () => {
@@ -89,7 +102,7 @@ export default function SearchAppBar({onChange}) {
             aria-label="open drawer"
           >
             <MenuIcon 
-              aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}
+              aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickListItem}
             />
             <Menu
               id="simple-menu"
@@ -98,9 +111,15 @@ export default function SearchAppBar({onChange}) {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>Food</MenuItem>
-              <MenuItem onClick={handleClose}>Groceries</MenuItem>
-              <MenuItem onClick={handleClose}>Services</MenuItem>
+            {options.map((option, index) => (
+              <MenuItem
+                key={option}
+                selected={index === selectedIndex}
+                onClick={(event) => handleMenuItemClick(event, index)}
+              >
+                {option}
+              </MenuItem>
+            ))}
             </Menu>
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
