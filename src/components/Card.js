@@ -29,7 +29,6 @@ export default function MediaCard(props) {
   const [spacing, setSpacing] = React.useState(2);
   const classes = useStyles();
   const business = props.business;
-  console.log("🚀 ~ file: Card.js ~ line 32 ~ MediaCard ~ business", business)
   return (
     <Grid item sm={6} xs={12}>
         <Card className={classes.root}>
