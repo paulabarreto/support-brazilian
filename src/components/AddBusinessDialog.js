@@ -16,6 +16,8 @@ import LanguageIcon from '@material-ui/icons/Language';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import { makeStyles } from '@material-ui/core/styles';
 
+import axios from 'axios';
+
 const useStyles = makeStyles((theme) => ({
   margin: theme.spacing(1),
 }));
@@ -23,6 +25,19 @@ const useStyles = makeStyles((theme) => ({
 export default function AddBusinessDialog(props) {
   const open = props.open;
   const classes = useStyles();
+
+  const url = 'http://localhost:8080/api/brazilianBusiness'
+
+  // axios.post(url, {
+  //   name: 'Fred',
+  //   lastName: 'Flintstone'
+  // })
+  // .then(function (response) {
+  //   console.log(response);
+  // })
+  // .catch(function (error) {
+  //   console.log(error);
+  // });
 
   return (
     <div>

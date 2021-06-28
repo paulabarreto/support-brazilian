@@ -51,12 +51,16 @@ function App() {
       }}
     )
     .then((response) => {
-      var base64Flag = 'data:image/jpeg;base64,';
-      if(response.data.data[2].image.data.data){
-        var imageStr = arrayBufferToBase64(response.data.data[2].image.data.data);
-        response.data.data[2].image = base64Flag + imageStr;
-      }
-      setList(response.data.data);
+      const base64Flag = 'data:image/jpeg;base64,';
+      const list = response.data.data.map(res => {
+        const imageStr = arrayBufferToBase64(res.image.data.data);
+        return {
+          ...res,
+          image: base64Flag + imageStr
+        }
+      })
+      setList(list);
+
     })
     .catch((error) => console.error(`Error: ${error}`))
   }
