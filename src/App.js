@@ -28,6 +28,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import LanguageIcon from '@material-ui/icons/Language';
 import InstagramIcon from '@material-ui/icons/Instagram';
 
+import axios from 'axios';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -37,6 +39,42 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+
+  const [businessList, setList] = useState([]);
+
+  const url = 'http://localhost:8080/api/brazilianBusiness'
+
+  useEffect(() => {
+    getBrazilianBusiness();
+  }, []);
+
+  const arrayBufferToBase64 = (buffer) => {
+    var binary = '';
+    var bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b) => binary += String.fromCharCode(b));
+    return window.btoa(binary);
+  };
+
+
+  const getBrazilianBusiness = () => {
+    axios.get(`${url}`,
+      {headers: {
+         authorization: ' xxxxxxxxxx' ,
+         'Content-Type': 'application/json'
+      }}
+    )
+    .then((response) => {
+      console.log("🚀 ~ file: App.js ~ line 67 ~ .then ~ response", response)
+      var base64Flag = 'data:image/jpeg;base64,';
+      if(response.data.data[2].image.data.data){
+        var imageStr = arrayBufferToBase64(response.data.data[2].image.data.data);
+        response.data.data[2].image = base64Flag + imageStr;
+      }
+      setList(response.data.data);
+      console.log("🚀 ~ file: App.js ~ line 55 ~ .then ~ businessList", businessList)
+    })
+    .catch((error) => console.error(`Error: ${error}`))
+  }
 
   const [value, setValue] = React.useState(0);
 
@@ -50,18 +88,17 @@ function App() {
     setOpen(false);
   };
 
-  const [list, setList] = useState(brazilianBusiness);
   const classes = useStyles();
 
   const updateInput = async (input) => {
-    const filtered = brazilianBusiness.filter(business => {
-     return business.title.toLowerCase().includes(input.toLowerCase())
+    const filtered = businessList.filter(business => {
+     return business.name.toLowerCase().includes(input.toLowerCase())
     })
     setList(filtered);
  }
 
   const handleMenuItemClick = (event, index) => {
-    const filtered = index === 0 ? brazilianBusiness : brazilianBusiness.filter(business => {
+    const filtered = index === 0 ? businessList : businessList.filter(business => {
       return business.category.includes(index)
      })
      setList(filtered);
@@ -73,7 +110,7 @@ function App() {
       <Container maxWidth="md">
         <Grid container justify="center">
           {
-            list.map((business, index) => (
+            businessList.map((business, index) => (
               <MediaCard
                 business={business}
                 key={index}
