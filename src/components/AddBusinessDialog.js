@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -26,21 +26,36 @@ export default function AddBusinessDialog(props) {
   const open = props.open;
   const classes = useStyles();
 
-  const url = 'http://localhost:8080/api/brazilianBusiness'
+  const [image, setImage] = useState('');
+  const [name, setName] = useState('');
+  const [website, setWebsite] = useState('');
+  const [instagram, setInstagram] = useState('');
 
-  // axios.post(url, {
-  //   name: 'Fred',
-  //   lastName: 'Flintstone'
-  // })
-  // .then(function (response) {
-  //   console.log(response);
-  // })
-  // .catch(function (error) {
-  //   console.log(error);
-  // });
+  const url = 'http://localhost:8080/api/newBusiness'
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('image', image);
+    formData.append('name', name);
+    formData.append('website', website);
+    formData.append('instagram', instagram);
+    formData.append('adminApproved', true);
+    const config = {
+        headers: {
+            'content-type': 'multipart/form-data'
+        }
+    };
+    axios.post(url,formData,config)
+        .then((response) => {
+            console.log("The file is successfully uploaded");
+        }).catch((error) => {
+    });
+  }
+
 
   return (
-    <div>
+    <form onSubmit={e => {handleSubmit(e)}}>
       <Dialog open={open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Add a Brazilian Business</DialogTitle>
           <DialogContent>
@@ -52,12 +67,14 @@ export default function AddBusinessDialog(props) {
                 <FormControl className={classes.margin}>
                   <InputLabel htmlFor="name">Name</InputLabel>
                     <Input
+                      onChange={e => setName(e.target.value)}
                       id="name"
                       startAdornment={
                         <InputAdornment position="start">
                           <AccountCircle />
                         </InputAdornment>
                       }
+                      
                     />
                 </FormControl>
               </Grid>
@@ -65,7 +82,9 @@ export default function AddBusinessDialog(props) {
               <FormControl className={classes.margin}>
                 <InputLabel htmlFor="image">Image</InputLabel>
                   <Input
+                    onChange={e => setImage(e.target.files[0])}
                     id="image"
+                    name="image"
                     type='file'
                     startAdornment={
                       <InputAdornment position="start">
@@ -81,6 +100,8 @@ export default function AddBusinessDialog(props) {
                   <InputLabel htmlFor="website">Website</InputLabel>
                     <Input
                       id="website"
+                      value={website}
+                      onChange={e => setWebsite(e.target.value)}
                       startAdornment={
                         <InputAdornment position="start">
                           <LanguageIcon />
@@ -94,6 +115,8 @@ export default function AddBusinessDialog(props) {
                   <InputLabel htmlFor="Instagram">Instagram</InputLabel>
                     <Input
                       id="Instagram"
+                      value={instagram}
+                      onChange={e => setInstagram(e.target.value)}
                       startAdornment={
                         <InputAdornment position="start">
                           <InstagramIcon />
@@ -108,11 +131,11 @@ export default function AddBusinessDialog(props) {
             <Button onClick={props.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={props.handleClose} color="primary">
+            <Button onClick={handleSubmit} color="primary">
               Send
             </Button>
           </DialogActions>
         </Dialog>
-    </div>
+    </form>
   );
 }
