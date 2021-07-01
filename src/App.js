@@ -60,7 +60,6 @@ function App() {
         }
       })
       setList(list);
-
     })
     .catch((error) => console.error(`Error: ${error}`))
   }
@@ -88,7 +87,7 @@ function App() {
 
   const handleMenuItemClick = (event, index) => {
     const filtered = index === 0 ? businessList : businessList.filter(business => {
-      return business.category.includes(index)
+        return business.category === index
      })
      setList(filtered);
   };

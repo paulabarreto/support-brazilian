@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -10,6 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import Select from '@material-ui/core/Select';
 
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import LanguageIcon from '@material-ui/icons/Language';
@@ -26,12 +27,21 @@ export default function AddBusinessDialog(props) {
   const open = props.open;
   const classes = useStyles();
 
-  const [image, setImage] = useState('');
-  const [name, setName] = useState('');
-  const [website, setWebsite] = useState('');
-  const [instagram, setInstagram] = useState('');
+  const [image, setImage] = useState(props.business ? props.business.image : '');
+  const [name, setName] = useState(props.business ? props.business.name : '');
+  const [website, setWebsite] = useState(props.business ? props.business.website : '');
+  const [instagram, setInstagram] = useState(props.business ? props.business.instagram : '');
+  const [category, setCategory] = useState(props.business ? props.business.category : 0);
 
-  const url = 'http://localhost:8080/api/newBusiness'
+  // useEffect(() => {
+  //   if (props.business) {
+  //     setName(props.business.name);
+  //     setWebsite(props.business.website);
+  //     setInstagram(props.business.instagram);
+  //     setCategory(props.business.category);
+  //   }
+  // }, [name, website, instagram, category]);
+  const url = props.business ? 'http://localhost:8080/api/brazilianBusiness' : 'http://localhost:8080/api/newBusiness';
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -40,17 +50,30 @@ export default function AddBusinessDialog(props) {
     formData.append('name', name);
     formData.append('website', website);
     formData.append('instagram', instagram);
+    formData.append('category', category);
     formData.append('adminApproved', true);
+
     const config = {
-        headers: {
-            'content-type': 'multipart/form-data'
-        }
+      headers: {
+          'content-type': 'multipart/form-data'
+      }
     };
-    axios.post(url,formData,config)
+    
+    if(props.business) {
+      axios.post(`${url}/${props.business._id}`,formData,config)
         .then((response) => {
-            console.log("The file is successfully uploaded");
+          props.handleClose();
         }).catch((error) => {
-    });
+          props.handleClose();
+      });
+    } else {
+      axios.post(url,formData,config)
+          .then((response) => {
+              props.handleClose();
+          }).catch((error) => {
+            props.handleClose();
+      });
+    }
   }
 
 
@@ -69,6 +92,7 @@ export default function AddBusinessDialog(props) {
                     <Input
                       onChange={e => setName(e.target.value)}
                       id="name"
+                      defaultValue={name}
                       startAdornment={
                         <InputAdornment position="start">
                           <AccountCircle />
@@ -100,7 +124,7 @@ export default function AddBusinessDialog(props) {
                   <InputLabel htmlFor="website">Website</InputLabel>
                     <Input
                       id="website"
-                      value={website}
+                      defaultValue={website}
                       onChange={e => setWebsite(e.target.value)}
                       startAdornment={
                         <InputAdornment position="start">
@@ -115,7 +139,7 @@ export default function AddBusinessDialog(props) {
                   <InputLabel htmlFor="Instagram">Instagram</InputLabel>
                     <Input
                       id="Instagram"
-                      value={instagram}
+                      defaultValue={instagram}
                       onChange={e => setInstagram(e.target.value)}
                       startAdornment={
                         <InputAdornment position="start">
@@ -125,7 +149,19 @@ export default function AddBusinessDialog(props) {
                     />
                 </FormControl>
               </Grid>
-            </Grid>  
+              <Grid item xs={12}>
+                <FormControl className={classes.formControl}>
+                  <InputLabel htmlFor="grouped-native-select">Category</InputLabel>
+                      
+                  <Select native defaultValue={category} id="grouped-native-select" onChange={e => setCategory(e.target.value)}>
+                    <option aria-label="None" value="" />
+                    <option value={1}>Food</option>
+                    <option value={2}>Groceries</option>
+                    <option value={3}>Services</option>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
           </DialogContent>
           <DialogActions>
             <Button onClick={props.handleClose} color="primary">

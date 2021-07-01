@@ -10,6 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import LanguageIcon from '@material-ui/icons/Language';
 import InstagramIcon from '@material-ui/icons/Instagram';
+import EditIcon from '@material-ui/icons/Edit';
+import AddBusinessDialog from './AddBusinessDialog';
 
 const useStyles = makeStyles({
   root: {
@@ -29,6 +31,17 @@ export default function MediaCard(props) {
   const [spacing, setSpacing] = React.useState(2);
   const classes = useStyles();
   const business = props.business;
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Grid item sm={6} xs={12}>
         <Card className={classes.root}>
@@ -60,7 +73,15 @@ export default function MediaCard(props) {
                   <InstagramIcon/>
               </Button>
             </a>
-            </CardActions>
+            <Button size="small" color="primary" onClick={handleClickOpen}>
+              <EditIcon/>
+            </Button>
+            <AddBusinessDialog 
+              open={open}
+              handleClose={handleClose}
+              business={business}
+            />
+          </CardActions>
         </Card>
     </Grid>
   );
