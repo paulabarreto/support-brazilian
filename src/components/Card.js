@@ -35,7 +35,6 @@ export default function MediaCard(props) {
   const business = props.business;
 
   const [open, setOpen] = React.useState(false);
-  const [count, setCount] = useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -58,11 +57,6 @@ export default function MediaCard(props) {
     });
   }
 
-  function useForceUpdate(){
-    const [value, setValue] = useState(0); // integer state
-    return () => setValue(value => value + 1); // update the state to force render
-  }
-
   return (
     <Grid item sm={6} xs={12}>
         <Card className={classes.root}>
@@ -77,7 +71,10 @@ export default function MediaCard(props) {
                 {business.name}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                {business.text}
+                {business.description}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  {business.location}
                 </Typography>
             </CardContent>
             </CardActionArea>

@@ -17,6 +17,7 @@ import LanguageIcon from '@material-ui/icons/Language';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import { makeStyles } from '@material-ui/core/styles';
 import ConfirmationDialog from './ConfirmationDialog';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 import axios from 'axios';
 
@@ -40,6 +41,8 @@ export default function AddBusinessDialog(props) {
 
   const [image, setImage] = useState(props.business ? props.business.image : '');
   const [name, setName] = useState(props.business ? props.business.name : '');
+  const [description, setDescription] = useState(props.business ? props.business.description : '');
+  const [location, setLocation] = useState(props.business ? props.business.location : '');
   const [website, setWebsite] = useState(props.business ? props.business.website : '');
   const [instagram, setInstagram] = useState(props.business ? props.business.instagram : '');
   const [category, setCategory] = useState(props.business ? props.business.category : 0);
@@ -51,6 +54,8 @@ export default function AddBusinessDialog(props) {
     const formData = new FormData();
     formData.append('image', image);
     formData.append('name', name);
+    formData.append('description', description);
+    formData.append('location', location);
     formData.append('website', website);
     formData.append('instagram', instagram);
     formData.append('category', category);
@@ -100,6 +105,36 @@ export default function AddBusinessDialog(props) {
                       startAdornment={
                         <InputAdornment position="start">
                           <AccountCircle/>
+                        </InputAdornment>
+                      }
+                    />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="description">Description</InputLabel>
+                    <Input
+                      onChange={e => setDescription(e.target.value)}
+                      id="description"
+                      defaultValue={description}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <AccountCircle/>
+                        </InputAdornment>
+                      }
+                    />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="location">Location</InputLabel>
+                    <Input
+                      onChange={e => setLocation(e.target.value)}
+                      id="location"
+                      defaultValue={location}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <LocationOnIcon/>
                         </InputAdornment>
                       }
                     />
