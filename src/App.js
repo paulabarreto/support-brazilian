@@ -104,6 +104,7 @@ function App() {
               <MediaCard
                 business={business}
                 key={index}
+                getBrazilianBusiness={getBrazilianBusiness}
               />
             ))
           }

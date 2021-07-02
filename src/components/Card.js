@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -12,6 +12,8 @@ import LanguageIcon from '@material-ui/icons/Language';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import EditIcon from '@material-ui/icons/Edit';
 import AddBusinessDialog from './AddBusinessDialog';
+import DeleteIcon from '@material-ui/icons/Delete';
+import axios from 'axios';
 
 const useStyles = makeStyles({
   root: {
@@ -33,6 +35,7 @@ export default function MediaCard(props) {
   const business = props.business;
 
   const [open, setOpen] = React.useState(false);
+  const [count, setCount] = useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -41,6 +44,24 @@ export default function MediaCard(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const url = 'http://localhost:8080/api/brazilianBusiness';
+
+  const handleDeleteBusiness = () => {
+    axios.delete(`${url}/${props.business._id}`)
+        .then((response) => {
+          console.log(response)
+          props.getBrazilianBusiness();
+        }).catch((error) => {
+          console.log(error)
+          // props.handleClose();
+    });
+  }
+
+  function useForceUpdate(){
+    const [value, setValue] = useState(0); // integer state
+    return () => setValue(value => value + 1); // update the state to force render
+  }
 
   return (
     <Grid item sm={6} xs={12}>
@@ -75,6 +96,9 @@ export default function MediaCard(props) {
             </a>
             <Button size="small" color="primary" onClick={handleClickOpen}>
               <EditIcon/>
+            </Button>
+            <Button size="small" color="primary">
+              <DeleteIcon onClick={handleDeleteBusiness}/>
             </Button>
             <AddBusinessDialog 
               open={open}
