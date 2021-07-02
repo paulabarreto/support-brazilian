@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
 function App() {
 
   const [businessList, setList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
 
   const url = 'http://localhost:8080/api/brazilianBusiness'
 
@@ -60,6 +61,7 @@ function App() {
         }
       })
       setList(list);
+      setFilteredList(list);
     })
     .catch((error) => console.error(`Error: ${error}`))
   }
@@ -82,14 +84,14 @@ function App() {
     const filtered = businessList.filter(business => {
      return business.name.toLowerCase().includes(input.toLowerCase())
     })
-    setList(filtered);
+    setFilteredList(filtered);
  }
 
   const handleMenuItemClick = (event, index) => {
     const filtered = index === 0 ? businessList : businessList.filter(business => {
-        return business.category === index
+      return business.category === index
      })
-     setList(filtered);
+     setFilteredList(filtered);
   };
 
   return (
@@ -98,7 +100,7 @@ function App() {
       <Container maxWidth="md">
         <Grid container justify="center">
           {
-            businessList.map((business, index) => (
+            filteredList.map((business, index) => (
               <MediaCard
                 business={business}
                 key={index}
