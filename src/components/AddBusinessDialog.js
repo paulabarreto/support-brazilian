@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -16,6 +16,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import LanguageIcon from '@material-ui/icons/Language';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import { makeStyles } from '@material-ui/core/styles';
+import ConfirmationDialog from './ConfirmationDialog';
 
 import axios from 'axios';
 
@@ -27,20 +28,22 @@ export default function AddBusinessDialog(props) {
   const open = props.open;
   const classes = useStyles();
 
+  const [openConfirmation, setOpen] = React.useState(false);
+
+  const handleOpenConfirmation = () => {
+    setOpen(true);
+  };
+
+  const handleCloseConfirmation = () => {
+    setOpen(false);
+  };
+
   const [image, setImage] = useState(props.business ? props.business.image : '');
   const [name, setName] = useState(props.business ? props.business.name : '');
   const [website, setWebsite] = useState(props.business ? props.business.website : '');
   const [instagram, setInstagram] = useState(props.business ? props.business.instagram : '');
   const [category, setCategory] = useState(props.business ? props.business.category : 0);
 
-  // useEffect(() => {
-  //   if (props.business) {
-  //     setName(props.business.name);
-  //     setWebsite(props.business.website);
-  //     setInstagram(props.business.instagram);
-  //     setCategory(props.business.category);
-  //   }
-  // }, [name, website, instagram, category]);
   const url = props.business ? 'http://localhost:8080/api/brazilianBusiness' : 'http://localhost:8080/api/newBusiness';
 
   const handleSubmit = (event) => {
@@ -70,6 +73,7 @@ export default function AddBusinessDialog(props) {
       axios.post(url,formData,config)
           .then((response) => {
               props.handleClose();
+              handleOpenConfirmation();
           }).catch((error) => {
             props.handleClose();
       });
@@ -87,7 +91,7 @@ export default function AddBusinessDialog(props) {
             </DialogContentText>
             <Grid container justify="center">
               <Grid item xs={12}>
-                <FormControl className={classes.margin}>
+                <FormControl fullWidth>
                   <InputLabel htmlFor="name">Name</InputLabel>
                     <Input
                       onChange={e => setName(e.target.value)}
@@ -95,15 +99,14 @@ export default function AddBusinessDialog(props) {
                       defaultValue={name}
                       startAdornment={
                         <InputAdornment position="start">
-                          <AccountCircle />
+                          <AccountCircle/>
                         </InputAdornment>
                       }
-                      
                     />
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-              <FormControl className={classes.margin}>
+              <FormControl fullWidth>
                 <InputLabel htmlFor="image">Image</InputLabel>
                   <Input
                     onChange={e => setImage(e.target.files[0])}
@@ -117,15 +120,15 @@ export default function AddBusinessDialog(props) {
                     }
                   />
               </FormControl>
-
               </Grid>
               <Grid item xs={12}>
-                <FormControl className={classes.margin}>
+                <FormControl fullWidth>
                   <InputLabel htmlFor="website">Website</InputLabel>
                     <Input
                       id="website"
                       defaultValue={website}
                       onChange={e => setWebsite(e.target.value)}
+                      fullWidth
                       startAdornment={
                         <InputAdornment position="start">
                           <LanguageIcon />
@@ -135,12 +138,13 @@ export default function AddBusinessDialog(props) {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FormControl className={classes.margin}>
+                <FormControl fullWidth>
                   <InputLabel htmlFor="Instagram">Instagram</InputLabel>
                     <Input
                       id="Instagram"
                       defaultValue={instagram}
                       onChange={e => setInstagram(e.target.value)}
+                      fullWidth
                       startAdornment={
                         <InputAdornment position="start">
                           <InstagramIcon />
@@ -150,10 +154,10 @@ export default function AddBusinessDialog(props) {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FormControl className={classes.formControl}>
+                <FormControl fullWidth>
                   <InputLabel htmlFor="grouped-native-select">Category</InputLabel>
                       
-                  <Select native defaultValue={category} id="grouped-native-select" onChange={e => setCategory(e.target.value)}>
+                  <Select fullWidth native defaultValue={category} id="grouped-native-select" onChange={e => setCategory(e.target.value)}>
                     <option aria-label="None" value="" />
                     <option value={1}>Food</option>
                     <option value={2}>Groceries</option>
@@ -172,6 +176,7 @@ export default function AddBusinessDialog(props) {
             </Button>
           </DialogActions>
         </Dialog>
+        <ConfirmationDialog open={openConfirmation} handleCloseConfirmation={handleCloseConfirmation}/>
     </form>
   );
 }
