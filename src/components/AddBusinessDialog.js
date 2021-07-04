@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,11 +15,12 @@ import Select from '@material-ui/core/Select';
 
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import LanguageIcon from '@material-ui/icons/Language';
+import FaceIcon from '@material-ui/icons/Face';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import { makeStyles } from '@material-ui/core/styles';
 import ConfirmationDialog from './ConfirmationDialog';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-
+import DescriptionIcon from '@material-ui/icons/Description';
 import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +29,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AddBusinessDialog(props) {
   const open = props.open;
-  const classes = useStyles();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const [openConfirmation, setOpen] = React.useState(false);
 
@@ -49,8 +56,8 @@ export default function AddBusinessDialog(props) {
 
   const url = props.business ? 'http://localhost:8080/api/brazilianBusiness' : 'http://localhost:8080/api/newBusiness';
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const onSubmit = () => {
+    // event.preventDefault();
     const formData = new FormData();
     formData.append('image', image);
     formData.append('name', name);
@@ -87,7 +94,7 @@ export default function AddBusinessDialog(props) {
 
 
   return (
-    <form onSubmit={e => {handleSubmit(e)}}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Dialog open={open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Add a Brazilian Business</DialogTitle>
           <DialogContent>
@@ -98,28 +105,33 @@ export default function AddBusinessDialog(props) {
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="name">Name</InputLabel>
-                    <Input
-                      onChange={e => setName(e.target.value)}
-                      id="name"
-                      defaultValue={name}
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <AccountCircle/>
-                        </InputAdornment>
-                      }
-                    />
+                      <Input
+                        {...register('name', { required: true })}
+                        error={errors.name}
+                        required='true'
+                        onChange={e => setName(e.target.value)}
+                        id="name"
+                        defaultValue={name}
+                        startAdornment={
+                          <InputAdornment position="start">
+                            <AccountCircle/>
+                          </InputAdornment>
+                        }
+                      />
+                      {errors.name && <p style={{marginTop:0, color:'red', fontSize: 'small'}}>Name is Required</p>}
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="description">Description</InputLabel>
                     <Input
+                      required
                       onChange={e => setDescription(e.target.value)}
                       id="description"
                       defaultValue={description}
                       startAdornment={
                         <InputAdornment position="start">
-                          <AccountCircle/>
+                          <DescriptionIcon/>
                         </InputAdornment>
                       }
                     />
@@ -129,6 +141,7 @@ export default function AddBusinessDialog(props) {
                 <FormControl fullWidth>
                   <InputLabel htmlFor="location">Location</InputLabel>
                     <Input
+                      required
                       onChange={e => setLocation(e.target.value)}
                       id="location"
                       defaultValue={location}
@@ -144,16 +157,21 @@ export default function AddBusinessDialog(props) {
               <FormControl fullWidth>
                 <InputLabel htmlFor="image">Image</InputLabel>
                   <Input
+                    {...register('image', { required: true })}
+                    error={errors.image}
+                    required='true'
                     onChange={e => setImage(e.target.files[0])}
                     id="image"
                     name="image"
                     type='file'
                     startAdornment={
                       <InputAdornment position="start">
-                        <AccountCircle />
+                        <FaceIcon />
                       </InputAdornment>
                     }
                   />
+                  {errors.image && <p style={{marginTop:0, color:'red', fontSize: 'small'}}>Image is Required</p>}
+
               </FormControl>
               </Grid>
               <Grid item xs={12}>
@@ -176,6 +194,7 @@ export default function AddBusinessDialog(props) {
                 <FormControl fullWidth>
                   <InputLabel htmlFor="Instagram">Instagram</InputLabel>
                     <Input
+                      required
                       id="Instagram"
                       defaultValue={instagram}
                       onChange={e => setInstagram(e.target.value)}
@@ -193,7 +212,6 @@ export default function AddBusinessDialog(props) {
                   <InputLabel htmlFor="grouped-native-select">Category</InputLabel>
                       
                   <Select fullWidth native defaultValue={category} id="grouped-native-select" onChange={e => setCategory(e.target.value)}>
-                    <option aria-label="None" value="" />
                     <option value={1}>Food</option>
                     <option value={2}>Groceries</option>
                     <option value={3}>Services</option>
@@ -206,7 +224,7 @@ export default function AddBusinessDialog(props) {
             <Button onClick={props.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={handleSubmit} color="primary">
+            <Button onClick={handleSubmit(onSubmit)} color="primary">
               Send
             </Button>
           </DialogActions>
