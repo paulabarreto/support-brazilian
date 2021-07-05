@@ -13,6 +13,10 @@ import InstagramIcon from '@material-ui/icons/Instagram';
 import EditIcon from '@material-ui/icons/Edit';
 import AddBusinessDialog from './AddBusinessDialog';
 import DeleteIcon from '@material-ui/icons/Delete';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import CardHeader from '@material-ui/core/CardHeader';
+import IconButton from '@material-ui/core/IconButton';
+
 import axios from 'axios';
 
 const useStyles = makeStyles({
@@ -57,9 +61,20 @@ export default function MediaCard(props) {
     });
   }
 
+  const [favourite, setFavourite] = useState(false);
+
+  
+
   return (
     <Grid item sm={6} xs={12}>
         <Card className={classes.root}>
+          <CardHeader
+            action={
+              <IconButton onClick={() => setFavourite(!favourite)} aria-label="settings">
+                <FavoriteIcon color={favourite ? 'primary' : 'inherit'}/>
+              </IconButton>
+            }
+          />
             <CardActionArea>
             <CardMedia
                 className={classes.media}
