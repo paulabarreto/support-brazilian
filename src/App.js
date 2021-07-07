@@ -61,10 +61,20 @@ function App() {
   const getFavouritesList = async (user) => {
       try{
         const faves = await axios.get(`${usersUrl}/${user.email}`)
+        setFavouriteList(faves.data)
         return faves.data
       } catch (error) {
         return `Error: ${error}`;
       }
+  }
+
+  const manageFavouritesList = (id, favourite) => {
+    if(!favourite) {
+      const newList = favouriteList.filter(unfavourite => unfavourite !== id)
+      setFavouriteList(newList);
+    } else {
+      setFavouriteList([...favouriteList, id])
+    }
   }
 
   useEffect(async () => {
@@ -77,13 +87,13 @@ function App() {
       const updatedFavesList = brazilianBusinsessList.map(business => {
         return {
           ...business,
-          favourite: favouriteBusinessList.includes(business._id)
+          favourite: favouriteList.includes(business._id)
         }
       })
       setList(updatedFavesList);
       setFilteredList(updatedFavesList);
     }
-  }, [isLoading]);
+  }, [isLoading, favouriteList]);
 
   const arrayBufferToBase64 = (buffer) => {
     var binary = '';
@@ -135,6 +145,7 @@ function App() {
                 business={business}
                 key={index}
                 getBBs={getBBs}
+                manageFavouritesList={manageFavouritesList}
               />
             ))
           }

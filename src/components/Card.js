@@ -69,10 +69,13 @@ export default function MediaCard(props) {
 
   const { user, isAuthenticated, isLoading } = useAuth0();
 
-  // const [favouriteList, setFavouriteList] = useState([]);
   const [favourite, setFavourite] = useState(false);
 
   const handleFavourites = (favourite) => {
+    if(props.business.favourite) {
+      favourite = false
+    }
+    props.manageFavouritesList(props.business._id, favourite)
     setFavourite(favourite)
     if (favourite) {
       const body = {
@@ -87,6 +90,8 @@ export default function MediaCard(props) {
             console.log(error)
             // props.handleClose();
       });
+    } else {
+      axios.put(`${usersUrl}/${user.email}`, {unfavourite_id: props.business._id})
     }
   }
 
