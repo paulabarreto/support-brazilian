@@ -3,7 +3,7 @@ import '@fontsource/roboto';
 import SearchAppBar from './components/AppBar';
 import MediaCard from './components/Card';
 import AddBusinessDialog from './components/AddBusinessDialog';
-import brazilianBusiness from './db/brazilianBusiness'
+import { useAuth0 } from "@auth0/auth0-react";
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -27,13 +27,65 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
 
+  const { user, isAuthenticated, isLoading } = useAuth0();
+
   const [businessList, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
+  const [favouriteList, setFavouriteList] = useState([]);
 
   const url = 'http://localhost:8080/api/brazilianBusiness'
 
+  const getBBs = async () => {
+    try {
+      const resp = await axios.get(`${url}`,
+      {headers: {
+         authorization: ' xxxxxxxxxx' ,
+         'Content-Type': 'application/json'
+      }})
+
+      const base64Flag = 'data:image/jpeg;base64,';
+      const list = resp.data.data.map(res => {
+        const imageStr = arrayBufferToBase64(res.image.data.data);
+        return {
+          ...res,
+          image: base64Flag + imageStr
+        }
+      })
+      return list
+    } catch(error) {
+      console.error(`Error: ${error}`)
+    }
+  }
+
+  const getFavouritesList = async () => {
+    if(isAuthenticated) {
+      try{
+        const faves = await axios.get(`${usersUrl}/${user.email}`)
+        return faves.data
+      } catch (error) {
+        return `Error: ${error}`;
+      }
+    } else {
+      return []
+    }
+  }
+
   useEffect(() => {
-    getBrazilianBusiness();
+    (async () => {
+      const [brazilianBusinsessList, favouriteBusinessList] = await Promise.all([
+        getBBs(),
+        getFavouritesList(),
+      ]);
+      
+      const updatedFavesList = brazilianBusinsessList.map(business => {
+        return {
+          ...business,
+          favourite: favouriteBusinessList.includes(business._id)
+        }
+      })
+      setList(updatedFavesList);
+      setFilteredList(updatedFavesList);
+    })()
   }, []);
 
   const arrayBufferToBase64 = (buffer) => {
@@ -43,28 +95,7 @@ function App() {
     return window.btoa(binary);
   };
 
-
-  const getBrazilianBusiness = () => {
-    axios.get(`${url}`,
-      {headers: {
-         authorization: ' xxxxxxxxxx' ,
-         'Content-Type': 'application/json'
-      }}
-    )
-    .then((response) => {
-      const base64Flag = 'data:image/jpeg;base64,';
-      const list = response.data.data.map(res => {
-        const imageStr = arrayBufferToBase64(res.image.data.data);
-        return {
-          ...res,
-          image: base64Flag + imageStr
-        }
-      })
-      setList(list);
-      setFilteredList(list);
-    })
-    .catch((error) => console.error(`Error: ${error}`))
-  }
+  
 
   const [value, setValue] = React.useState(0);
 
@@ -94,6 +125,12 @@ function App() {
      setFilteredList(filtered);
   };
 
+  // Get Favourites List from user
+
+  const usersUrl = 'http://localhost:8080/api/users';
+
+  
+  
   return (
     <div className={classes.root}>
       <SearchAppBar onMenuClick={(e, index) => handleMenuItemClick(e, index)} onChange={(e) => updateInput(e.target.value)}/>
@@ -104,7 +141,7 @@ function App() {
               <MediaCard
                 business={business}
                 key={index}
-                getBrazilianBusiness={getBrazilianBusiness}
+                getBBs={getBBs}
               />
             ))
           }

@@ -16,6 +16,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
+import { useAuth0 } from "@auth0/auth0-react";
 
 import axios from 'axios';
 
@@ -34,6 +35,7 @@ const useStyles = makeStyles({
 });
 
 export default function MediaCard(props) {
+
   const [spacing, setSpacing] = React.useState(2);
   const classes = useStyles();
   const business = props.business;
@@ -61,17 +63,41 @@ export default function MediaCard(props) {
     });
   }
 
+  // Favourites Feature Section
+
+  const usersUrl = 'http://localhost:8080/api/users';
+
+  const { user, isAuthenticated, isLoading } = useAuth0();
+
+  // const [favouriteList, setFavouriteList] = useState([]);
   const [favourite, setFavourite] = useState(false);
 
-  
+  const handleFavourites = (favourite) => {
+    setFavourite(favourite)
+    if (favourite) {
+      const body = {
+        name: user.name,
+        email: user.email,
+        favourite: props.business._id
+      }
+      axios.post(`${usersUrl}/${user.email}`, body)
+          .then((response) => {
+            console.log(response)
+          }).catch((error) => {
+            console.log(error)
+            // props.handleClose();
+      });
+    }
+  }
+
 
   return (
     <Grid item sm={6} xs={12}>
         <Card className={classes.root}>
           <CardHeader
             action={
-              <IconButton onClick={() => setFavourite(!favourite)} aria-label="settings">
-                <FavoriteIcon color={favourite ? 'primary' : 'inherit'}/>
+              <IconButton onClick={() => handleFavourites(!favourite)} aria-label="settings">
+                <FavoriteIcon color={business.favourite ? 'primary' : 'inherit'}/>
               </IconButton>
             }
           />
