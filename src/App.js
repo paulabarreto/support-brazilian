@@ -34,6 +34,7 @@ function App() {
   const [favouriteList, setFavouriteList] = useState([]);
 
   const url = 'http://localhost:8080/api/brazilianBusiness'
+  const usersUrl = 'http://localhost:8080/api/users';
 
   const getBBs = async () => {
     try {
@@ -57,24 +58,20 @@ function App() {
     }
   }
 
-  const getFavouritesList = async () => {
-    if(isAuthenticated) {
+  const getFavouritesList = async (user) => {
       try{
         const faves = await axios.get(`${usersUrl}/${user.email}`)
         return faves.data
       } catch (error) {
         return `Error: ${error}`;
       }
-    } else {
-      return []
-    }
   }
 
-  useEffect(() => {
-    (async () => {
+  useEffect(async () => {
+    if(!isLoading) {
       const [brazilianBusinsessList, favouriteBusinessList] = await Promise.all([
         getBBs(),
-        getFavouritesList(),
+        getFavouritesList(user),
       ]);
       
       const updatedFavesList = brazilianBusinsessList.map(business => {
@@ -85,8 +82,8 @@ function App() {
       })
       setList(updatedFavesList);
       setFilteredList(updatedFavesList);
-    })()
-  }, []);
+    }
+  }, [isLoading]);
 
   const arrayBufferToBase64 = (buffer) => {
     var binary = '';
@@ -94,8 +91,6 @@ function App() {
     bytes.forEach((b) => binary += String.fromCharCode(b));
     return window.btoa(binary);
   };
-
-  
 
   const [value, setValue] = React.useState(0);
 
@@ -125,11 +120,9 @@ function App() {
      setFilteredList(filtered);
   };
 
-  // Get Favourites List from user
-
-  const usersUrl = 'http://localhost:8080/api/users';
-
-  
+  if (isLoading) {
+    return <div>Loading ...</div>;
+  }
   
   return (
     <div className={classes.root}>
