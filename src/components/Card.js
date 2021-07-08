@@ -71,11 +71,11 @@ export default function MediaCard(props) {
 
   const [favourite, setFavourite] = useState(false);
 
+  useEffect(() => {
+    setFavourite(business.favourite)
+  }, [business.favourite]);
+
   const handleFavourites = (favourite) => {
-    if(props.business.favourite) {
-      favourite = false
-    }
-    props.manageFavouritesList(props.business._id, favourite)
     setFavourite(favourite)
     if (favourite) {
       const body = {
@@ -88,7 +88,6 @@ export default function MediaCard(props) {
             console.log(response)
           }).catch((error) => {
             console.log(error)
-            // props.handleClose();
       });
     } else {
       axios.put(`${usersUrl}/${user.email}`, {unfavourite_id: props.business._id})
@@ -102,7 +101,7 @@ export default function MediaCard(props) {
           <CardHeader
             action={
               <IconButton onClick={() => handleFavourites(!favourite)} aria-label="settings">
-                <FavoriteIcon color={business.favourite ? 'primary' : 'inherit'}/>
+                <FavoriteIcon color={favourite ? 'primary' : 'inherit'}/>
               </IconButton>
             }
           />

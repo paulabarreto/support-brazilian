@@ -32,6 +32,7 @@ function App() {
   const [businessList, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [favouriteList, setFavouriteList] = useState([]);
+  const [isAPIdataLoading, setAPIdataLoading] = useState(true);
 
   const url = 'http://localhost:8080/api/brazilianBusiness'
   const usersUrl = 'http://localhost:8080/api/users';
@@ -62,19 +63,11 @@ function App() {
       try{
         const faves = await axios.get(`${usersUrl}/${user.email}`)
         setFavouriteList(faves.data)
+        console.log("🚀 ~ file: App.js ~ line 69 ~ getFavouritesList ~ faves.data", faves.data)
         return faves.data
       } catch (error) {
         return `Error: ${error}`;
       }
-  }
-
-  const manageFavouritesList = (id, favourite) => {
-    if(!favourite) {
-      const newList = favouriteList.filter(unfavourite => unfavourite !== id)
-      setFavouriteList(newList);
-    } else {
-      setFavouriteList([...favouriteList, id])
-    }
   }
 
   useEffect(async () => {
@@ -92,8 +85,9 @@ function App() {
       })
       setList(updatedFavesList);
       setFilteredList(updatedFavesList);
+      setAPIdataLoading(false);
     }
-  }, [isLoading, favouriteList]);
+  }, [isLoading, isAPIdataLoading]);
 
   const arrayBufferToBase64 = (buffer) => {
     var binary = '';
@@ -130,7 +124,7 @@ function App() {
      setFilteredList(filtered);
   };
 
-  if (isLoading) {
+  if (isLoading  || isAPIdataLoading) {
     return <div>Loading ...</div>;
   }
   
@@ -145,7 +139,6 @@ function App() {
                 business={business}
                 key={index}
                 getBBs={getBBs}
-                manageFavouritesList={manageFavouritesList}
               />
             ))
           }
