@@ -124,6 +124,13 @@ function App() {
      setFilteredList(filtered);
   };
 
+  const [favesSelected, setFavesSelected] = useState(false);
+  const handleShowFavourites = (selected) => {
+    setFavesSelected(selected)
+    const filterFaves = !selected ? businessList : businessList.filter(business => business.favourite)
+    setFilteredList(filterFaves);
+  }
+
   if (isLoading  || isAPIdataLoading) {
     return <div>Loading ...</div>;
   }
@@ -146,14 +153,14 @@ function App() {
           <BottomNavigation
             value={value}
             onChange={(event, newValue) => {
-              setValue(newValue);
+
+              setValue(favesSelected ? 2 : 1);
             }}
             showLabels
             className={classes.root}
           >
           <BottomNavigationAction label="Add Business" icon={<AddCircleIcon />} onClick={handleClickOpen} />
-          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-          <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} onClick={() => handleShowFavourites(!favesSelected)} />
         </BottomNavigation>
         <AddBusinessDialog open={open} handleClose={handleClose}/>
       </Container>
