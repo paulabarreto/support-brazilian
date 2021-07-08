@@ -63,7 +63,6 @@ function App() {
       try{
         const faves = await axios.get(`${usersUrl}/${user.email}`)
         setFavouriteList(faves.data)
-        console.log("🚀 ~ file: App.js ~ line 69 ~ getFavouritesList ~ faves.data", faves.data)
         return faves.data
       } catch (error) {
         return `Error: ${error}`;
@@ -152,8 +151,7 @@ function App() {
         </Grid>
           <BottomNavigation
             value={value}
-            onChange={(event, newValue) => {
-
+            onChange={() => {
               setValue(favesSelected ? 2 : 1);
             }}
             showLabels
