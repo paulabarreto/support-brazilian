@@ -136,12 +136,16 @@ export default function MediaCard(props) {
                   <InstagramIcon/>
               </Button>
             </a>
-            <Button size="small" color="primary" onClick={handleClickOpen}>
-              <EditIcon/>
-            </Button>
-            <Button size="small" color="primary">
-              <DeleteIcon onClick={handleDeleteBusiness}/>
-            </Button>
+            {user && user.email === 'paulavilaca@gmail.com' && 
+              <div>
+                <Button size="small" color="primary" onClick={handleClickOpen}>
+                  <EditIcon/>
+                </Button>
+                <Button size="small" color="primary">
+                  <DeleteIcon onClick={handleDeleteBusiness}/>
+                </Button>
+              </div>
+            }
             <AddBusinessDialog 
               open={open}
               handleClose={handleClose}
