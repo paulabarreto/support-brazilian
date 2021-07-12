@@ -9,7 +9,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import AuthNav from "./AuthNav";
+import AuthNav from "./authentication/AuthNav";
+import { createTheme } from '@material-ui/core/styles';
+import blue from '@material-ui/core/colors/blue';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -77,7 +79,7 @@ export default function SearchAppBar({onMenuClick, onChange}) {
   ];
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const handleClickListItem = (event) => {
     setAnchorEl(event.currentTarget);

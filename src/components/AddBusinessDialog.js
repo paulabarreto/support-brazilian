@@ -73,7 +73,6 @@ export default function AddBusinessDialog(props) {
           'content-type': 'multipart/form-data'
       }
     };
-    
     if(props.business) {
       axios.post(`${url}/${props.business._id}`,formData,config)
         .then((response) => {
@@ -107,11 +106,11 @@ export default function AddBusinessDialog(props) {
                   <InputLabel htmlFor="name">Name</InputLabel>
                       <Input
                         {...register('name', { required: true })}
-                        error={errors.name}
-                        required='true'
+                        error={errors.name ? true : false}
+                        required={true}
                         onChange={e => setName(e.target.value)}
                         id="name"
-                        defaultValue={name}
+                        value={name}
                         startAdornment={
                           <InputAdornment position="start">
                             <AccountCircle/>
@@ -153,27 +152,28 @@ export default function AddBusinessDialog(props) {
                     />
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
-              <FormControl fullWidth>
-                <InputLabel htmlFor="image">Image</InputLabel>
-                  <Input
-                    {...register('image', { required: true })}
-                    error={errors.image}
-                    required='true'
-                    onChange={e => setImage(e.target.files[0])}
-                    id="image"
-                    name="image"
-                    type='file'
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <FaceIcon />
-                      </InputAdornment>
-                    }
-                  />
-                  {errors.image && <p style={{marginTop:0, color:'red', fontSize: 'small'}}>Image is Required</p>}
+              {!props.business &&
+                <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="image">Image</InputLabel>
+                    <Input
+                      {...register('image', { required: true })}
+                      error={errors.image}
+                      onChange={e => setImage(e.target.files[0])}
+                      id="image"
+                      name="image"
+                      type='file'
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <FaceIcon />
+                        </InputAdornment>
+                      }
+                    />
+                    {errors.image && <p style={{marginTop:0, color:'red', fontSize: 'small'}}>Image is Required</p>}
 
-              </FormControl>
-              </Grid>
+                </FormControl>
+                </Grid>
+              }
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="website">Website</InputLabel>
@@ -212,6 +212,7 @@ export default function AddBusinessDialog(props) {
                   <InputLabel htmlFor="grouped-native-select">Category</InputLabel>
                       
                   <Select fullWidth native defaultValue={category} id="grouped-native-select" onChange={e => setCategory(e.target.value)}>
+                    <option aria-label="None" value="" />
                     <option value={1}>Food</option>
                     <option value={2}>Groceries</option>
                     <option value={3}>Services</option>
@@ -224,7 +225,7 @@ export default function AddBusinessDialog(props) {
             <Button onClick={props.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={handleSubmit(onSubmit)} color="primary">
+            <Button disabled={!name} onClick={handleSubmit(onSubmit)} color="primary">
               Send
             </Button>
           </DialogActions>

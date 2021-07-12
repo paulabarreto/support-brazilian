@@ -124,18 +124,20 @@ export default function MediaCard(props) {
             </CardContent>
             </CardActionArea>
             <CardActions>
-            {business.website ?
+            {business.website &&
               <a target="_blank" rel="noreferrer" href={business.website}>
                 <Button size="small" color="primary">
                     <LanguageIcon/>
                 </Button>
-              </a> : ''
+              </a>
             }
-            <a target="_blank" rel="noreferrer" href={business.instagram}>
-              <Button size="small" color="primary">
-                  <InstagramIcon/>
-              </Button>
-            </a>
+            {business.instagram && 
+              <a target="_blank" rel="noreferrer" href={business.instagram}>
+                <Button size="small" color="primary">
+                    <InstagramIcon/>
+                </Button>
+              </a>
+            }
             {user && user.email === 'paulavilaca@gmail.com' && 
               <div>
                 <Button size="small" color="primary" onClick={handleClickOpen}>
