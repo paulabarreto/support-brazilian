@@ -16,6 +16,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
+import CheckIcon from '@material-ui/icons/Check';
 import { useAuth0 } from "@auth0/auth0-react";
 
 import axios from 'axios';
@@ -94,6 +95,16 @@ export default function MediaCard(props) {
     }
   }
 
+  const handleApproveBusiness = () => {
+    axios.post(`${url}/${props.business._id}`, {adminApproved: true})
+        .then((response) => {
+          console.log(response);
+        }).catch((error) => {
+          console.log(error);
+
+    });
+  }
+
 
   return (
     <Grid item sm={6} xs={12}>
@@ -138,7 +149,7 @@ export default function MediaCard(props) {
                 </Button>
               </a>
             }
-            {user && user.email === 'paulavilaca@gmail.com' && 
+            {props.isAdmin && 
               <div>
                 <Button size="small" color="primary" onClick={handleClickOpen}>
                   <EditIcon/>
@@ -146,6 +157,11 @@ export default function MediaCard(props) {
                 <Button size="small" color="primary">
                   <DeleteIcon onClick={handleDeleteBusiness}/>
                 </Button>
+                {!business.adminApproved && 
+                  <Button size="small" color="primary" onClick={handleApproveBusiness}>
+                    <CheckIcon />
+                  </Button>
+                }
               </div>
             }
             <AddBusinessDialog 

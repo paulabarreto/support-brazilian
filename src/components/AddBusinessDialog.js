@@ -66,7 +66,7 @@ export default function AddBusinessDialog(props) {
     formData.append('website', website);
     formData.append('instagram', instagram);
     formData.append('category', category);
-    formData.append('adminApproved', true);
+    formData.append('adminApproved', false);
 
     const config = {
       headers: {
@@ -74,14 +74,14 @@ export default function AddBusinessDialog(props) {
       }
     };
     if(props.business) {
-      axios.post(`${url}/${props.business._id}`,formData,config)
+      axios.post(`${url}/${props.business._id}`, formData, config)
         .then((response) => {
           props.handleClose();
         }).catch((error) => {
           props.handleClose();
       });
     } else {
-      axios.post(url,formData,config)
+      axios.post(url, formData, config)
           .then((response) => {
               props.handleClose();
               handleOpenConfirmation();

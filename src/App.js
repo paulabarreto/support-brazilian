@@ -28,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
 function App() {
 
   const { user, isAuthenticated, isLoading } = useAuth0();
-
+  
+  const [isAdmin, setAdmin] = useState(false);
   const [businessList, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [favouriteList, setFavouriteList] = useState([]);
@@ -37,7 +38,7 @@ function App() {
   const url = 'http://localhost:8080/api/brazilianBusiness'
   const usersUrl = 'http://localhost:8080/api/users';
 
-  const getBBs = async () => {
+  const getBBs = async (isAdmin) => {
     try {
       const resp = await axios.get(`${url}`,
       {headers: {
@@ -46,13 +47,25 @@ function App() {
       }})
 
       const base64Flag = 'data:image/jpeg;base64,';
-      const list = resp.data.data.map(res => {
-        const imageStr = arrayBufferToBase64(res.image.data.data);
-        return {
-          ...res,
-          image: base64Flag + imageStr
-        }
-      })
+      let list = [];
+      if (!isAdmin) {
+        list = resp.data.data.filter(res => res.adminApproved)
+        .map(res => {
+          const imageStr = arrayBufferToBase64(res.image.data.data);
+          return {
+            ...res,
+            image: base64Flag + imageStr
+          }
+        });
+      } else {
+        list = resp.data.data.map(res => {
+          const imageStr = arrayBufferToBase64(res.image.data.data);
+          return {
+            ...res,
+            image: base64Flag + imageStr
+          }
+        })
+      }
       return list
     } catch(error) {
       console.error(`Error: ${error}`)
@@ -71,8 +84,12 @@ function App() {
 
   useEffect(async () => {
     if(!isLoading) {
+
+      const checkAdmin = user.email === 'paulavilaca@gmail.com' ? true : false
+      setAdmin(checkAdmin);
+
       const [brazilianBusinsessList, favouriteBusinessList] = await Promise.all([
-        getBBs(),
+        getBBs(isAdmin),
         getFavouritesList(user),
       ]);
       
@@ -144,7 +161,7 @@ function App() {
               <MediaCard
                 business={business}
                 key={index}
-                getBBs={getBBs}
+                isAdmin={isAdmin}
               />
             ))
           }
