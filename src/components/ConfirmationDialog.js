@@ -23,7 +23,7 @@ export default function ConfirmationDialog(props) {
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle id="alert-dialog-slide-title">{"Thank You"}</DialogTitle>
+        <DialogTitle id="alert-dialog-slide-title">{props.title}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
             {props.confirmation}

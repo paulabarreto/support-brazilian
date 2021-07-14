@@ -38,6 +38,7 @@ export default function AddBusinessDialog(props) {
 
   const [openConfirmation, setOpen] = React.useState(false);
   const [confirmationText, setConfirmationText] = React.useState('');
+  const [confirmationTitle, setConfirmationTitle] = React.useState('');
 
   const handleOpenConfirmation = () => {
     setOpen(true);
@@ -86,9 +87,11 @@ export default function AddBusinessDialog(props) {
           .then((response) => {
               props.handleClose();
               setConfirmationText('Your Brazilian Business Addition request was sent to the Admin for approval.')
+              setConfirmationTitle('Thanks!');
               handleOpenConfirmation();
           }).catch((error) => {
-            setConfirmationText('There was an error. Please try again soon.')
+            setConfirmationText('Please try again soon.');
+            setConfirmationTitle('Sorry, there was an error!');
             props.handleClose();
             handleOpenConfirmation();
       });
@@ -238,6 +241,7 @@ export default function AddBusinessDialog(props) {
           open={openConfirmation} 
           handleCloseConfirmation={handleCloseConfirmation}
           confirmation={confirmationText}
+          title={confirmationTitle}
         />
     </form>
   );

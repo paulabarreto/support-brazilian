@@ -12,8 +12,8 @@ import React, { useState, useEffect } from 'react';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import ConfirmationDialog from './components/ConfirmationDialog';
 
 import axios from 'axios';
 
@@ -120,7 +120,7 @@ function App() {
   useEffect(async () => {
     if(!isLoading) {
 
-      const checkAdmin = user.email === 'paulavilaca@gmail.com' ? true : false
+      const checkAdmin = user && user.email === 'paulavilaca@gmail.com' ? true : false
       setAdmin(checkAdmin);
 
       const [brazilianBusinsessList, favouriteBusinessList] = await Promise.all([
@@ -152,7 +152,11 @@ function App() {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    if(!user && !isLoading) {
+      handleOpenConfirmation();
+    } else {
+      setOpen(true);
+    }
   };
 
   const handleClose = () => {
@@ -177,10 +181,23 @@ function App() {
 
   const [favesSelected, setFavesSelected] = useState(false);
   const handleShowFavourites = (selected) => {
-    setFavesSelected(selected)
-    const filterFaves = !selected ? businessList : businessList.filter(business => business.favourite)
-    setFilteredList(filterFaves);
+    if(!isAuthenticated) {
+      handleOpenConfirmation();
+    } else {
+      setFavesSelected(selected)
+      const filterFaves = !selected ? businessList : businessList.filter(business => business.favourite)
+      setFilteredList(filterFaves);
+    }
   }
+
+  const [openConfirmation, setOpenConfirmation] = React.useState(false);
+  const handleOpenConfirmation = () => {
+    setOpenConfirmation(true);
+  };
+
+  const handleCloseConfirmation = () => {
+    setOpenConfirmation(false);
+  };
 
   if (isLoading  || isAPIdataLoading) {
     return <div>Loading ...</div>;
@@ -191,20 +208,25 @@ function App() {
       <SearchAppBar onMenuClick={(e, index) => handleMenuItemClick(e, index)} onChange={(e) => updateInput(e.target.value)}/>
       <Container maxWidth="md">
         <Grid container justify="center">
-          {
+          { filteredList.length > 0 &&
             filteredList.map((business, index) => (
               <MediaCard
                 business={business}
                 key={index}
                 isAdmin={isAdmin}
+                openConfirmation={handleOpenConfirmation}
               />
             ))
+          }
+          {
+            filteredList.length === 0 &&
+            <h3>No results to show</h3>
           }
         </Grid>
           <BottomNavigation
             value={value}
             onChange={() => {
-              setValue(favesSelected ? 2 : 1);
+              setValue(isAuthenticated && !favesSelected ? 1 : isAuthenticated && favesSelected ? 2 : 0);
             }}
             showLabels
             className={classes.root}
@@ -213,6 +235,12 @@ function App() {
           <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} onClick={() => handleShowFavourites(!favesSelected)} />
         </BottomNavigation>
         <AddBusinessDialog open={open} handleClose={handleClose}/>
+        <ConfirmationDialog 
+          open={openConfirmation}
+          handleCloseConfirmation={handleCloseConfirmation}
+          title="Let's meet!"
+          confirmation={'Please Sign Up/Login to enable Add Business and Favourite Button'}
+        />
       </Container>
     </div>
   );

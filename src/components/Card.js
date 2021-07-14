@@ -77,8 +77,12 @@ export default function MediaCard(props) {
   }, [business.favourite]);
 
   const handleFavourites = (favourite) => {
+    if(!user && !isLoading) {
+      props.openConfirmation();
+      return
+    }
     setFavourite(favourite)
-    if (favourite) {
+    if (favourite && user) {
       const body = {
         name: user.name,
         email: user.email,
