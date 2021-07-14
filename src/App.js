@@ -71,6 +71,7 @@ function App() {
       if(isAdmin) {
         list.sort(showPendingApprovalFirst(list));
       }
+      console.log("🚀 ~ file: App.js ~ line 78 ~ getBBs ~ list", list)
       return list;
     } catch(error) {
       console.error(`Error: ${error}`)
@@ -234,7 +235,7 @@ function App() {
           <BottomNavigationAction label="Add Business" icon={<AddCircleIcon />} onClick={handleClickOpen} />
           <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} onClick={() => handleShowFavourites(!favesSelected)} />
         </BottomNavigation>
-        <AddBusinessDialog open={open} handleClose={handleClose}/>
+        <AddBusinessDialog open={open} handleClose={handleClose} user={user}/>
         <ConfirmationDialog 
           open={openConfirmation}
           handleCloseConfirmation={handleCloseConfirmation}

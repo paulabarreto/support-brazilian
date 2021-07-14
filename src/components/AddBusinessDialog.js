@@ -69,6 +69,7 @@ export default function AddBusinessDialog(props) {
     formData.append('instagram', instagram);
     formData.append('category', category);
     formData.append('adminApproved', false);
+    formData.append('createdBy', props.user.email);
 
     const config = {
       headers: {
