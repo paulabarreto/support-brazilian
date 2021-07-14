@@ -26,7 +26,7 @@ export default function ConfirmationDialog(props) {
         <DialogTitle id="alert-dialog-slide-title">{"Thank You"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            Your Brazilian Business Addition request was sent to the Admin for approval.
+            {props.confirmation}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

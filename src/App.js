@@ -68,13 +68,29 @@ function App() {
       }
       list.join(sortByName(list)); // 'Blue,Humpback,Beluga'
       list.sort(sortByName(list));
+      if(isAdmin) {
+        list.sort(showPendingApprovalFirst(list));
+      }
       return list;
     } catch(error) {
       console.error(`Error: ${error}`)
     }
   }
 
-  // sort by name
+  const showPendingApprovalFirst = (list) => {
+    list.sort(function(a, b) {
+      const statusA = a.adminApproved
+      const statusB = b.adminApproved
+      if(statusA === true && statusB === false) {
+        return 1
+      }
+      if(statusA === false && statusB === true) {
+        return -1
+      }
+      return 0
+    })
+  }
+
   const sortByName = (list) => {
     list.sort(function(a, b) {
       var nameA = a.name.toUpperCase(); // ignore upper and lowercase
