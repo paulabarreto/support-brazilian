@@ -118,13 +118,13 @@ function App() {
       }
   }
 
-  useEffect(async () => {
+  useEffect(() => {
     if(!isLoading) {
 
       const checkAdmin = user && user.email === 'paulavilaca@gmail.com' ? true : false
       setAdmin(checkAdmin);
 
-      const [brazilianBusinsessList, favouriteBusinessList] = await Promise.all([
+      const [brazilianBusinsessList, favouriteBusinessList] = async () => await Promise.all([
         getBBs(isAdmin),
         getFavouritesList(user),
       ]);
