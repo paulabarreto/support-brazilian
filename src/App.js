@@ -66,12 +66,11 @@ function App() {
           }
         })
       }
-      list.join(sortByName(list)); // 'Blue,Humpback,Beluga'
+      list.join(sortByName(list));
       list.sort(sortByName(list));
       if(isAdmin) {
         list.sort(showPendingApprovalFirst(list));
       }
-      console.log("🚀 ~ file: App.js ~ line 78 ~ getBBs ~ list", list)
       return list;
     } catch(error) {
       console.error(`Error: ${error}`)
@@ -118,13 +117,13 @@ function App() {
       }
   }
 
-  useEffect(() => {
+  useEffect(async () => {
     if(!isLoading) {
 
       const checkAdmin = user && user.email === 'paulavilaca@gmail.com' ? true : false
       setAdmin(checkAdmin);
 
-      const [brazilianBusinsessList, favouriteBusinessList] = async () => await Promise.all([
+      const [brazilianBusinsessList, favouriteBusinessList] = await Promise.all([
         getBBs(isAdmin),
         getFavouritesList(user),
       ]);
