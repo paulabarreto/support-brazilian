@@ -12,7 +12,8 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Select from '@material-ui/core/Select';
-
+import * as urls from '../constants';
+import * as endpoints from '../endpoints';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import LanguageIcon from '@material-ui/icons/Language';
 import FaceIcon from '@material-ui/icons/Face';
@@ -56,7 +57,14 @@ export default function AddBusinessDialog(props) {
   const [instagram, setInstagram] = useState(props.business ? props.business.instagram : '');
   const [category, setCategory] = useState(props.business ? props.business.category : 0);
 
-  const url = props.business ? 'http://localhost:8080/api/brazilianBusiness' : 'http://localhost:8080/api/newBusiness';
+  let url;
+  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+    url = props.business ? `${urls.LOCAL_API_URL}/${endpoints.GetBusiness}`
+        : `${urls.LOCAL_API_URL}/${endpoints.AddBusiness}`;
+  } else {
+    url = props.business ? `${urls.PRODUCTION_API_URL}/${endpoints.GetBusiness}`
+    : `${urls.PRODUCTION_API_URL}/${endpoints.AddBusiness}`;
+  }
 
   const onSubmit = () => {
     // event.preventDefault();

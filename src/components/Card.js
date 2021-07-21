@@ -18,7 +18,8 @@ import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
 import CheckIcon from '@material-ui/icons/Check';
 import { useAuth0 } from "@auth0/auth0-react";
-
+import * as urls from '../constants';
+import * as endpoints from '../endpoints';
 import axios from 'axios';
 
 const useStyles = makeStyles({
@@ -51,7 +52,15 @@ export default function MediaCard(props) {
     setOpen(false);
   };
 
-  const url = 'http://localhost:8080/api/brazilianBusiness';
+  let url;
+  let usersUrl;
+  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+    url = `${urls.LOCAL_API_URL}/${endpoints.GetBusiness}`;
+    usersUrl = `${urls.LOCAL_API_URL}/${endpoints.GetUsers}`;    
+  } else {
+    url = `${urls.PRODUCTION_API_URL}/${endpoints.GetBusiness}`;
+    usersUrl = `${urls.PRODUCTION_API_URL}/${endpoints.GetUsers}`;    
+  }
 
   const handleDeleteBusiness = () => {
     axios.delete(`${url}/${props.business._id}`)
@@ -65,8 +74,6 @@ export default function MediaCard(props) {
   }
 
   // Favourites Feature Section
-
-  const usersUrl = 'http://localhost:8080/api/users';
 
   const { user, isAuthenticated, isLoading } = useAuth0();
 

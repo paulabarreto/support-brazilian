@@ -8,7 +8,8 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import React, { useState, useEffect } from 'react';
-
+import * as urls from './constants';
+import * as endpoints from './endpoints';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -38,11 +39,11 @@ function App() {
   let url;
   let usersUrl;
   if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-    url = 'http://localhost:8080/api/brazilianBusiness'
-    usersUrl = 'http://localhost:8080/api/users';    
+    url = `${urls.LOCAL_API_URL}/${endpoints.GetBusiness}`;
+    usersUrl = `${urls.LOCAL_API_URL}/${endpoints.GetUsers}`;    
   } else {
-    url = 'https://support-brazilian-api.herokuapp.com/api/brazilianBusiness'
-    usersUrl = 'https://support-brazilian-api.herokuapp.com/api/users';
+    url = `${urls.PRODUCTION_API_URL}/${endpoints.GetBusiness}`;
+    usersUrl = `${urls.PRODUCTION_API_URL}/${endpoints.GetUsers}`;    
   }
 
   const getBBs = async (isAdmin) => {
