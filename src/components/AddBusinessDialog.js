@@ -57,6 +57,16 @@ export default function AddBusinessDialog(props) {
   const [instagram, setInstagram] = useState(props.business ? props.business.instagram : '');
   const [category, setCategory] = useState(props.business ? props.business.category : 0);
 
+  const clearFormData = () => {
+    setImage('');
+    setName('');
+    setDescription('');
+    setLocation('');
+    setWebsite('');
+    setInstagram('');
+    setCategory('');
+  }
+
   let url;
   if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     url = props.business ? `${urls.LOCAL_API_URL}/${endpoints.GetBusiness}`
@@ -98,6 +108,7 @@ export default function AddBusinessDialog(props) {
               setConfirmationText('Your Brazilian Business Addition request was sent to the Admin for approval.')
               setConfirmationTitle('Thanks!');
               handleOpenConfirmation();
+              clearFormData();
           }).catch((error) => {
             setConfirmationText('Please try again soon.');
             setConfirmationTitle('Sorry, there was an error!');
