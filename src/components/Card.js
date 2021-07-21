@@ -24,7 +24,7 @@ import axios from 'axios';
 
 const useStyles = makeStyles({
   root: {
-    width: 345,
+    // width: 345,
     marginTop: '20px',
   },
   gridRoot: {
@@ -38,7 +38,6 @@ const useStyles = makeStyles({
 
 export default function MediaCard(props) {
 
-  const [spacing, setSpacing] = React.useState(2);
   const classes = useStyles();
   const business = props.business;
 
@@ -118,7 +117,7 @@ export default function MediaCard(props) {
 
 
   return (
-    <Grid item sm={6} xs={12}>
+    <Grid item xs={12}>
         <Card className={classes.root}>
           <CardHeader
             action={
@@ -179,6 +178,7 @@ export default function MediaCard(props) {
               open={open}
               handleClose={handleClose}
               business={business}
+              user={user}
             />
           </CardActions>
         </Card>
