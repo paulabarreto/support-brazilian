@@ -35,8 +35,15 @@ function App() {
   const [favouriteList, setFavouriteList] = useState([]);
   const [isAPIdataLoading, setAPIdataLoading] = useState(true);
 
-  const url = 'http://localhost:8080/api/brazilianBusiness'
-  const usersUrl = 'http://localhost:8080/api/users';
+  let url;
+  let usersUrl;
+  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+    url = 'http://localhost:8080/api/brazilianBusiness'
+    usersUrl = 'http://localhost:8080/api/users';    
+  } else {
+    url = 'https://support-brazilian-api.herokuapp.com/api/brazilianBusiness'
+    usersUrl = 'https://support-brazilian-api.herokuapp.com/api/users';
+  }
 
   const getBBs = async (isAdmin) => {
     try {
