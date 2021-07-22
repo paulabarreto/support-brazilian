@@ -10,10 +10,6 @@ import Container from '@material-ui/core/Container';
 import React, { useState, useEffect } from 'react';
 import * as urls from './constants';
 import * as endpoints from './endpoints';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ConfirmationDialog from './components/ConfirmationDialog';
 
 import axios from 'axios';
@@ -213,7 +209,7 @@ function App() {
   
   return (
     <div className={classes.root}>
-      <SearchAppBar 
+      <SearchAppBar
         onMenuClick={(e, index) => handleMenuItemClick(e, index)} 
         onChange={(e) => updateInput(e.target.value)}
         handleClickOpen={handleClickOpen}
@@ -237,17 +233,6 @@ function App() {
             <h3>No results to show</h3>
           }
         </Grid>
-          <BottomNavigation
-            value={value}
-            onChange={() => {
-              setValue(isAuthenticated && !favesSelected ? 1 : isAuthenticated && favesSelected ? 2 : 0);
-            }}
-            showLabels
-            className={classes.root}
-          >
-          <BottomNavigationAction label="Add Business" icon={<AddCircleIcon />} onClick={handleClickOpen} />
-          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} onClick={() => handleShowFavourites(!favesSelected)} />
-        </BottomNavigation>
         <AddBusinessDialog open={open} handleClose={handleClose} user={user}/>
         <ConfirmationDialog 
           open={openConfirmation}
