@@ -217,6 +217,8 @@ function App() {
         onMenuClick={(e, index) => handleMenuItemClick(e, index)} 
         onChange={(e) => updateInput(e.target.value)}
         handleClickOpen={handleClickOpen}
+        favesSelected={favesSelected}
+        handleShowFavourites={handleShowFavourites}
       />
       <Container maxWidth="md">
         <Grid container justify="center">

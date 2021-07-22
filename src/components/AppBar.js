@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SearchAppBar({handleClickOpen, onMenuClick, onChange}) {
+export default function SearchAppBar({handleShowFavourites, favesSelected, handleClickOpen, onMenuClick, onChange}) {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -172,7 +172,7 @@ export default function SearchAppBar({handleClickOpen, onMenuClick, onChange}) {
                     </Typography>
                 </AccordionDetails>
               </Accordion>
-              <MenuItem>
+              <MenuItem onClick={() => handleShowFavourites(!favesSelected)}>
                 <FavoriteIcon color="primary"/>
                 <Typography className={classes.heading}>
                   Favourites
