@@ -10,8 +10,12 @@ import SearchIcon from '@material-ui/icons/Search';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AuthNav from "./authentication/AuthNav";
-import { createTheme } from '@material-ui/core/styles';
-import blue from '@material-ui/core/colors/blue';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,13 +75,6 @@ const useStyles = makeStyles((theme) => ({
 export default function SearchAppBar({onMenuClick, onChange}) {
   const classes = useStyles();
 
-  const options = [
-    'All',
-    'Food',
-    'Groceries',
-    'Services',
-  ];
-
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
@@ -115,15 +112,51 @@ export default function SearchAppBar({onMenuClick, onChange}) {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-            {options.map((option, index) => (
-              <MenuItem
-                key={option}
-                selected={index === selectedIndex}
-                onClick={(event) => handleMenuItemClick(event, index)}
-              >
-                {option}
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography className={classes.heading}>Categories</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <Typography>
+                      <MenuItem
+                        selected={selectedIndex === 0}
+                        onClick={(event) => handleMenuItemClick(event, 0)}
+                      >
+                        All
+                      </MenuItem>
+                      <MenuItem
+                        selected={selectedIndex === 1}
+                        onClick={(event) => handleMenuItemClick(event, 1)}
+                      >
+                        Food
+                      </MenuItem>
+                      <MenuItem
+                        selected={selectedIndex === 2}
+                        onClick={(event) => handleMenuItemClick(event, 2)}
+                      >
+                        Groceries
+                      </MenuItem>
+                      <MenuItem
+                        selected={selectedIndex === 3}
+                        onClick={(event) => handleMenuItemClick(event, 3)}
+                      >
+                        Services
+                      </MenuItem>
+                    </Typography>
+                </AccordionDetails>
+              </Accordion>
+              <MenuItem>
+                <FavoriteIcon color="primary"/>
+                Favourites
               </MenuItem>
-            ))}
+              <MenuItem>
+                <AddCircleIcon color="primary"/>
+                Add New Business
+              </MenuItem>
             </Menu>
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
