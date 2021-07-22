@@ -16,10 +16,20 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import AccountTreeIcon from '@material-ui/icons/AccountTree';
+import FastfoodIcon from '@material-ui/icons/Fastfood';
+import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
+import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
+import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular,
+    paddingLeft: '5px'
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -72,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SearchAppBar({onMenuClick, onChange}) {
+export default function SearchAppBar({handleClickOpen, onMenuClick, onChange}) {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -118,6 +128,7 @@ export default function SearchAppBar({onMenuClick, onChange}) {
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
+                  <AccountTreeIcon color="primary"/>
                   <Typography className={classes.heading}>Categories</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
@@ -126,36 +137,52 @@ export default function SearchAppBar({onMenuClick, onChange}) {
                         selected={selectedIndex === 0}
                         onClick={(event) => handleMenuItemClick(event, 0)}
                       >
-                        All
+                        <AllInclusiveIcon color="primary"/>
+                        <Typography className={classes.heading}>
+                          All
+                        </Typography>
                       </MenuItem>
                       <MenuItem
                         selected={selectedIndex === 1}
                         onClick={(event) => handleMenuItemClick(event, 1)}
                       >
-                        Food
+                        <FastfoodIcon color="primary"/>
+                        <Typography className={classes.heading}>
+                          Food
+                        </Typography>
                       </MenuItem>
                       <MenuItem
                         selected={selectedIndex === 2}
                         onClick={(event) => handleMenuItemClick(event, 2)}
                       >
-                        Groceries
+                        <ShoppingBasketIcon color="primary"/>
+                        <Typography className={classes.heading}>
+                          Groceries
+                        </Typography>
                       </MenuItem>
                       <MenuItem
                         selected={selectedIndex === 3}
                         onClick={(event) => handleMenuItemClick(event, 3)}
                       >
-                        Services
+                        <WorkOutlineIcon color="primary"/>
+                        <Typography className={classes.heading}>
+                          Services
+                        </Typography>
                       </MenuItem>
                     </Typography>
                 </AccordionDetails>
               </Accordion>
               <MenuItem>
                 <FavoriteIcon color="primary"/>
-                Favourites
+                <Typography className={classes.heading}>
+                  Favourites
+                </Typography>
               </MenuItem>
-              <MenuItem>
+              <MenuItem onClick={() => handleClickOpen()}>
                 <AddCircleIcon color="primary"/>
-                Add New Business
+                <Typography className={classes.heading}>
+                  Add New Business
+                </Typography>
               </MenuItem>
             </Menu>
           </IconButton>

@@ -213,7 +213,11 @@ function App() {
   
   return (
     <div className={classes.root}>
-      <SearchAppBar onMenuClick={(e, index) => handleMenuItemClick(e, index)} onChange={(e) => updateInput(e.target.value)}/>
+      <SearchAppBar 
+        onMenuClick={(e, index) => handleMenuItemClick(e, index)} 
+        onChange={(e) => updateInput(e.target.value)}
+        handleClickOpen={handleClickOpen}
+      />
       <Container maxWidth="md">
         <Grid container justify="center">
           { filteredList.length > 0 &&
