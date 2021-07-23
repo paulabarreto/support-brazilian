@@ -221,6 +221,7 @@ function App() {
               <MediaCard
                 business={business}
                 key={index}
+                index={index}
                 isAdmin={isAdmin}
                 openConfirmation={handleOpenConfirmation}
               />

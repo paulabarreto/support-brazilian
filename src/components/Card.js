@@ -21,8 +21,11 @@ import { useAuth0 } from "@auth0/auth0-react";
 import * as urls from '../constants';
 import * as endpoints from '../endpoints';
 import axios from 'axios';
+import Avatar from '@material-ui/core/Avatar';
+import StarIcon from '@material-ui/icons/Star';
+import { yellow, green } from '@material-ui/core/colors';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme)=>({
   root: {
     width: 345,
     marginTop: '20px',
@@ -36,8 +39,14 @@ const useStyles = makeStyles({
   },
   cardActionArea: {
     height: 300
-  }
-});
+  },
+  pink: {
+    width: theme.spacing(4),
+    height: theme.spacing(4),
+    color: green[500],
+    backgroundColor: yellow[500],
+  },
+}));
 
 export default function MediaCard(props) {
 
@@ -122,13 +131,29 @@ export default function MediaCard(props) {
   return (
     <Grid item xs={12} md={6}>
         <Card className={classes.root}>
-          <CardHeader
+          {props.index === 0 ?
+            <CardHeader
+            avatar={
+              <Avatar aria-label="star" className={classes.pink}>
+                <StarIcon />
+              </Avatar>
+            }
+            title="Top Favourite"
             action={
               <IconButton onClick={() => handleFavourites(!favourite)} aria-label="settings">
                 <FavoriteIcon color={favourite ? 'primary' : 'inherit'}/>
               </IconButton>
             }
           />
+          :
+            <CardHeader
+              action={
+                <IconButton onClick={() => handleFavourites(!favourite)} aria-label="settings">
+                  <FavoriteIcon color={favourite ? 'primary' : 'inherit'}/>
+                </IconButton>
+              }
+            />
+          }
             <CardActionArea className={classes.cardActionArea}>
               <CardMedia
                   className={classes.media}
