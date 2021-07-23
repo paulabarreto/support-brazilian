@@ -24,7 +24,7 @@ import axios from 'axios';
 
 const useStyles = makeStyles({
   root: {
-    // width: 345,
+    width: 345,
     marginTop: '20px',
   },
   gridRoot: {
@@ -34,6 +34,9 @@ const useStyles = makeStyles({
     height: 140,
     backgroundSize: 'contain'
   },
+  cardActionArea: {
+    height: 300
+  }
 });
 
 export default function MediaCard(props) {
@@ -117,7 +120,7 @@ export default function MediaCard(props) {
 
 
   return (
-    <Grid item xs={12}>
+    <Grid item xs={12} md={6}>
         <Card className={classes.root}>
           <CardHeader
             action={
@@ -126,24 +129,24 @@ export default function MediaCard(props) {
               </IconButton>
             }
           />
-            <CardActionArea>
-            <CardMedia
-                className={classes.media}
-                image={business.image ? business.image : null}
-                title={business.name}
-            />
-            <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                {business.name}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                {business.description}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  {business.location}
-                </Typography>
-            </CardContent>
-            </CardActionArea>
+            <CardActionArea className={classes.cardActionArea}>
+              <CardMedia
+                  className={classes.media}
+                  image={business.image ? business.image : null}
+                  title={business.name}
+              />
+              <CardContent>
+                  <Typography gutterBottom variant="h5" component="h2">
+                  {business.name}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" component="p">
+                  {business.description}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" component="p">
+                    {business.location}
+                  </Typography>
+              </CardContent>
+              </CardActionArea>
             <CardActions>
             {business.website &&
               <a target="_blank" rel="noreferrer" href={business.website}>
