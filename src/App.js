@@ -151,8 +151,6 @@ function App() {
     return window.btoa(binary);
   };
 
-  const [value, setValue] = React.useState(0);
-
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -217,7 +215,7 @@ function App() {
         handleShowFavourites={handleShowFavourites}
       />
       <Container maxWidth="md">
-        <Grid container justify="center">
+        <Grid container justify="center" style={{marginTop: 70 + 'px'}}>
           { filteredList.length > 0 &&
             filteredList.map((business, index) => (
               <MediaCard
