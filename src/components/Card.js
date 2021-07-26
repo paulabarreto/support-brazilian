@@ -131,12 +131,14 @@ export default function MediaCard(props) {
   return (
     <Grid item xs={12} md={6}>
         <Card className={classes.root}>
-          {props.index === 0 ?
+          {props.index === 0 || props.index === 1  || props.index === 2 ?
             <CardHeader
             avatar={
               <Avatar aria-label="star" className={classes.pink}>
                 {/* <StarIcon /> */}
-                1
+                <Typography variant="button">
+                  {props.index + 1}
+                </Typography>
               </Avatar>
             }
             title="Top Favourite"
