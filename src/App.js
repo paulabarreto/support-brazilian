@@ -30,16 +30,20 @@ function App() {
   const [businessList, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [favouriteList, setFavouriteList] = useState([]);
+  const [mostLikedBusiness, setMostLiked] = useState([]);
   const [isAPIdataLoading, setAPIdataLoading] = useState(true);
 
   let url;
   let usersUrl;
+  let mostLikedUrl;
   if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     url = `${urls.LOCAL_API_URL}/${endpoints.GetBusiness}`;
     usersUrl = `${urls.LOCAL_API_URL}/${endpoints.GetUsers}`;    
+    mostLikedUrl = `${urls.LOCAL_API_URL}/${endpoints.getMostLikedBusiness}`;    
   } else {
     url = `${urls.PRODUCTION_API_URL}/${endpoints.GetBusiness}`;
-    usersUrl = `${urls.PRODUCTION_API_URL}/${endpoints.GetUsers}`;    
+    usersUrl = `${urls.PRODUCTION_API_URL}/${endpoints.GetUsers}`;
+    mostLikedUrl = `${urls.PRODUCTION_API_URL}/${endpoints.getMostLikedBusiness}`;    
   }
 
   const getBBs = async (isAdmin) => {
@@ -121,25 +125,59 @@ function App() {
       }
   }
 
+  const getMostLikedBusiness = async () => {
+      try{
+        const mostLiked = await axios.get(`${mostLikedUrl}`)
+        setMostLiked(mostLiked.data)
+        return mostLiked.data
+      } catch (error) {
+        return `Error: ${error}`;
+      }
+  }
+
+
   useEffect(async () => {
     if(!isLoading) {
 
       const checkAdmin = user && user.email === 'paulavilaca@gmail.com' ? true : false
       setAdmin(checkAdmin);
 
-      const [brazilianBusinsessList, favouriteBusinessList] = await Promise.all([
+      const [brazilianBusinsessList, favouriteBusinessList, mostLiked] = await Promise.all([
         getBBs(isAdmin),
         getFavouritesList(user),
+        getMostLikedBusiness()
       ]);
       
-      const updatedFavesList = brazilianBusinsessList.map(business => {
+      let updatedFavesList = brazilianBusinsessList.map(business => {
         return {
           ...business,
           favourite: favouriteList.includes(business._id)
         }
       })
-      setList(updatedFavesList);
-      setFilteredList(updatedFavesList);
+
+      /**
+       * List 1 consists of most liked business
+       * List 2 with all the others
+       */
+      // const list1 = updatedFavesList.filter(business => {
+      //   return mostLiked.includes(business._id)
+      // })
+
+      const list1 = mostLiked.map(likedId => {
+        return updatedFavesList.find(business => business._id === likedId)
+      })
+
+      const list2 = updatedFavesList.filter(business => {
+        return !mostLiked.includes(business._id)
+      })
+
+      const finalList = [
+        ...list1,
+        ...list2
+      ];
+
+      setList(finalList);
+      setFilteredList(finalList);
       setAPIdataLoading(false);
     }
   }, [isLoading, isAPIdataLoading]);

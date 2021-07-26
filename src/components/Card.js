@@ -135,7 +135,8 @@ export default function MediaCard(props) {
             <CardHeader
             avatar={
               <Avatar aria-label="star" className={classes.pink}>
-                <StarIcon />
+                {/* <StarIcon /> */}
+                1
               </Avatar>
             }
             title="Top Favourite"
