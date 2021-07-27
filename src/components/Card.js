@@ -115,6 +115,12 @@ export default function MediaCard(props) {
     } else {
       axios.put(`${usersUrl}/${user.email}`, {unfavourite_id: props.business._id})
     }
+    axios.put(`${url}/${props.business._id}`, {like: favourite})
+      .then((response) => {
+        console.log(response)
+      }).catch((error) => {
+        console.log(error)
+      })
   }
 
   const handleApproveBusiness = () => {
