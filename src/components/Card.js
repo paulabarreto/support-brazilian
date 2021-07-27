@@ -137,7 +137,7 @@ export default function MediaCard(props) {
   return (
     <Grid item xs={12} md={6}>
         <Card className={classes.root}>
-          {props.index === 0 || props.index === 1  || props.index === 2 ?
+          {(props.index === 0 || props.index === 1  || props.index === 2) && props.page === 1 ?
             <CardHeader
             avatar={
               <Avatar aria-label="star" className={classes.pink}>

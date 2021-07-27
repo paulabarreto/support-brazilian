@@ -11,6 +11,8 @@ import React, { useState, useEffect } from 'react';
 import * as urls from './constants';
 import * as endpoints from './endpoints';
 import ConfirmationDialog from './components/ConfirmationDialog';
+import Typography from '@material-ui/core/Typography';
+import Pagination from '@material-ui/lab/Pagination';
 
 import axios from 'axios';
 
@@ -18,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     marginBottom: 20,
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
   },
   margin: theme.spacing(1),
 }));
@@ -31,6 +36,11 @@ function App() {
   const [filteredList, setFilteredList] = useState([]);
   const [favouriteList, setFavouriteList] = useState([]);
   const [isAPIdataLoading, setAPIdataLoading] = useState(true);
+  const [page, setPage] = React.useState(1);
+
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
 
   let url;
   let usersUrl;
@@ -44,9 +54,9 @@ function App() {
     usersUrl = `${urls.PRODUCTION_API_URL}/${endpoints.GetUsers}`; 
   }
 
-  const getBBs = async (isAdmin) => {
+  const getBBs = async (isAdmin, page) => {
     try {
-      const resp = await axios.get(`${url}`,
+      const resp = await axios.get(`${url}/${page}`,
       {headers: {
          authorization: ' xxxxxxxxxx' ,
          'Content-Type': 'application/json'
@@ -130,10 +140,10 @@ function App() {
       setAdmin(checkAdmin);
 
       const [brazilianBusinsessList, favouriteBusinessList] = await Promise.all([
-        getBBs(isAdmin),
+        getBBs(isAdmin, page),
         getFavouritesList(user),
       ]);
-      
+
       let updatedFavesList = brazilianBusinsessList.map(business => {
         return {
           ...business,
@@ -145,7 +155,7 @@ function App() {
       setFilteredList(updatedFavesList);
       setAPIdataLoading(false);
     }
-  }, [isLoading, isAPIdataLoading]);
+  }, [isLoading, isAPIdataLoading, page]);
 
   const arrayBufferToBase64 = (buffer) => {
     var binary = '';
@@ -226,6 +236,7 @@ function App() {
                 key={index}
                 index={index}
                 isAdmin={isAdmin}
+                page={page}
                 openConfirmation={handleOpenConfirmation}
               />
             ))
@@ -242,6 +253,8 @@ function App() {
           title="Let's meet!"
           confirmation={'Please Sign Up/Login to enable Add Business and Favourite Button'}
         />
+        <Typography>Page: {page}</Typography>
+        <Pagination count={4} page={page} onChange={handleChange} />
       </Container>
     </div>
   );

@@ -86,6 +86,7 @@ export default function AddBusinessDialog(props) {
     formData.append('website', website);
     formData.append('instagram', instagram);
     formData.append('category', category);
+    formData.append('likes', props.business.likes ? props.business.likes : 0);
     formData.append('adminApproved', false);
     formData.append('createdBy', props.user.email);
 
