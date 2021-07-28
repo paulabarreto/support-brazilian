@@ -1,4 +1,3 @@
-import './App.css';
 import '@fontsource/roboto';
 import SearchAppBar from './components/AppBar';
 import MediaCard from './components/Card';
@@ -15,6 +14,8 @@ import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
 import Skeleton from '@material-ui/lab/Skeleton';
 import axios from 'axios';
+import { LensTwoTone } from '@material-ui/icons';
+import createMixins from '@material-ui/core/styles/createMixins';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,6 +45,7 @@ function App() {
   const [isAPIdataLoading, setAPIdataLoading] = useState(true);
   const [page, setPage] = React.useState(1);
   const [category, setCategory] = React.useState(0);
+  const [searchField, setSearchField] = React.useState('');
 
   const handleChange = (event, value) => {
     setPage(value);
@@ -61,8 +63,12 @@ function App() {
   }
 
   const getBBs = async (isAdmin, page) => {
-    const getURL = category === 0 ? `${url}/${page}` :
+    let getURL = category === 0 ? `${url}/${page}` :
                     `${url}/${page}/${category}`;
+    if(searchField !== '') {
+      getURL = `${url}/${page}/0/${searchField}`
+    }
+    
     try {
       const resp = await axios.get(getURL,
       {headers: {
@@ -163,7 +169,7 @@ function App() {
       setFilteredList(updatedFavesList);
       setAPIdataLoading(false);
     }
-  }, [isLoading, isAPIdataLoading, page, category]);
+  }, [isLoading, isAPIdataLoading, page, category, searchField]);
 
   const arrayBufferToBase64 = (buffer) => {
     var binary = '';
@@ -188,14 +194,14 @@ function App() {
 
   const classes = useStyles();
 
-  const updateInput = async (input) => {
-    const filtered = businessList.filter(business => {
-     return business.name.toLowerCase().includes(input.toLowerCase())
-    })
-    setFilteredList(filtered);
+  const updateInput = async (event, input) => {
+    if (event.key === 'Enter') {
+      setSearchField(input);
+    }
  }
 
   const handleMenuItemClick = async (event, index) => {
+    setSearchField('')
     let listByCategory = businessList;
     setPage(1);
     setCategory(index);
@@ -203,7 +209,7 @@ function App() {
       setFilteredList(listByCategory)
       return listByCategory;
     }
-    listByCategory = getBBs(isAdmin, page);
+    listByCategory = await getBBs(isAdmin, page);
     setFilteredList(listByCategory);
 
   };
@@ -236,7 +242,7 @@ function App() {
     <div className={classes.root}>
       <SearchAppBar
         onMenuClick={(e, index) => handleMenuItemClick(e, index)} 
-        onChange={(e) => updateInput(e.target.value)}
+        onChange={(e) => updateInput(e, e.target.value)}
         handleClickOpen={handleClickOpen}
         favesSelected={favesSelected}
         handleShowFavourites={handleShowFavourites}
