@@ -43,6 +43,7 @@ function App() {
   const [favouriteList, setFavouriteList] = useState([]);
   const [isAPIdataLoading, setAPIdataLoading] = useState(true);
   const [page, setPage] = React.useState(1);
+  const [category, setCategory] = React.useState(0);
 
   const handleChange = (event, value) => {
     setPage(value);
@@ -60,8 +61,10 @@ function App() {
   }
 
   const getBBs = async (isAdmin, page) => {
+    const getURL = category === 0 ? `${url}/${page}` :
+                    `${url}/${page}/${category}`;
     try {
-      const resp = await axios.get(`${url}/${page}`,
+      const resp = await axios.get(getURL,
       {headers: {
          authorization: ' xxxxxxxxxx' ,
          'Content-Type': 'application/json'
@@ -160,7 +163,7 @@ function App() {
       setFilteredList(updatedFavesList);
       setAPIdataLoading(false);
     }
-  }, [isLoading, isAPIdataLoading, page]);
+  }, [isLoading, isAPIdataLoading, page, category]);
 
   const arrayBufferToBase64 = (buffer) => {
     var binary = '';
@@ -192,11 +195,17 @@ function App() {
     setFilteredList(filtered);
  }
 
-  const handleMenuItemClick = (event, index) => {
-    const filtered = index === 0 ? businessList : businessList.filter(business => {
-      return business.category === index
-     })
-     setFilteredList(filtered);
+  const handleMenuItemClick = async (event, index) => {
+    let listByCategory = businessList;
+    setPage(1);
+    setCategory(index);
+    if (index === 0) {
+      setFilteredList(listByCategory)
+      return listByCategory;
+    }
+    listByCategory = getBBs(isAdmin, page);
+    setFilteredList(listByCategory);
+
   };
 
   const [favesSelected, setFavesSelected] = useState(false);

@@ -21,7 +21,6 @@ import FastfoodIcon from '@material-ui/icons/Fastfood';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
-import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
