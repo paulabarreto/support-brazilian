@@ -185,15 +185,6 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
                   Add New Business
                 </Typography>
               </MenuItem>
-              <a style={{color: 'inherit', textDecoration:"none"}} 
-                  target="_blank" href="https://www.paulabarreto.ca">
-                <MenuItem>
-                    <PermContactCalendarIcon color="primary"/>
-                    <Typography className={classes.heading}>
-                      Owner's Portfolio & Contact
-                    </Typography>
-                </MenuItem>
-              </a>
             </Menu>
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>

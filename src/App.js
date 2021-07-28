@@ -13,18 +13,24 @@ import * as endpoints from './endpoints';
 import ConfirmationDialog from './components/ConfirmationDialog';
 import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
-
+import Skeleton from '@material-ui/lab/Skeleton';
 import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    marginBottom: 20,
     '& > * + *': {
       marginTop: theme.spacing(2),
     },
   },
+  footer: {
+    backgroundColor: '#3f51b5',
+    height: 30,
+    color: 'white',
+    paddingTop: 10
+  },
   margin: theme.spacing(1),
+  mtop: 10,
 }));
 
 function App() {
@@ -44,7 +50,6 @@ function App() {
 
   let url;
   let usersUrl;
-  let mostLikedUrl;
   if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     url = `${urls.LOCAL_API_URL}/${endpoints.GetBusiness}`;
     usersUrl = `${urls.LOCAL_API_URL}/${endpoints.GetUsers}`;    
@@ -245,6 +250,18 @@ function App() {
             filteredList.length === 0 &&
             <h3>No results to show</h3>
           }
+
+          <Grid item xs={12}>
+            <Grid container justify="center" style={{marginTop: 30 + 'px'}}>
+              <Typography>Page: {page}</Typography>
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <Grid container justify="center" style={{marginTop: 10 + 'px'}}>
+                <Pagination count={4} page={page} onChange={handleChange} />
+            </Grid>
+          </Grid>
+          
         </Grid>
         <AddBusinessDialog open={open} handleClose={handleClose} user={user}/>
         <ConfirmationDialog 
@@ -253,9 +270,17 @@ function App() {
           title="Let's meet!"
           confirmation={'Please Sign Up/Login to enable Add Business and Favourite Button'}
         />
-        <Typography>Page: {page}</Typography>
-        <Pagination count={4} page={page} onChange={handleChange} />
       </Container>
+      <footer className={classes.footer}>
+        <Grid container justify="center">
+          <Typography variant="subtitle2">
+            Created by Paula Barreto | <a style={{color: 'inherit', textDecoration:"none"}} 
+                  target="_blank" href="https://www.paulabarreto.ca">www.paulabarreto.ca</a>
+          </Typography>
+        
+        </Grid>
+      </footer>
+
     </div>
   );
 }

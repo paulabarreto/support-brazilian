@@ -22,7 +22,6 @@ import * as urls from '../constants';
 import * as endpoints from '../endpoints';
 import axios from 'axios';
 import Avatar from '@material-ui/core/Avatar';
-import StarIcon from '@material-ui/icons/Star';
 import { yellow, green } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme)=>({
