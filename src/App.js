@@ -14,8 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
 import Skeleton from '@material-ui/lab/Skeleton';
 import axios from 'axios';
-import { LensTwoTone } from '@material-ui/icons';
-import createMixins from '@material-ui/core/styles/createMixins';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -195,10 +194,8 @@ function App() {
   const classes = useStyles();
 
   const updateInput = async (event, input) => {
-    if (event.key === 'Enter') {
       setSearchField(input);
-    }
- }
+  }
 
   const handleMenuItemClick = async (event, index) => {
     setSearchField('')

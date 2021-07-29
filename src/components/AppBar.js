@@ -200,7 +200,7 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
-              onKeyDown={onChange}
+              onChange={onChange}
             />
           </div>
           <AuthNav/>
