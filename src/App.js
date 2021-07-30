@@ -46,8 +46,10 @@ function App() {
   const [category, setCategory] = React.useState(0);
   const [searchField, setSearchField] = React.useState('');
   const [pageCount, setPageCount] = React.useState(0);
+  const [isFirstLoad, setFirstLoad] = React.useState(true);
 
   const handleChange = (event, value) => {
+    setFirstLoad(false);
     setPage(value);
   };
 
@@ -145,7 +147,6 @@ function App() {
 
   useEffect(() => {
     if(!isLoading) {
-
       const checkAdmin = user && user.email === 'paulavilaca@gmail.com' ? true : false
       setAdmin(checkAdmin);
 
@@ -155,18 +156,28 @@ function App() {
           getFavouritesList(user),
           getBusinessCount()
         ]);
+        
         let updatedFavesList = brazilianBusinsessList.map(business => {
           return {
             ...business,
             favourite: favouriteList.includes(business._id)
           }
         })
+
+        if(isFirstLoad) {
+          updatedFavesList = updatedFavesList.map((item, index) => {
+            return {
+              ...item,
+              position: index
+            }
+          })
+        }
   
         setList(updatedFavesList);
         setFilteredList(updatedFavesList);
         setAPIdataLoading(false);
         return brazilianBusinsessList;
-      }, 3000)
+      }, 2500)
   
       return () => clearTimeout(fetchData)
     }
@@ -200,9 +211,11 @@ function App() {
     setPage(1);
     setCategory(index);
     if (index === 0) {
+      setFirstLoad(true);
       setFilteredList(listByCategory)
       return listByCategory;
     }
+    setFirstLoad(false);
     listByCategory = await getBBs(isAdmin, page);
     setFilteredList(listByCategory);
 
@@ -213,6 +226,11 @@ function App() {
     if(!isAuthenticated) {
       handleOpenConfirmation();
     } else {
+      if(selected) {
+        setFirstLoad(false)
+      } else {
+        setFirstLoad(true)
+      }
       setFavesSelected(selected)
       const filterFaves = !selected ? businessList : businessList.filter(business => business.favourite)
       setFilteredList(filterFaves);
@@ -220,9 +238,11 @@ function App() {
   }
 
   const handleSearchField = (e) => {
-    setPage(1); 
-    setSearchField(e)
-
+    setPage(1);
+    setSearchField(e);
+    if(e !== '') {
+      setFirstLoad(false)
+    }
   }
 
   const [openConfirmation, setOpenConfirmation] = React.useState(false);
@@ -254,7 +274,6 @@ function App() {
               <MediaCard
                 business={business}
                 key={index}
-                index={index}
                 isAdmin={isAdmin}
                 page={page}
                 openConfirmation={handleOpenConfirmation}

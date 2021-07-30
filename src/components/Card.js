@@ -136,13 +136,13 @@ export default function MediaCard(props) {
   return (
     <Grid item xs={12} md={6}>
         <Card className={classes.root}>
-          {(props.index === 0 || props.index === 1  || props.index === 2) && props.page === 1 ?
+          {(business.position === 0 || business.position === 1  || business.position === 2) && props.page === 1 ?
             <CardHeader
             avatar={
               <Avatar aria-label="star" className={classes.pink}>
                 {/* <StarIcon /> */}
                 <Typography variant="button">
-                  {props.index + 1}
+                  {business.position + 1}
                 </Typography>
               </Avatar>
             }
