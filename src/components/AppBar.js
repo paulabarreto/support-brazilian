@@ -87,16 +87,24 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [searchValue, setSearchValue] = React.useState('');
 
   const handleClickListItem = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleMenuItemClick = (event, index) => {
+    setSearchValue('')
+    onChange('')
     setSelectedIndex(index);
     setAnchorEl(null);
     onMenuClick(event, index)
   };
+
+  const handleChange = (e) => {
+    onChange(e.target.value)
+    setSearchValue(e.target.value)
+  }
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -195,12 +203,13 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
             </div>
             <InputBase
               placeholder="Search…"
+              value={searchValue}
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
-              onChange={onChange}
+              onChange={(e) => handleChange(e)}
             />
           </div>
           <AuthNav/>

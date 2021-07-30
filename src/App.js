@@ -220,7 +220,7 @@ function App() {
     <div className={classes.root}>
       <SearchAppBar
         onMenuClick={(e, index) => handleMenuItemClick(e, index)} 
-        onChange={(e) => setSearchField(e.target.value)}
+        onChange={(e) => setSearchField(e)}
         handleClickOpen={handleClickOpen}
         favesSelected={favesSelected}
         handleShowFavourites={handleShowFavourites}
