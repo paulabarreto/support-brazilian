@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
 import Skeleton from '@material-ui/lab/Skeleton';
 import axios from 'axios';
+var qs = require('qs');
 
 
 const useStyles = makeStyles((theme) => ({
@@ -64,6 +65,39 @@ function App() {
     url = `${urls.PRODUCTION_API_URL}/${endpoints.GetBusiness}`;
     usersUrl = `${urls.PRODUCTION_API_URL}/${endpoints.GetUsers}`; 
     countUrl = `${urls.LOCAL_API_URL}/${endpoints.GetBusinessCount}`;
+  }
+
+  const getFavourites = async (ids) => {
+    try {
+      const resp =  await axios.get('http://localhost:8080/api/brazilianBusinessFavourites', {
+        params: {
+          ids: ids
+        },
+        headers: {
+          authorization: ' xxxxxxxxxx' ,
+          'Content-Type': 'application/json'
+        },
+        paramsSerializer: params => {
+          return qs.stringify(params)
+        }
+        
+      })
+      const base64Flag = 'data:image/jpeg;base64,';
+
+      const list = resp.data.data.map(res => {
+        const imageStr = arrayBufferToBase64(res.image.data.data);
+        return {
+          ...res,
+          image: base64Flag + imageStr,
+          favourite: true
+        }
+      })
+      return list;
+
+
+    } catch(error) {
+      console.log(error)
+    }
   }
 
   const getBBs = async (isAdmin, page) => {
@@ -154,7 +188,7 @@ function App() {
         const [brazilianBusinsessList, favouriteBusinessList, pageCount] = await Promise.all([
           getBBs(isAdmin, page),
           getFavouritesList(user),
-          getBusinessCount()
+          // getBusinessCount()
         ]);
         
         let updatedFavesList = brazilianBusinsessList.map(business => {
@@ -222,7 +256,7 @@ function App() {
   };
 
   const [favesSelected, setFavesSelected] = useState(false);
-  const handleShowFavourites = (selected) => {
+  const handleShowFavourites = async (selected) => {
     if(!isAuthenticated) {
       handleOpenConfirmation();
     } else {
@@ -232,7 +266,9 @@ function App() {
         setFirstLoad(true)
       }
       setFavesSelected(selected)
-      const filterFaves = !selected ? businessList : businessList.filter(business => business.favourite)
+      // const filterFaves = !selected ? businessList : businessList.filter(business => business.favourite)
+      const filterFaves = !selected ? businessList : 
+      await getFavourites(favouriteList);
       setFilteredList(filterFaves);
     }
   }
