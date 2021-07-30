@@ -93,8 +93,6 @@ function App() {
         }
       })
       return list;
-
-
     } catch(error) {
       console.log(error)
     }
@@ -188,7 +186,7 @@ function App() {
         const [brazilianBusinsessList, favouriteBusinessList, pageCount] = await Promise.all([
           getBBs(isAdmin, page),
           getFavouritesList(user),
-          // getBusinessCount()
+          getBusinessCount()
         ]);
         
         let updatedFavesList = brazilianBusinsessList.map(business => {
