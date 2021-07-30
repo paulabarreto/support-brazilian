@@ -45,6 +45,7 @@ function App() {
   const [page, setPage] = React.useState(1);
   const [category, setCategory] = React.useState(0);
   const [searchField, setSearchField] = React.useState('');
+  const [pageCount, setPageCount] = React.useState(0);
 
   const handleChange = (event, value) => {
     setPage(value);
@@ -52,13 +53,15 @@ function App() {
 
   let url;
   let usersUrl;
+  let countUrl;
   if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     url = `${urls.LOCAL_API_URL}/${endpoints.GetBusiness}`;
     usersUrl = `${urls.LOCAL_API_URL}/${endpoints.GetUsers}`;    
-   
+    countUrl = `${urls.LOCAL_API_URL}/${endpoints.GetBusinessCount}`
   } else {
     url = `${urls.PRODUCTION_API_URL}/${endpoints.GetBusiness}`;
     usersUrl = `${urls.PRODUCTION_API_URL}/${endpoints.GetUsers}`; 
+    countUrl = `${urls.LOCAL_API_URL}/${endpoints.GetBusinessCount}`;
   }
 
   const getBBs = async (isAdmin, page) => {
@@ -128,6 +131,18 @@ function App() {
       }
   }
 
+  const getBusinessCount = async (user) => {
+      try{
+        const count = await axios.get(`${countUrl}`)
+        const businessCount = count.data.data;
+        const numberOfPages = Math.round(businessCount / 5)
+        setPageCount(numberOfPages);
+        return count.data.data
+      } catch (error) {
+        return `Error: ${error}`;
+      }
+  }
+
   useEffect(() => {
     if(!isLoading) {
 
@@ -135,10 +150,12 @@ function App() {
       setAdmin(checkAdmin);
 
       const fetchData = setTimeout(async () => {
-        const [brazilianBusinsessList, favouriteBusinessList] = await Promise.all([
+        const [brazilianBusinsessList, favouriteBusinessList, pageCount] = await Promise.all([
           getBBs(isAdmin, page),
           getFavouritesList(user),
-        ]);let updatedFavesList = brazilianBusinsessList.map(business => {
+          getBusinessCount()
+        ]);
+        let updatedFavesList = brazilianBusinsessList.map(business => {
           return {
             ...business,
             favourite: favouriteList.includes(business._id)
@@ -148,7 +165,6 @@ function App() {
         setList(updatedFavesList);
         setFilteredList(updatedFavesList);
         setAPIdataLoading(false);
-
         return brazilianBusinsessList;
       }, 3000)
   
@@ -203,6 +219,12 @@ function App() {
     }
   }
 
+  const handleSearchField = (e) => {
+    setPage(1); 
+    setSearchField(e)
+
+  }
+
   const [openConfirmation, setOpenConfirmation] = React.useState(false);
   const handleOpenConfirmation = () => {
     setOpenConfirmation(true);
@@ -220,7 +242,7 @@ function App() {
     <div className={classes.root}>
       <SearchAppBar
         onMenuClick={(e, index) => handleMenuItemClick(e, index)} 
-        onChange={(e) => setSearchField(e)}
+        onChange={(e) => handleSearchField(e)}
         handleClickOpen={handleClickOpen}
         favesSelected={favesSelected}
         handleShowFavourites={handleShowFavourites}
@@ -251,7 +273,7 @@ function App() {
           </Grid>
           <Grid item xs={12}>
             <Grid container justify="center" style={{marginTop: 10 + 'px'}}>
-                <Pagination count={4} page={page} onChange={handleChange} />
+                <Pagination count={pageCount} page={page} onChange={handleChange} />
             </Grid>
           </Grid>
           
