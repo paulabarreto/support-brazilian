@@ -128,7 +128,7 @@ export default function AddBusinessDialog(props) {
             <DialogContentText>
               To request a Brazilian business addition, please submit the info below.
             </DialogContentText>
-            <Grid container justify="center">
+            <Grid container justifyContent="center">
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="name">Name</InputLabel>

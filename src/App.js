@@ -302,7 +302,7 @@ function App() {
         handleShowFavourites={handleShowFavourites}
       />
       <Container maxWidth="md">
-        <Grid container justify="center" style={{marginTop: 70 + 'px'}}>
+        <Grid container justifyContent="center" style={{marginTop: 70 + 'px'}}>
           { filteredList.length > 0 &&
             filteredList.map((business, index) => (
               <MediaCard
@@ -320,12 +320,12 @@ function App() {
           }
 
           <Grid item xs={12}>
-            <Grid container justify="center" style={{marginTop: 30 + 'px'}}>
+            <Grid container justifyContent="center" style={{marginTop: 30 + 'px'}}>
               <Typography>Page: {page}</Typography>
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Grid container justify="center" style={{marginTop: 10 + 'px'}}>
+            <Grid container justifyContent="center" style={{marginTop: 10 + 'px'}}>
                 <Pagination count={pageCount} page={page} onChange={handleChange} />
             </Grid>
           </Grid>
@@ -340,7 +340,7 @@ function App() {
         />
       </Container>
       <footer className={classes.footer}>
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <Typography variant="subtitle2">
             Created by Paula Barreto | <a style={{color: 'inherit', textDecoration:"none"}} 
                   target="_blank" href="https://www.paulabarreto.ca">www.paulabarreto.ca</a>

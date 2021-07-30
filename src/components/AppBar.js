@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     pointerEvents: 'none',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContentContent: 'center',
   },
   inputRoot: {
     color: 'inherit',
