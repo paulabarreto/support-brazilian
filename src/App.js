@@ -67,6 +67,7 @@ function App() {
     if(searchField !== '') {
       getURL = `${url}/${page}/0/${searchField}`
     }
+    console.log(searchField)
     
     try {
       const resp = await axios.get(getURL,
@@ -100,6 +101,7 @@ function App() {
       if(isAdmin) {
         list.sort(showPendingApprovalFirst(list));
       }
+      console.log(list)
       return list;
     } catch(error) {
       console.error(`Error: ${error}`)
@@ -146,27 +148,31 @@ function App() {
       }
   }
 
-  useEffect(async () => {
+  useEffect(() => {
     if(!isLoading) {
 
       const checkAdmin = user && user.email === 'paulavilaca@gmail.com' ? true : false
       setAdmin(checkAdmin);
 
-      const [brazilianBusinsessList, favouriteBusinessList] = await Promise.all([
-        getBBs(isAdmin, page),
-        getFavouritesList(user),
-      ]);
+      const fetchData = setTimeout(async () => {
+        const [brazilianBusinsessList, favouriteBusinessList] = await Promise.all([
+          getBBs(isAdmin, page),
+          getFavouritesList(user),
+        ]);let updatedFavesList = brazilianBusinsessList.map(business => {
+          return {
+            ...business,
+            favourite: favouriteList.includes(business._id)
+          }
+        })
+  
+        setList(updatedFavesList);
+        setFilteredList(updatedFavesList);
+        setAPIdataLoading(false);
 
-      let updatedFavesList = brazilianBusinsessList.map(business => {
-        return {
-          ...business,
-          favourite: favouriteList.includes(business._id)
-        }
-      })
-
-      setList(updatedFavesList);
-      setFilteredList(updatedFavesList);
-      setAPIdataLoading(false);
+        return brazilianBusinsessList;
+      }, 3000)
+  
+      return () => clearTimeout(fetchData)
     }
   }, [isLoading, isAPIdataLoading, page, category, searchField]);
 
@@ -193,12 +199,7 @@ function App() {
 
   const classes = useStyles();
 
-  const updateInput = async (event, input) => {
-      setSearchField(input);
-  }
-
   const handleMenuItemClick = async (event, index) => {
-    setSearchField('')
     let listByCategory = businessList;
     setPage(1);
     setCategory(index);
@@ -239,7 +240,7 @@ function App() {
     <div className={classes.root}>
       <SearchAppBar
         onMenuClick={(e, index) => handleMenuItemClick(e, index)} 
-        onChange={(e) => updateInput(e, e.target.value)}
+        onChange={(e) => setSearchField(e.target.value)}
         handleClickOpen={handleClickOpen}
         favesSelected={favesSelected}
         handleShowFavourites={handleShowFavourites}
