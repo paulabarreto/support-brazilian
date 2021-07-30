@@ -67,7 +67,6 @@ function App() {
     if(searchField !== '') {
       getURL = `${url}/${page}/0/${searchField}`
     }
-    console.log(searchField)
     
     try {
       const resp = await axios.get(getURL,
@@ -101,7 +100,6 @@ function App() {
       if(isAdmin) {
         list.sort(showPendingApprovalFirst(list));
       }
-      console.log(list)
       return list;
     } catch(error) {
       console.error(`Error: ${error}`)
