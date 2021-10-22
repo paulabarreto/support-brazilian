@@ -50,6 +50,9 @@ function App() {
   const [pageCount, setPageCount] = React.useState(0);
   const [isFirstLoad, setFirstLoad] = React.useState(true);
 
+  // For page count track which filter is being used
+  const [filter, setFilter] = React.useState('category');
+
   const handleChange = (event, value) => {
     setFirstLoad(false);
     setPage(value);
@@ -61,7 +64,7 @@ function App() {
   if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     url = `${urls.LOCAL_API_URL}/${endpoints.GetBusiness}`;
     usersUrl = `${urls.LOCAL_API_URL}/${endpoints.GetUsers}`;    
-    countUrl = `${urls.LOCAL_API_URL}/${endpoints.GetBusinessCount}`
+    countUrl = `${urls.LOCAL_API_URL}/${endpoints.GetBusinessCount}/${filter}/${category}`
   } else {
     url = `${urls.PRODUCTION_API_URL}/${endpoints.GetBusiness}`;
     usersUrl = `${urls.PRODUCTION_API_URL}/${endpoints.GetUsers}`; 
@@ -243,6 +246,7 @@ function App() {
     let listByCategory = businessList;
     setPage(1);
     setCategory(index);
+    setFilter('category');
     if (index === 0) {
       setFirstLoad(true);
       setFilteredList(listByCategory)
@@ -269,14 +273,21 @@ function App() {
       const filterFaves = !selected ? businessList : 
       await getFavourites(favouriteList);
       setFilteredList(filterFaves);
+      const numOfPages = Math.round(favouriteList.length / 5)
+      setPageCount(numOfPages)
     }
   }
 
   const handleSearchField = (e) => {
     setPage(1);
     setSearchField(e);
+    setFilter('name');
+    setCategory(e);
     if(e !== '') {
       setFirstLoad(false)
+    }
+    if (e === '') { 
+      setCategory(0);
     }
   }
 
