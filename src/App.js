@@ -12,7 +12,8 @@ import * as endpoints from './endpoints';
 import ConfirmationDialog from './components/ConfirmationDialog';
 import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
-import Skeleton from '@material-ui/lab/Skeleton';
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 import axios from 'axios';
 var qs = require('qs');
 
@@ -287,10 +288,6 @@ function App() {
   const handleCloseConfirmation = () => {
     setOpenConfirmation(false);
   };
-
-  if (isLoading  || isAPIdataLoading) {
-    return <div>Loading ...</div>;
-  }
   
   return (
     <div className={classes.root}>
@@ -303,7 +300,14 @@ function App() {
       />
       <Container maxWidth="md">
         <Grid container justifyContent="center" style={{marginTop: 70 + 'px'}}>
-          { filteredList.length > 0 &&
+          {isAPIdataLoading &&
+            <Grid item xs={12} md={6} style={{marginTop: 20 + 'px'}}>
+              <Stack spacing={1}>
+                <Skeleton variant="rectangular" width={350} height={300} />
+              </Stack>
+            </Grid>
+          }
+          { !isAPIdataLoading && filteredList.length > 0 &&
             filteredList.map((business, index) => (
               <MediaCard
                 business={business}
@@ -314,7 +318,7 @@ function App() {
               />
             ))
           }
-          {
+          { !isAPIdataLoading &&
             filteredList.length === 0 &&
             <h3>No results to show</h3>
           }
