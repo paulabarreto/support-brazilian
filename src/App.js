@@ -53,6 +53,9 @@ function App() {
   // For page count track which filter is being used
   const [filter, setFilter] = React.useState('category');
 
+  // For skeleton loading
+  const dummyArray = [1, 2, 3];
+
   const handleChange = (event, value) => {
     setFirstLoad(false);
     setPage(value);
@@ -311,12 +314,13 @@ function App() {
       />
       <Container maxWidth="md">
         <Grid container justifyContent="center" style={{marginTop: 70 + 'px'}}>
-          {isAPIdataLoading &&
+          {isAPIdataLoading && dummyArray.map(skeleton => (
             <Grid item xs={12} md={6} style={{marginTop: 20 + 'px'}}>
               <Stack spacing={1}>
                 <Skeleton variant="rectangular" width={350} height={300} />
               </Stack>
             </Grid>
+            ))
           }
           { !isAPIdataLoading && filteredList.length > 0 &&
             filteredList.map((business, index) => (
