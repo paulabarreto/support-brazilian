@@ -15,6 +15,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import axios from 'axios';
+import urlService from './urls';
 var qs = require('qs');
 
 
@@ -57,26 +58,19 @@ function App() {
   const dummyArray = [1, 2, 3];
 
   const handleChange = (event, value) => {
+    setAPIdataLoading(true);
     setFirstLoad(false);
     setPage(value);
   };
 
-  let url;
-  let usersUrl;
-  let countUrl;
-  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-    url = `${urls.LOCAL_API_URL}/${endpoints.GetBusiness}`;
-    usersUrl = `${urls.LOCAL_API_URL}/${endpoints.GetUsers}`;    
-    countUrl = `${urls.LOCAL_API_URL}/${endpoints.GetBusinessCount}/${filter}/${category}`
-  } else {
-    url = `${urls.PRODUCTION_API_URL}/${endpoints.GetBusiness}`;
-    usersUrl = `${urls.PRODUCTION_API_URL}/${endpoints.GetUsers}`; 
-    countUrl = `${urls.LOCAL_API_URL}/${endpoints.GetBusinessCount}`;
-  }
+  const url = urlService(endpoints.GetBusiness);
+  const usersUrl = urlService(endpoints.GetUsers);
+  const countUrl = urlService(endpoints.GetBusinessCount);
+  const favouritesUrl = urlService(endpoints.GetFavourites);
 
   const getFavourites = async (ids) => {
     try {
-      const resp =  await axios.get('http://localhost:8080/api/brazilianBusinessFavourites', {
+      const resp =  await axios.get(favouritesUrl, {
         params: {
           ids: ids
         },
@@ -106,6 +100,7 @@ function App() {
   }
 
   const getBBs = async (isAdmin, page) => {
+    setAPIdataLoading(true);
     let getURL = category === 0 ? `${url}/${page}` :
                     `${url}/${page}/${category}`;
     if(searchField !== '') {
@@ -174,7 +169,7 @@ function App() {
 
   const getBusinessCount = async (user) => {
       try{
-        const count = await axios.get(`${countUrl}`)
+        const count = await axios.get(`${countUrl}/${filter}/${category}`)
         const businessCount = count.data.data;
         const numberOfPages = Math.round(businessCount / 5)
         setPageCount(numberOfPages);
@@ -220,7 +215,7 @@ function App() {
   
       return () => clearTimeout(fetchData)
     }
-  }, [isLoading, isAPIdataLoading, page, category, searchField]);
+  }, [isLoading, page, category, searchField]);
 
   const arrayBufferToBase64 = (buffer) => {
     var binary = '';
@@ -246,6 +241,7 @@ function App() {
   const classes = useStyles();
 
   const handleMenuItemClick = async (event, index) => {
+    setAPIdataLoading(true);
     let listByCategory = businessList;
     setPage(1);
     setCategory(index);
@@ -286,6 +282,10 @@ function App() {
     setSearchField(e);
     setFilter('name');
     setCategory(e);
+    const filtered = businessList.filter(business => {
+      return business.name.toLowerCase().includes(e.toLowerCase())
+     })
+    setFilteredList(filtered);
     if(e !== '') {
       setFirstLoad(false)
     }
