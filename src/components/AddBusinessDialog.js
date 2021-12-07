@@ -86,7 +86,7 @@ export default function AddBusinessDialog(props) {
     formData.append('website', website);
     formData.append('instagram', instagram);
     formData.append('category', category);
-    formData.append('likes', props.business.likes ? props.business.likes : 0);
+    // formData.append('likes', props.business.likes ? props.business.likes : 0);
     formData.append('adminApproved', false);
     formData.append('createdBy', props.user.email);
 
@@ -152,8 +152,10 @@ export default function AddBusinessDialog(props) {
                 <FormControl fullWidth>
                   <InputLabel htmlFor="description">Description</InputLabel>
                     <Input
-                      required
+                      {...register('description', { required: true })}
+                      error={errors.description ? true : false}
                       onChange={e => setDescription(e.target.value)}
+                      required={true}
                       id="description"
                       defaultValue={description}
                       startAdornment={
@@ -162,13 +164,15 @@ export default function AddBusinessDialog(props) {
                         </InputAdornment>
                       }
                     />
+                    {errors.description && <p style={{marginTop:0, color:'red', fontSize: 'small'}}>Description is Required</p>}
+
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="location">Location</InputLabel>
                     <Input
-                      required
+                      required={true}
                       onChange={e => setLocation(e.target.value)}
                       id="location"
                       defaultValue={location}
@@ -187,6 +191,7 @@ export default function AddBusinessDialog(props) {
                     <Input
                       {...register('image', { required: true })}
                       error={errors.image}
+                      required={true}
                       onChange={e => setImage(e.target.files[0])}
                       id="image"
                       name="image"
@@ -253,7 +258,7 @@ export default function AddBusinessDialog(props) {
             <Button onClick={props.handleClose} color="primary">
               Cancel
             </Button>
-            <Button disabled={!name} onClick={handleSubmit(onSubmit)} color="primary">
+            <Button disabled={!name || !description || !image || !location || !category} onClick={handleSubmit(onSubmit)} color="primary">
               Send
             </Button>
           </DialogActions>
