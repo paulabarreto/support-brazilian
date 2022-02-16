@@ -15,9 +15,7 @@ import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import axios from 'axios';
 import urlService from './urls';
-import getBusiness from './services/getBusiness';
-var qs = require('qs');
-
+import { getBusiness, getFavourites, getFavouritesList, getBusinessCount } from './services/getBusiness';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,37 +66,6 @@ function App() {
   const countUrl = urlService(endpoints.GetBusinessCount);
   const favouritesUrl = urlService(endpoints.GetFavourites);
 
-  const getFavourites = async (ids) => {
-    try {
-      const resp =  await axios.get(favouritesUrl, {
-        params: {
-          ids: ids
-        },
-        headers: {
-          authorization: ' xxxxxxxxxx' ,
-          'Content-Type': 'application/json'
-        },
-        paramsSerializer: params => {
-          return qs.stringify(params)
-        }
-        
-      })
-      const base64Flag = 'data:image/jpeg;base64,';
-
-      const list = resp.data.data.map(res => {
-        const imageStr = arrayBufferToBase64(res.image.data.data);
-        return {
-          ...res,
-          image: base64Flag + imageStr,
-          favourite: true
-        }
-      })
-      return list;
-    } catch(error) {
-      console.log(error)
-    }
-  }
-
   const getBBs = async (isAdmin, page) => {
     setAPIdataLoading(true);
     let getURL = category === 0 ? `${url}/${page}` :
@@ -130,26 +97,14 @@ function App() {
     })
   }
 
-  const getFavouritesList = async (user) => {
-      try{
-        const faves = await axios.get(`${usersUrl}/${user.email}`)
-        setFavouriteList(faves.data)
-        return faves.data
-      } catch (error) {
-        return `Error: ${error}`;
-      }
+  const favouritesList = async (user) => {
+    const faves = await getFavouritesList(usersUrl, user)
+    setFavouriteList(faves)
   }
 
-  const getBusinessCount = async (user) => {
-      try{
-        const count = await axios.get(`${countUrl}/${filter}/${category}`)
-        const businessCount = count.data.data;
-        const numberOfPages = Math.round(businessCount / 5)
-        setPageCount(numberOfPages);
-        return count.data.data
-      } catch (error) {
-        return `Error: ${error}`;
-      }
+  const businessCount = async () => {
+    const count = await getBusinessCount(`${countUrl}/${filter}/${category}`)
+    setPageCount(count);
   }
 
   useEffect(() => {
@@ -160,8 +115,8 @@ function App() {
       const fetchData = setTimeout(async () => {
         const [brazilianBusinsessList, favouriteBusinessList, pageCount] = await Promise.all([
           getBBs(isAdmin, page),
-          getFavouritesList(user),
-          getBusinessCount()
+          favouritesList(user),
+          businessCount()
         ]);
         
         let updatedFavesList = brazilianBusinsessList.map(business => {
@@ -189,13 +144,6 @@ function App() {
       return () => clearTimeout(fetchData)
     }
   }, [isLoading, page, category, searchField]);
-
-  const arrayBufferToBase64 = (buffer) => {
-    var binary = '';
-    var bytes = [].slice.call(new Uint8Array(buffer));
-    bytes.forEach((b) => binary += String.fromCharCode(b));
-    return window.btoa(binary);
-  };
 
   const [open, setOpen] = React.useState(false);
 
@@ -243,7 +191,7 @@ function App() {
       setFavesSelected(selected)
       // const filterFaves = !selected ? businessList : businessList.filter(business => business.favourite)
       const filterFaves = !selected ? businessList : 
-      await getFavourites(favouriteList);
+      await getFavourites(favouritesUrl, favouriteList);
       setFilteredList(filterFaves);
       const numOfPages = Math.round(favouriteList.length / 5)
       setPageCount(numOfPages)
