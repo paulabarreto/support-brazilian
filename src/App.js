@@ -7,7 +7,6 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import React, { useState, useEffect } from 'react';
-import * as urls from './constants';
 import * as endpoints from './endpoints';
 import ConfirmationDialog from './components/ConfirmationDialog';
 import Typography from '@material-ui/core/Typography';
@@ -16,6 +15,7 @@ import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import axios from 'axios';
 import urlService from './urls';
+import getBusiness from './services/getBusiness';
 var qs = require('qs');
 
 
@@ -106,41 +106,14 @@ function App() {
     if(searchField !== '') {
       getURL = `${url}/${page}/0/${searchField}`
     }
+    let list = [];
     
-    try {
-      const resp = await axios.get(getURL,
-      {headers: {
-         authorization: ' xxxxxxxxxx' ,
-         'Content-Type': 'application/json'
-      }})
-
-      const base64Flag = 'data:image/jpeg;base64,';
-      let list = [];
-      if (!isAdmin) {
-        list = resp.data.data.filter(res => res.adminApproved)
-        .map(res => {
-          const imageStr = arrayBufferToBase64(res.image.data.data);
-          return {
-            ...res,
-            image: base64Flag + imageStr
-          }
-        });
-      } else {
-        list = resp.data.data.map(res => {
-          const imageStr = arrayBufferToBase64(res.image.data.data);
-          return {
-            ...res,
-            image: base64Flag + imageStr
-          }
-        })
-      }
-      if(isAdmin) {
-        list.sort(showPendingApprovalFirst(list));
-      }
-      return list;
-    } catch(error) {
-      console.error(`Error: ${error}`)
+    list = await getBusiness(getURL);
+    if(!isAdmin){
+      return list.filter(item => item.adminApproved)
     }
+    list.sort(showPendingApprovalFirst(list));
+    return list;
   }
 
   const showPendingApprovalFirst = (list) => {
