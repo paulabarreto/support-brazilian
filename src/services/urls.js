@@ -1,5 +1,5 @@
-import * as endpoints from './endpoints';
-import * as urls from './constants';
+import * as endpoints from '../endpoints';
+import * as urls from '../constants';
 
 const urlService = (endpoint) => {
     let url;
@@ -20,13 +20,11 @@ const urlService = (endpoint) => {
         url = production ===  true ? `${urls.PRODUCTION_API_URL}/${endpoints.GetBusinessCount}`
                                     : `${urls.LOCAL_API_URL}/${endpoints.GetBusinessCount}`;
         break;
-        case endpoints.GetBusinessCount:
-        url = production ===  true ? `${urls.PRODUCTION_API_URL}/${endpoints.GetBusinessCount}`
-                                    : `${urls.LOCAL_API_URL}/${endpoints.GetBusinessCount}`;
-        break;
         case endpoints.GetFavourites:
         url = production ===  true ? `${urls.PRODUCTION_API_URL}/${endpoints.GetFavourites}`
                                     : `${urls.LOCAL_API_URL}/${endpoints.GetFavourites}`;
+        break;
+        default:
         break;
     }
     return url;

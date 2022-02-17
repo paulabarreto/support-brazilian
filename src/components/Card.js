@@ -85,7 +85,7 @@ export default function MediaCard(props) {
 
   // Favourites Feature Section
 
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { user, isLoading } = useAuth0();
 
   const [favourite, setFavourite] = useState(false);
 

@@ -24,10 +24,6 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import DescriptionIcon from '@material-ui/icons/Description';
 import axios from 'axios';
 
-const useStyles = makeStyles((theme) => ({
-  margin: theme.spacing(1),
-}));
-
 export default function AddBusinessDialog(props) {
   const open = props.open;
 

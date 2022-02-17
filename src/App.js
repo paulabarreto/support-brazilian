@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
-import urlService from './urls';
+import urlService from './services/urls';
 import { getBusiness, getFavourites, getFavouritesList, getBusinessCount } from './services/getBusiness';
 
 const useStyles = makeStyles((theme) => ({
@@ -109,7 +109,7 @@ function App() {
 
   useEffect(() => {
     if(!isLoading) {
-      const checkAdmin = user && user.email === 'paulavilaca@gmail.com' ? true : false
+      const checkAdmin = user && user.email === process.env.REACT_APP_ADMIN_EMAIL ? true : false
       setAdmin(checkAdmin);
 
       const fetchData = setTimeout(async () => {
