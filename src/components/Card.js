@@ -22,7 +22,8 @@ import * as urls from '../constants';
 import * as endpoints from '../endpoints';
 import axios from 'axios';
 import Avatar from '@material-ui/core/Avatar';
-import { yellow, green } from '@material-ui/core/colors';
+import { yellow } from '@material-ui/core/colors';
+import StarIcon from '@material-ui/icons/Star';
 
 const useStyles = makeStyles((theme)=>({
   root: {
@@ -40,10 +41,10 @@ const useStyles = makeStyles((theme)=>({
     height: 300
   },
   pink: {
-    width: theme.spacing(4),
-    height: theme.spacing(4),
-    color: green[500],
-    backgroundColor: yellow[500],
+    width: theme.spacing(6),
+    height: theme.spacing(6),
+    color: yellow[500],
+    backgroundColor: 'white',
   },
 }));
 
@@ -140,13 +141,9 @@ export default function MediaCard(props) {
             <CardHeader
             avatar={
               <Avatar aria-label="star" className={classes.pink}>
-                {/* <StarIcon /> */}
-                <Typography variant="button">
-                  {business.position + 1}
-                </Typography>
+                <StarIcon />
               </Avatar>
             }
-            title="Top Favourite"
             action={
               <IconButton onClick={() => handleFavourites(!favourite)} aria-label="settings">
                 <FavoriteIcon color={favourite ? 'primary' : 'inherit'}/>
