@@ -13,7 +13,6 @@ import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
-import axios from 'axios';
 import urlService from './urls';
 import { getBusiness, getFavourites, getFavouritesList, getBusinessCount } from './services/getBusiness';
 
@@ -104,7 +103,8 @@ function App() {
 
   const businessCount = async () => {
     const count = await getBusinessCount(`${countUrl}/${filter}/${category}`)
-    setPageCount(count);
+    const numberOfPages = Math.round(count / 5)
+    setPageCount(numberOfPages);
   }
 
   useEffect(() => {

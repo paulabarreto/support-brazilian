@@ -76,8 +76,7 @@ const getBusiness = async(url) => {
     try{
       const count = await axios.get(url)
       const businessCount = count.data.data;
-      const numberOfPages = Math.round(businessCount / 5)
-      return count.data.data
+      return businessCount
     } catch (error) {
       return `Error: ${error}`;
     }
