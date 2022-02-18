@@ -41,8 +41,6 @@ const useStyles = makeStyles((theme)=>({
     height: 300
   },
   pink: {
-    width: theme.spacing(6),
-    height: theme.spacing(6),
     color: yellow[500],
     backgroundColor: 'white',
   },
@@ -137,28 +135,13 @@ export default function MediaCard(props) {
   return (
     <Grid item xs={12} md={6}>
         <Card className={classes.root}>
-          {(business.position === 0 || business.position === 1  || business.position === 2) && props.page === 1 ?
             <CardHeader
-            avatar={
-              <Avatar aria-label="star" className={classes.pink}>
-                <StarIcon />
-              </Avatar>
-            }
             action={
               <IconButton onClick={() => handleFavourites(!favourite)} aria-label="settings">
                 <FavoriteIcon color={favourite ? 'primary' : 'inherit'}/>
               </IconButton>
             }
           />
-          :
-            <CardHeader
-              action={
-                <IconButton onClick={() => handleFavourites(!favourite)} aria-label="settings">
-                  <FavoriteIcon color={favourite ? 'primary' : 'inherit'}/>
-                </IconButton>
-              }
-            />
-          }
             <CardActionArea className={classes.cardActionArea}>
               <CardMedia
                   className={classes.media}

@@ -185,21 +185,16 @@ export default function AddBusinessDialog(props) {
                 <FormControl fullWidth>
                   <InputLabel htmlFor="image">Image</InputLabel>
                     <Input
-                      {...register('image', { required: true })}
-                      error={errors.image}
-                      required={true}
                       onChange={e => setImage(e.target.files[0])}
                       id="image"
                       name="image"
-                      type='file'
+                      type="file"
                       startAdornment={
                         <InputAdornment position="start">
                           <FaceIcon />
                         </InputAdornment>
                       }
                     />
-                    {errors.image && <p style={{marginTop:0, color:'red', fontSize: 'small'}}>Image is Required</p>}
-
                 </FormControl>
                 </Grid>
               }
