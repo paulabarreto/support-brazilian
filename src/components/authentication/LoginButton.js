@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
   return (
-    <Button variant="contained" color="primary" disableElevation
+    <Button variant="contained" color="inherit" disableElevation
       onClick={() => loginWithRedirect({
         screen_hint: "login",
       })}

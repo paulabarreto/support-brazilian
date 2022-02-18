@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   footer: {
-    backgroundColor: '#3f51b5',
+    backgroundColor: 'rgba(0, 0, 0, 0.87)',
     height: 30,
     color: 'white',
     paddingTop: 10

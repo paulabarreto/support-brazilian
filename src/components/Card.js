@@ -21,9 +21,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import * as urls from '../constants';
 import * as endpoints from '../endpoints';
 import axios from 'axios';
-import Avatar from '@material-ui/core/Avatar';
 import { yellow } from '@material-ui/core/colors';
-import StarIcon from '@material-ui/icons/Star';
 
 const useStyles = makeStyles((theme)=>({
   root: {

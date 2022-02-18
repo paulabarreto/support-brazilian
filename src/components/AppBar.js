@@ -21,15 +21,19 @@ import FastfoodIcon from '@material-ui/icons/Fastfood';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
+import { green } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
+  appBar: {
+    backgroundColor: '#0f3d09',
+  },
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
-    paddingLeft: '5px'
+    paddingLeft: '5px',
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -112,7 +116,7 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed">
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton
             edge="start"
