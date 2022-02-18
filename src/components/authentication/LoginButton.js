@@ -9,7 +9,7 @@ const LoginButton = () => {
   return (
     <Button variant="contained" color="primary" disableElevation
       onClick={() => loginWithRedirect({
-        screen_hint: "signup",
+        screen_hint: "login",
       })}
     >
       Log In

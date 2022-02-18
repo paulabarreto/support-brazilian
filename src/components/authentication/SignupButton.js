@@ -8,9 +8,9 @@ const SignupButton = () => {
   const { loginWithRedirect } = useAuth0();
   return (
     <Button variant="contained" color="primary" disableElevation
-      onClick={() =>
-        loginWithRedirect()
-      }
+    onClick={() => loginWithRedirect({
+      screen_hint: "signup",
+    })}
     >
       Sign Up
     </Button>
