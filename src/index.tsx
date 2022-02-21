@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Map from './pages/Map';
+import {MapApp} from './pages/Map';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Auth0ProviderWithHistory from "./auth/auth0-provider-with-history";
@@ -13,7 +13,7 @@ ReactDOM.render(
       <Auth0ProviderWithHistory>
         <Routes>
           <Route path="/" element={<App />}/>
-          <Route path="/map" element={<Map />}/>
+          <Route path="/map" element={<MapApp />}/>
         </Routes>
       </Auth0ProviderWithHistory>
     </Router>
