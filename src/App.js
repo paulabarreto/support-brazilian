@@ -15,6 +15,7 @@ import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import urlService from './services/urls';
 import { getBusiness, getFavourites, getFavouritesList, getBusinessCount } from './services/getBusiness';
+import 'dotenv/config';
 
 const useStyles = makeStyles((theme) => ({
   root: {
