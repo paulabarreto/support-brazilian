@@ -79,6 +79,8 @@ const MapApp: React.VFC = () => {
     </div>
   );
 
+  if(!GOOGLE_MAPS_API_KEY) return <div>Loading...</div>
+
   return (
     <div style={{ display: "flex", height: "100%" }}>
       <Wrapper apiKey={GOOGLE_MAPS_API_KEY} render={render}>
