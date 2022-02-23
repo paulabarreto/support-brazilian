@@ -15,7 +15,7 @@ const render = (status: Status) => {
 
 const MapApp: React.VFC = () => {
   const [clicks, setClicks] = React.useState<google.maps.LatLng[]>([]);
-  const [zoom, setZoom] = React.useState(3); // initial zoom
+  const [zoom, setZoom] = React.useState(15); // initial zoom
   const [center, setCenter] = React.useState<google.maps.LatLngLiteral>({
     lat: 0,
     lng: 0,
@@ -30,7 +30,21 @@ const MapApp: React.VFC = () => {
     console.log("onIdle");
     setZoom(m.getZoom()!);
     setCenter(m.getCenter()!.toJSON());
+    showCurrentLocation();
   };
+
+  const showCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position: GeolocationPosition) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          setCenter(pos)
+        })
+    }
+  }
 
   const form = (
     <div
@@ -79,6 +93,8 @@ const MapApp: React.VFC = () => {
     </div>
   );
 
+  
+  //TODO SKELETON LOADING
   if(!GOOGLE_MAPS_API_KEY) return <div>Loading...</div>
 
   return (
@@ -121,6 +137,7 @@ const Map: React.FC<MapProps> = ({
     if (ref.current && !map) {
       setMap(new window.google.maps.Map(ref.current, {}));
     }
+      
   }, [ref, map]);
 
   // because React does not do deep comparisons, a custom hook is used
