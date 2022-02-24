@@ -18,11 +18,13 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import LanguageIcon from '@material-ui/icons/Language';
 import FaceIcon from '@material-ui/icons/Face';
 import InstagramIcon from '@material-ui/icons/Instagram';
-import { makeStyles } from '@material-ui/core/styles';
 import ConfirmationDialog from './ConfirmationDialog';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import DescriptionIcon from '@material-ui/icons/Description';
 import axios from 'axios';
+import 'dotenv/config';
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+
 
 export default function AddBusinessDialog(props) {
   const open = props.open;
@@ -48,7 +50,7 @@ export default function AddBusinessDialog(props) {
   const [image, setImage] = useState(props.business ? props.business.image : '');
   const [name, setName] = useState(props.business ? props.business.name : '');
   const [description, setDescription] = useState(props.business ? props.business.description : '');
-  const [location, setLocation] = useState(props.business ? props.business.location : '');
+  const [location, setLocation] = useState(props.business ? props.business.location : null);
   const [website, setWebsite] = useState(props.business ? props.business.website : '');
   const [instagram, setInstagram] = useState(props.business ? props.business.instagram : '');
   const [category, setCategory] = useState(props.business ? props.business.category : 0);
@@ -62,6 +64,9 @@ export default function AddBusinessDialog(props) {
     setInstagram('');
     setCategory('');
   }
+
+  const GOOGLE_MAPS_API_KEY=process.env.REACT_APP_GOOGLE_API_KEY;
+
 
   let url;
   if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -115,6 +120,8 @@ export default function AddBusinessDialog(props) {
     }
   }
 
+  //TODO SKELETON LOADING
+  if(!GOOGLE_MAPS_API_KEY) return <div>Loading...</div>
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -124,7 +131,7 @@ export default function AddBusinessDialog(props) {
             <DialogContentText>
               To request a Brazilian business addition, please submit the info below.
             </DialogContentText>
-            <Grid container justifyContent="center">
+            <Grid container justifyContent="center" spacing={1}>
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="name">Name</InputLabel>
@@ -167,17 +174,14 @@ export default function AddBusinessDialog(props) {
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="location">Location</InputLabel>
-                    <Input
-                      required={true}
-                      onChange={e => setLocation(e.target.value)}
-                      id="location"
-                      defaultValue={location}
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <LocationOnIcon/>
-                        </InputAdornment>
-                      }
-                    />
+                  <GooglePlacesAutocomplete
+                    apiKey={GOOGLE_MAPS_API_KEY}
+                    selectProps={{
+                      location,
+                      onChange: setLocation,
+                    }}
+                    id="location"
+                  />
                 </FormControl>
               </Grid>
               {!props.business &&

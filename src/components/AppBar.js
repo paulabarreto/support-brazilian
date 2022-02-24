@@ -119,9 +119,10 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
+            onClick={handleClickListItem}
           >
             <MenuIcon 
-              aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickListItem}
+              aria-controls="simple-menu" aria-haspopup="true"
             />
             <Menu
               id="simple-menu"
@@ -139,44 +140,42 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
                   <Typography className={classes.heading}>Categories</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Typography>
-                      <MenuItem
-                        selected={selectedIndex === 0}
-                        onClick={(event) => handleMenuItemClick(event, 0)}
-                      >
-                        <AllInclusiveIcon color="primary"/>
-                        <Typography className={classes.heading}>
-                          All
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem
-                        selected={selectedIndex === 1}
-                        onClick={(event) => handleMenuItemClick(event, 1)}
-                      >
-                        <FastfoodIcon color="primary"/>
-                        <Typography className={classes.heading}>
-                          Food
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem
-                        selected={selectedIndex === 2}
-                        onClick={(event) => handleMenuItemClick(event, 2)}
-                      >
-                        <ShoppingBasketIcon color="primary"/>
-                        <Typography className={classes.heading}>
-                          Groceries
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem
-                        selected={selectedIndex === 3}
-                        onClick={(event) => handleMenuItemClick(event, 3)}
-                      >
-                        <WorkOutlineIcon color="primary"/>
-                        <Typography className={classes.heading}>
-                          Services
-                        </Typography>
-                      </MenuItem>
+                  <MenuItem
+                    selected={selectedIndex === 0}
+                    onClick={(event) => handleMenuItemClick(event, 0)}
+                  >
+                    <AllInclusiveIcon color="primary"/>
+                    <Typography className={classes.heading}>
+                      All
                     </Typography>
+                  </MenuItem>
+                  <MenuItem
+                    selected={selectedIndex === 1}
+                    onClick={(event) => handleMenuItemClick(event, 1)}
+                  >
+                    <FastfoodIcon color="primary"/>
+                    <Typography className={classes.heading}>
+                      Food
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem
+                    selected={selectedIndex === 2}
+                    onClick={(event) => handleMenuItemClick(event, 2)}
+                  >
+                    <ShoppingBasketIcon color="primary"/>
+                    <Typography className={classes.heading}>
+                      Groceries
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem
+                    selected={selectedIndex === 3}
+                    onClick={(event) => handleMenuItemClick(event, 3)}
+                  >
+                    <WorkOutlineIcon color="primary"/>
+                    <Typography className={classes.heading}>
+                      Services
+                    </Typography>
+                  </MenuItem>
                 </AccordionDetails>
               </Accordion>
               <MenuItem onClick={() => handleShowFavourites(!favesSelected)}>

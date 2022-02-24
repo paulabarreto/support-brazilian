@@ -110,6 +110,7 @@ const MapApp: React.VFC = () => {
           {clicks.map((latLng, i) => (
             <Marker key={i} position={latLng} />
           ))}
+          <Marker position={{lat: 43.98825664699051, lng: -79.45483309365741}}/>
         </Map>
       </Wrapper>
       {/* Basic form for controlling center and zoom of map. */}
