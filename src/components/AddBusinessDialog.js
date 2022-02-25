@@ -24,6 +24,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import axios from 'axios';
 import 'dotenv/config';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 
 
 export default function AddBusinessDialog(props) {
@@ -78,12 +79,13 @@ export default function AddBusinessDialog(props) {
   }
 
   const onSubmit = () => {
+
     // event.preventDefault();
     const formData = new FormData();
     formData.append('image', image);
     formData.append('name', name);
     formData.append('description', description);
-    formData.append('location', location);
+    formData.append('location', location.label);
     formData.append('website', website);
     formData.append('instagram', instagram);
     formData.append('category', category);
@@ -97,26 +99,42 @@ export default function AddBusinessDialog(props) {
       }
     };
     if(props.business) {
-      axios.post(`${url}/${props.business._id}`, formData, config)
-        .then((response) => {
-          props.handleClose();
-        }).catch((error) => {
-          props.handleClose();
-      });
-    } else {
-      axios.post(url, formData, config)
+      geocodeByAddress(location.label)
+      .then(results => getLatLng(results[0]))
+      .then(({ lat, lng }) => 
+        Object.keys({ lat, lng }).forEach(key => formData.append(key, { lat, lng }[key])
+      )
+      .then( () =>
+        axios.post(`${url}/${props.business._id}`, formData, config)
           .then((response) => {
-              props.handleClose();
-              setConfirmationText('Your Brazilian Business Addition request was sent to the Admin for approval.')
-              setConfirmationTitle('Thanks!');
-              handleOpenConfirmation();
-              clearFormData();
-          }).catch((error) => {
-            setConfirmationText('Please try again soon.');
-            setConfirmationTitle('Sorry, there was an error!');
             props.handleClose();
-            handleOpenConfirmation();
-      });
+          }).catch((error) => {
+            props.handleClose();
+          })
+        )
+      )
+    } else {
+      geocodeByAddress(location.label)
+      .then(results => getLatLng(results[0]))
+      .then(({ lat, lng }) =>
+        Object.keys({ lat, lng }).forEach(key => formData.append(key, { lat, lng }[key]))
+      )
+      .then(() => 
+        axios.post(url, formData, config)
+            .then((response) => {
+                props.handleClose();
+                setConfirmationText('Your Brazilian Business Addition request was sent to the Admin for approval.')
+                setConfirmationTitle('Thanks!');
+                handleOpenConfirmation();
+                clearFormData();
+            }).catch((error) => {
+              setConfirmationText('Please try again soon.');
+              setConfirmationTitle('Sorry, there was an error!');
+              props.handleClose();
+              handleOpenConfirmation();
+        })
+    )
+      
     }
   }
 
