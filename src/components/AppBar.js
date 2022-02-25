@@ -67,6 +67,9 @@ const useStyles = makeStyles((theme) => ({
   inputRoot: {
     color: 'inherit',
   },
+  paragraph : {
+    maxWidth: '200px'
+  },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
@@ -132,54 +135,55 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="categories-content"
-                id="categories-header"
-              >
-                <AccountTreeIcon color="primary"/>
-                <Typography className={classes.heading}>Categories</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <MenuItem
-                  selected={selectedIndex === 0}
-                  onClick={(event) => handleMenuItemClick(event, 0)}
+            <div className={classes.paragraph}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="categories-content"
+                  id="categories-header"
                 >
-                  <AllInclusiveIcon color="primary"/>
-                  <Typography className={classes.heading}>
-                    All
-                  </Typography>
-                </MenuItem>
-                <MenuItem
-                  selected={selectedIndex === 1}
-                  onClick={(event) => handleMenuItemClick(event, 1)}
-                >
-                  <FastfoodIcon color="primary"/>
-                  <Typography className={classes.heading}>
-                    Food
-                  </Typography>
-                </MenuItem>
-                <MenuItem
-                  selected={selectedIndex === 2}
-                  onClick={(event) => handleMenuItemClick(event, 2)}
-                >
-                  <ShoppingBasketIcon color="primary"/>
-                  <Typography className={classes.heading}>
-                    Groceries
-                  </Typography>
-                </MenuItem>
-                <MenuItem
-                  selected={selectedIndex === 3}
-                  onClick={(event) => handleMenuItemClick(event, 3)}
-                >
-                  <WorkOutlineIcon color="primary"/>
-                  <Typography className={classes.heading}>
-                    Services
-                  </Typography>
-                </MenuItem>
-              </AccordionDetails>
-            </Accordion>
+                  <AccountTreeIcon color="primary"/>
+                  <Typography className={classes.heading}>Categories</Typography>
+                </AccordionSummary>
+                <AccordionDetails style={{display: 'block'}}>
+                  <MenuItem
+                    selected={selectedIndex === 0}
+                    onClick={(event) => handleMenuItemClick(event, 0)}
+                  >
+                    <AllInclusiveIcon color="primary"/>
+                    <Typography className={classes.heading}>
+                      All
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem
+                    selected={selectedIndex === 1}
+                    onClick={(event) => handleMenuItemClick(event, 1)}
+                  >
+                    <FastfoodIcon color="primary"/>
+                    <Typography className={classes.heading}>
+                      Food
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem
+                    selected={selectedIndex === 2}
+                    onClick={(event) => handleMenuItemClick(event, 2)}
+                  >
+                    <ShoppingBasketIcon color="primary"/>
+                    <Typography className={classes.heading}>
+                      Groceries
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem
+                    selected={selectedIndex === 3}
+                    onClick={(event) => handleMenuItemClick(event, 3)}
+                  >
+                    <WorkOutlineIcon color="primary"/>
+                    <Typography className={classes.heading}>
+                      Services
+                    </Typography>
+                  </MenuItem>
+                </AccordionDetails>
+              </Accordion>
             <MenuItem onClick={() => handleShowFavourites(!favesSelected)}>
               <FavoriteIcon color="primary"/>
               <Typography className={classes.heading}>
@@ -192,6 +196,8 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
                 Add New Business
               </Typography>
             </MenuItem>
+            </div>
+
           </Menu>
           <Typography className={classes.title} variant="h6" noWrap>
             Support Brazilian
