@@ -7,13 +7,11 @@ import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import Button from '@mui/material/Button';
 
 import { styled, alpha } from "@mui/material/styles";
 
 import Menu from '@mui/material/Menu';
 import MenuItem from "@mui/material/MenuItem";
-import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 
 import AuthNav from "./authentication/AuthNav";
