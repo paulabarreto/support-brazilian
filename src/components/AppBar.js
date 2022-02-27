@@ -7,10 +7,11 @@ import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import Button from '@mui/material/Button';
 
 import { styled, alpha } from "@mui/material/styles";
 
-import MenuList from "@mui/material/MenuList";
+import Menu from '@mui/material/Menu';
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
@@ -80,13 +81,18 @@ export default function SearchAppBar({
   onChange,
 }) {
 
+  //Menu
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [searchValue, setSearchValue] = React.useState("");
-
-  const handleClickListItem = (event) => {
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [searchValue, setSearchValue] = React.useState("");
 
   const handleMenuItemClick = (event, index) => {
     setSearchValue("");
@@ -101,28 +107,29 @@ export default function SearchAppBar({
     setSearchValue(e.target.value);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
         <Toolbar>
           <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-            aria-label="open drawer"
-            onClick={handleClickListItem}
+            aria-controls={open ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
+            id="basic-button"
           >
             <MenuIcon aria-controls="simple-menu" aria-haspopup="true" />
           </IconButton>
 
           <Paper sx={{ width: 320, maxWidth: "100%" }}>
-            <MenuList>
+            <Menu
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
               <Accordion>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
@@ -179,7 +186,7 @@ export default function SearchAppBar({
                   Add New Business
                 </Typography>
               </MenuItem>
-            </MenuList>
+            </Menu>
           </Paper>
           <Typography
             variant="h6"
