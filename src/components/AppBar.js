@@ -1,175 +1,160 @@
-import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import { alpha, makeStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import AuthNav from "./authentication/AuthNav";
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import AccountTreeIcon from '@material-ui/icons/AccountTree';
-import FastfoodIcon from '@material-ui/icons/Fastfood';
-import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
-import WorkOutlineIcon from '@material-ui/icons/WorkOutline';
-import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
+import React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import InputBase from "@mui/material/InputBase";
+import MenuIcon from "@mui/icons-material/Menu";
+import SearchIcon from "@mui/icons-material/Search";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
+import { styled, alpha } from "@mui/material/styles";
+
+import MenuList from "@mui/material/MenuList";
+import MenuItem from "@mui/material/MenuItem";
+import Divider from "@mui/material/Divider";
+import Paper from "@mui/material/Paper";
+
+import AuthNav from "./authentication/AuthNav";
+
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import FastfoodIcon from "@mui/icons-material/Fastfood";
+import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
+import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
+
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: theme.typography.fontWeightRegular,
-    paddingLeft: '5px'
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(1),
+    width: "auto",
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(1),
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContentContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-  },
-  paragraph : {
-    maxWidth: '200px'
-  },
-  inputInput: {
+}));
+
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      width: "12ch",
+      "&:focus": {
+        width: "20ch",
       },
     },
   },
 }));
 
-export default function SearchAppBar({handleShowFavourites, favesSelected, handleClickOpen, onMenuClick, onChange}) {
-  const classes = useStyles();
+export default function SearchAppBar({
+  handleShowFavourites,
+  favesSelected,
+  handleClickOpen,
+  onMenuClick,
+  onChange,
+}) {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [searchValue, setSearchValue] = React.useState('');
+  const [searchValue, setSearchValue] = React.useState("");
 
   const handleClickListItem = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleMenuItemClick = (event, index) => {
-    setSearchValue('')
-    onChange('')
+    setSearchValue("");
+    onChange("");
     setSelectedIndex(index);
     setAnchorEl(null);
-    onMenuClick(event, index)
+    onMenuClick(event, index);
   };
 
   const handleChange = (e) => {
-    onChange(e.target.value)
-    setSearchValue(e.target.value)
-  }
+    onChange(e.target.value);
+    setSearchValue(e.target.value);
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
 
   return (
-    <div className={classes.root}>
+    <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
         <Toolbar>
           <IconButton
+            size="large"
             edge="start"
-            className={classes.menuButton}
             color="inherit"
+            aria-label="open drawer"
+            sx={{ mr: 2 }}
             aria-label="open drawer"
             onClick={handleClickListItem}
           >
-            <MenuIcon 
-              aria-controls="simple-menu" aria-haspopup="true"
-            />
+            <MenuIcon aria-controls="simple-menu" aria-haspopup="true" />
           </IconButton>
-          
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <div className={classes.paragraph}>
+
+          <Paper sx={{ width: 320, maxWidth: "100%" }}>
+            <MenuList>
               <Accordion>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="categories-content"
                   id="categories-header"
                 >
-                  <AccountTreeIcon color="primary"/>
-                  <Typography className={classes.heading}>Categories</Typography>
+                  <AccountTreeIcon color="primary" />
+                  <Typography>
+                    Categories
+                  </Typography>
                 </AccordionSummary>
-                <AccordionDetails style={{display: 'block'}}>
+                <AccordionDetails style={{ display: "block" }}>
                   <MenuItem
                     selected={selectedIndex === 0}
                     onClick={(event) => handleMenuItemClick(event, 0)}
                   >
-                    <AllInclusiveIcon color="primary"/>
-                    <Typography className={classes.heading}>
-                      All
-                    </Typography>
+                    <AllInclusiveIcon color="primary" />
+                    <Typography>All</Typography>
                   </MenuItem>
                   <MenuItem
                     selected={selectedIndex === 1}
                     onClick={(event) => handleMenuItemClick(event, 1)}
                   >
-                    <FastfoodIcon color="primary"/>
-                    <Typography className={classes.heading}>
-                      Food
-                    </Typography>
+                    <FastfoodIcon color="primary" />
+                    <Typography>Food</Typography>
                   </MenuItem>
                   <MenuItem
                     selected={selectedIndex === 2}
                     onClick={(event) => handleMenuItemClick(event, 2)}
                   >
-                    <ShoppingBasketIcon color="primary"/>
-                    <Typography className={classes.heading}>
+                    <ShoppingBasketIcon color="primary" />
+                    <Typography>
                       Groceries
                     </Typography>
                   </MenuItem>
@@ -177,49 +162,48 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
                     selected={selectedIndex === 3}
                     onClick={(event) => handleMenuItemClick(event, 3)}
                   >
-                    <WorkOutlineIcon color="primary"/>
-                    <Typography className={classes.heading}>
+                    <WorkOutlineIcon color="primary" />
+                    <Typography>
                       Services
                     </Typography>
                   </MenuItem>
                 </AccordionDetails>
               </Accordion>
-            <MenuItem onClick={() => handleShowFavourites(!favesSelected)}>
-              <FavoriteIcon color="primary"/>
-              <Typography className={classes.heading}>
-                Favourites
-              </Typography>
-            </MenuItem>
-            <MenuItem onClick={() => handleClickOpen()}>
-              <AddCircleIcon color="primary"/>
-              <Typography className={classes.heading}>
-                Add New Business
-              </Typography>
-            </MenuItem>
-            </div>
-
-          </Menu>
-          <Typography className={classes.title} variant="h6" noWrap>
+              <MenuItem onClick={() => handleShowFavourites(!favesSelected)}>
+                <FavoriteIcon color="primary" />
+                <Typography >Favourites</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => handleClickOpen()}>
+                <AddCircleIcon color="primary" />
+                <Typography >
+                  Add New Business
+                </Typography>
+              </MenuItem>
+            </MenuList>
+          </Paper>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+          >
             Support Brazilian
           </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
+
+          <Search>
+            <SearchIconWrapper>
               <SearchIcon />
-            </div>
-            <InputBase
+            </SearchIconWrapper>
+            <StyledInputBase
               placeholder="Search…"
               value={searchValue}
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
+              inputProps={{ "aria-label": "search" }}
               onChange={(e) => handleChange(e)}
             />
-          </div>
-          <AuthNav/>
+          </Search>
+          <AuthNav />
         </Toolbar>
       </AppBar>
-    </div>
+    </Box>
   );
 }
