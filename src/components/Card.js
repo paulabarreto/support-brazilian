@@ -1,54 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import LanguageIcon from '@material-ui/icons/Language';
-import InstagramIcon from '@material-ui/icons/Instagram';
-import EditIcon from '@material-ui/icons/Edit';
+
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import CardActionArea from '@mui/material/CardActionArea';
+
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import LanguageIcon from '@mui/icons-material/Language';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CheckIcon from '@mui/icons-material/Check';
+
+import Grid from '@mui/material/Grid';
+
 import AddBusinessDialog from './AddBusinessDialog';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import CardHeader from '@material-ui/core/CardHeader';
-import IconButton from '@material-ui/core/IconButton';
-import CheckIcon from '@material-ui/icons/Check';
 import { useAuth0 } from "@auth0/auth0-react";
 import * as urls from '../constants';
 import * as endpoints from '../endpoints';
 import axios from 'axios';
-import Avatar from '@material-ui/core/Avatar';
-import { yellow } from '@material-ui/core/colors';
-import StarIcon from '@material-ui/icons/Star';
-
-const useStyles = makeStyles((theme)=>({
-  root: {
-    width: 345,
-    marginTop: '20px',
-  },
-  gridRoot: {
-    flexGrow: 1,
-  },
-  media: {
-    height: 140,
-    backgroundSize: 'contain'
-  },
-  cardActionArea: {
-    height: 300
-  },
-  pink: {
-    color: yellow[500],
-    backgroundColor: 'white',
-  },
-}));
 
 export default function MediaCard(props) {
 
-  const classes = useStyles();
   const business = props.business;
 
   const [open, setOpen] = React.useState(false);
@@ -133,8 +111,8 @@ export default function MediaCard(props) {
 
 
   return (
-    <Grid item xs={12} md={6}>
-        <Card className={classes.root}>
+    <Grid item xs={12} md={6}>    
+        <Card sx={{ margin: '20px' }}>
             <CardHeader
             action={
               <IconButton onClick={() => handleFavourites(!favourite)} aria-label="settings">
@@ -142,13 +120,16 @@ export default function MediaCard(props) {
               </IconButton>
             }
           />
-            <CardActionArea className={classes.cardActionArea}>
+            
               <CardMedia
-                  className={classes.media}
+                  sx={{ objectFit: 'contain' }}
                   image={business.image ? business.image : null}
                   title={business.name}
+                  height="194"
+                  component="img"
+                  alt="Business Logo"
               />
-              <CardContent>
+              <CardContent sx={{height: '100px'}}>
                   <Typography gutterBottom variant="h5" component="h2">
                   {business.name}
                   </Typography>
@@ -159,7 +140,6 @@ export default function MediaCard(props) {
                     {business.location}
                   </Typography>
               </CardContent>
-              </CardActionArea>
             <CardActions>
             {business.website &&
               <a target="_blank" rel="noreferrer" href={business.website}>

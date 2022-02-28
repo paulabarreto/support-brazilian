@@ -1,30 +1,32 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Grid from '@material-ui/core/Grid';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Select from '@material-ui/core/Select';
+
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+import Grid from '@mui/material/Grid';
+import Select from '@mui/material/Select';
 import * as urls from '../constants';
 import * as endpoints from '../endpoints';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import LanguageIcon from '@material-ui/icons/Language';
-import FaceIcon from '@material-ui/icons/Face';
-import InstagramIcon from '@material-ui/icons/Instagram';
+import LanguageIcon from '@mui/icons-material/Language';
+import FaceIcon from '@mui/icons-material/Face';
+import InstagramIcon from '@mui/icons-material/Instagram';
 import ConfirmationDialog from './ConfirmationDialog';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import DescriptionIcon from '@material-ui/icons/Description';
+import DescriptionIcon from '@mui/icons-material/Description';
 import axios from 'axios';
 import 'dotenv/config';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormControl from '@mui/material/FormControl';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 
 
 export default function AddBusinessDialog(props) {
@@ -189,19 +191,6 @@ export default function AddBusinessDialog(props) {
 
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor="location">Location</InputLabel>
-                  <GooglePlacesAutocomplete
-                    apiKey={GOOGLE_MAPS_API_KEY}
-                    selectProps={{
-                      location,
-                      onChange: setLocation,
-                    }}
-                    id="location"
-                  />
-                </FormControl>
-              </Grid>
               {!props.business &&
                 <Grid item xs={12}>
                 <FormControl fullWidth>
@@ -263,6 +252,19 @@ export default function AddBusinessDialog(props) {
                     <option value={2}>Groceries</option>
                     <option value={3}>Services</option>
                   </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <GooglePlacesAutocomplete
+                    apiKey={GOOGLE_MAPS_API_KEY}
+                    selectProps={{
+                      location,
+                      onChange: setLocation,
+                      defaultInputValue: 'Location'
+                    }}
+                    id="location"
+                  />
                 </FormControl>
               </Grid>
             </Grid>

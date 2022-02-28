@@ -142,8 +142,6 @@ function App() {
     setOpen(false);
   };
 
-  const classes = useStyles();
-
   const handleMenuItemClick = async (event, index) => {
     setAPIdataLoading(true);
     let listByCategory = businessList;
@@ -208,7 +206,7 @@ function App() {
   };
   
   return (
-    <div className={classes.root}>
+    <div>
       <SearchAppBar
         onMenuClick={(e, index) => handleMenuItemClick(e, index)} 
         onChange={(e) => handleSearchField(e)}
