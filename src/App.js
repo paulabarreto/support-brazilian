@@ -3,36 +3,18 @@ import SearchAppBar from './components/AppBar';
 import MediaCard from './components/Card';
 import AddBusinessDialog from './components/AddBusinessDialog';
 import { useAuth0 } from "@auth0/auth0-react";
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import Grid from '@mui/material/Grid';
+import Container from '@mui/material/Container';
 import React, { useState, useEffect } from 'react';
 import * as endpoints from './endpoints';
 import ConfirmationDialog from './components/ConfirmationDialog';
-import Typography from '@material-ui/core/Typography';
-import Pagination from '@material-ui/lab/Pagination';
+import Typography from '@mui/material/Typography';
+import Pagination from '@mui/material/Pagination';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import urlService from './services/urls';
 import { getBusiness, getFavourites, getFavouritesList, getBusinessCount } from './services/getBusiness';
 import 'dotenv/config';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    '& > * + *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-  footer: {
-    backgroundColor: '#3f51b5',
-    height: 30,
-    color: 'white',
-    paddingTop: 10
-  },
-  margin: theme.spacing(1),
-  mtop: 10,
-}));
 
 function App() {
 
@@ -280,7 +262,13 @@ function App() {
           confirmation={'Please Sign Up/Login to enable Add Business and Favourite Button'}
         />
       </Container>
-      <footer className={classes.footer}>
+      <footer 
+        style={{
+          backgroundColor: '#3f51b5',
+          height: '30px',
+          color: 'white',
+          paddingTop: '10px'
+        }}>
         <Grid container justifyContent="center">
           <Typography variant="subtitle2">
             Created by Paula Barreto | <a style={{color: 'inherit', textDecoration:"none"}} 
