@@ -112,7 +112,7 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed">
+      <AppBar position="fixed" >
         <Toolbar>
           <IconButton
             edge="start"
