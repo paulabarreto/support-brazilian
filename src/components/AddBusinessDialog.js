@@ -141,7 +141,7 @@ export default function AddBusinessDialog(props) {
   }
 
   //TODO SKELETON LOADING
-  if(!GOOGLE_MAPS_API_KEY) return <div>Loading...</div>
+  if(!GOOGLE_MAPS_API_KEY) return <div>Loading..</div>
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -152,8 +152,8 @@ export default function AddBusinessDialog(props) {
               To request a Brazilian business addition, please submit the info below.
             </DialogContentText>
             <Grid container justifyContent="center" spacing={1}>
-              <Grid item xs={12}>
-                <FormControl fullWidth>
+              <Grid item xs={6}>
+                <FormControl>
                   <InputLabel htmlFor="name">Name</InputLabel>
                       <Input
                         {...register('name', { required: true })}
@@ -164,13 +164,31 @@ export default function AddBusinessDialog(props) {
                         value={name}
                         startAdornment={
                           <InputAdornment position="start">
-                            <AccountCircle/>
+                            <AccountCircle color="primary"/>
                           </InputAdornment>
                         }
                       />
                       {errors.name && <p style={{marginTop:0, color:'red', fontSize: 'small'}}>Name is Required</p>}
                 </FormControl>
               </Grid>
+              {!props.business &&
+                <Grid item xs={6}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="image">Image</InputLabel>
+                    <Input
+                      onChange={e => setImage(e.target.files[0])}
+                      id="image"
+                      name="image"
+                      type="file"
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <FaceIcon color="primary"/>
+                        </InputAdornment>
+                      }
+                    />
+                </FormControl>
+                </Grid>
+              }
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="description">Description</InputLabel>
@@ -183,7 +201,7 @@ export default function AddBusinessDialog(props) {
                       defaultValue={description}
                       startAdornment={
                         <InputAdornment position="start">
-                          <DescriptionIcon/>
+                          <DescriptionIcon color="primary"/>
                         </InputAdornment>
                       }
                     />
@@ -191,24 +209,7 @@ export default function AddBusinessDialog(props) {
 
                 </FormControl>
               </Grid>
-              {!props.business &&
-                <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor="image">Image</InputLabel>
-                    <Input
-                      onChange={e => setImage(e.target.files[0])}
-                      id="image"
-                      name="image"
-                      type="file"
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <FaceIcon />
-                        </InputAdornment>
-                      }
-                    />
-                </FormControl>
-                </Grid>
-              }
+              
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="website">Website</InputLabel>
@@ -219,7 +220,7 @@ export default function AddBusinessDialog(props) {
                       fullWidth
                       startAdornment={
                         <InputAdornment position="start">
-                          <LanguageIcon />
+                          <LanguageIcon color="primary"/>
                         </InputAdornment>
                       }
                     />
@@ -236,7 +237,7 @@ export default function AddBusinessDialog(props) {
                       fullWidth
                       startAdornment={
                         <InputAdornment position="start">
-                          <InstagramIcon />
+                          <InstagramIcon color="primary"/>
                         </InputAdornment>
                       }
                     />
@@ -254,7 +255,7 @@ export default function AddBusinessDialog(props) {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{marginBottom: '50px'}}>
                 <FormControl fullWidth>
                   <GooglePlacesAutocomplete
                     apiKey={GOOGLE_MAPS_API_KEY}
