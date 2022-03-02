@@ -9,12 +9,12 @@ const containerStyle = {
   height: '400px'
 };
 
-const center = {
-  lat: -3.745,
-  lng: -38.523
-};
-
 function MyMapComponent() {
+  const [center, setCenter] = React.useState({
+    lat: -3.745,
+    lng: -38.523
+  });
+  
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: GOOGLE_MAPS_API
@@ -23,6 +23,10 @@ function MyMapComponent() {
   const [map, setMap] = React.useState(null)
 
   const onLoad = React.useCallback(function callback(map) {
+    navigator?.geolocation.getCurrentPosition(
+        ({ coords: { latitude: lat, longitude: lng } }) => {
+          setCenter({ lat, lng })
+        })
     const bounds = new window.google.maps.LatLngBounds();
     map.fitBounds(bounds);
     setMap(map)
@@ -36,7 +40,7 @@ function MyMapComponent() {
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={10}
+        zoom={15}
         onLoad={onLoad}
         onUnmount={onUnmount}
       >
