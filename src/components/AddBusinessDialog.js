@@ -23,6 +23,10 @@ import ConfirmationDialog from './ConfirmationDialog';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import DescriptionIcon from '@material-ui/icons/Description';
 import axios from 'axios';
+import { StandaloneSearchBox, useJsApiLoader } from '@react-google-maps/api';
+
+
+const libraries = ['places'];
 
 export default function AddBusinessDialog(props) {
   const open = props.open;
@@ -115,6 +119,21 @@ export default function AddBusinessDialog(props) {
     }
   }
 
+  const GOOGLE_MAPS_API = process.env.REACT_APP_GOOGLE_API_KEY;
+
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: GOOGLE_MAPS_API,
+    libraries: libraries
+  })
+
+  const [searchBox, setSearchBox] = React.useState(null)
+
+  const onLoad = ref => setSearchBox(ref);
+
+  const onPlacesChanged = () => console.log(searchBox.getPlaces());
+
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -125,8 +144,8 @@ export default function AddBusinessDialog(props) {
               To request a Brazilian business addition, please submit the info below.
             </DialogContentText>
             <Grid container justifyContent="center">
-              <Grid item xs={12}>
-                <FormControl fullWidth>
+              <Grid item xs={6}>
+                <FormControl>
                   <InputLabel htmlFor="name">Name</InputLabel>
                       <Input
                         {...register('name', { required: true })}
@@ -144,6 +163,24 @@ export default function AddBusinessDialog(props) {
                       {errors.name && <p style={{marginTop:0, color:'red', fontSize: 'small'}}>Name is Required</p>}
                 </FormControl>
               </Grid>
+              {!props.business &&
+                <Grid item xs={6}>
+                <FormControl>
+                  <InputLabel htmlFor="image">Image</InputLabel>
+                    <Input
+                      onChange={e => setImage(e.target.files[0])}
+                      id="image"
+                      name="image"
+                      type="file"
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <FaceIcon />
+                        </InputAdornment>
+                      }
+                    />
+                </FormControl>
+                </Grid>
+              }
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="description">Description</InputLabel>
@@ -164,40 +201,6 @@ export default function AddBusinessDialog(props) {
 
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor="location">Location</InputLabel>
-                    <Input
-                      required={true}
-                      onChange={e => setLocation(e.target.value)}
-                      id="location"
-                      defaultValue={location}
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <LocationOnIcon/>
-                        </InputAdornment>
-                      }
-                    />
-                </FormControl>
-              </Grid>
-              {!props.business &&
-                <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor="image">Image</InputLabel>
-                    <Input
-                      onChange={e => setImage(e.target.files[0])}
-                      id="image"
-                      name="image"
-                      type="file"
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <FaceIcon />
-                        </InputAdornment>
-                      }
-                    />
-                </FormControl>
-                </Grid>
-              }
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="website">Website</InputLabel>
@@ -242,6 +245,43 @@ export default function AddBusinessDialog(props) {
                     <option value={3}>Services</option>
                   </Select>
                 </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <StandaloneSearchBox
+              onLoad={onLoad}
+              onPlacesChanged={
+                  onPlacesChanged
+              }
+              >
+              <input
+                  type="text"
+                  placeholder="Location"
+                  style={{
+                    paddingRight: '24px',
+                    cursor: 'pointer',
+                    minWidth: '16px',
+                    userSelect: 'none',
+                    borderRadius: 0,
+                    mozAppearance: 'none',
+                    webkitAppearance: 'none',
+                    font: 'inherit',
+                    color: 'currentColor',
+                    width: '100%',
+                    border: 0,
+                    height: '1.1876em',
+                    margin: 0,
+                    display: 'block',
+                    padding: '6px 0 7px',
+                    minWidth: 0,
+                    background: 'none',
+                    boxSizing: 'content-box',
+                    animationName: 'mui-auto-fill-cancel',
+                    letterSpacing: 'inherit',
+                    animationSuration: '10ms',
+                    webkitTapHighlightColor: 'transparent'
+                  }}
+              />
+          </StandaloneSearchBox>
               </Grid>
             </Grid>
           </DialogContent>

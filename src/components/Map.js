@@ -17,7 +17,7 @@ function MyMapComponent() {
   
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: GOOGLE_MAPS_API
+    googleMapsApiKey: GOOGLE_MAPS_API,
   })
 
   const [map, setMap] = React.useState(null)
@@ -35,6 +35,7 @@ function MyMapComponent() {
   const onUnmount = React.useCallback(function callback(map) {
     setMap(null)
   }, [])
+
 
   return isLoaded ? (
       <GoogleMap
