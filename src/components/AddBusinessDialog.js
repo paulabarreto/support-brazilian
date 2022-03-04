@@ -39,6 +39,7 @@ export default function AddBusinessDialog(props) {
   const [openConfirmation, setOpen] = React.useState(false);
   const [confirmationText, setConfirmationText] = React.useState("");
   const [confirmationTitle, setConfirmationTitle] = React.useState("");
+  const [autoComplete, setAutoComplete] = React.useState(null);
 
   const handleOpenConfirmation = () => {
     setOpen(true);
@@ -146,11 +147,20 @@ export default function AddBusinessDialog(props) {
     libraries: libraries,
   });
 
-  const [searchBox, setSearchBox] = React.useState(null);
+  const onLoad = (autocomplete) => {
+    setAutoComplete(autocomplete)
+    // autocomplete.setFields(['address_component', 'geometry']);
+  }
 
-  const onLoad = (ref) => setSearchBox(ref);
-
-  const onPlacesChanged = () => console.log(searchBox.getPlaces());
+  const onPlacesChanged = () => {
+    const place = autoComplete.getPlaces();
+    const lat = place[0].geometry.location.lat();
+    const lng = place[0].geometry.location.lat();
+    const address = place[0].formatted_address;
+    setLocation(address);
+    setLat(lat);
+    setLng(lng);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
