@@ -235,8 +235,8 @@ function App() {
       />
       <Container maxWidth="md">
         <Grid container justifyContent="center" style={{marginTop: 70 + 'px'}}>
-          {isAPIdataLoading && dummyArray.map(skeleton => (
-            <Grid item xs={12} md={6} style={{marginTop: 20 + 'px'}}>
+          {isAPIdataLoading && dummyArray.map((skeleton, index) => (
+            <Grid key={index} item xs={12} md={6} style={{marginTop: 20 + 'px'}}>
               <Stack spacing={1}>
                 <Skeleton variant="rectangular" width={350} height={300} />
               </Stack>

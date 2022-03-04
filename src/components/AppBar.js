@@ -119,9 +119,10 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
+            onClick={handleClickListItem}
           >
             <MenuIcon 
-              aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickListItem}
+              aria-controls="simple-menu" aria-haspopup="true"
             />
             <Menu
               id="simple-menu"
