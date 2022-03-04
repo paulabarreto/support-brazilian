@@ -286,40 +286,39 @@ export default function AddBusinessDialog(props) {
               </FormControl>
             </Grid>
             <Grid item xs={12}>
-              <FormControl>
-                <StandaloneSearchBox
-                  onLoad={onLoad}
-                  onPlacesChanged={onPlacesChanged}
-                >
-                  <input
-                    type="text"
-                    placeholder="Location"
-                    style={{
-                      paddingRight: "24px",
-                      cursor: "pointer",
-                      minWidth: "16px",
-                      userSelect: "none",
-                      borderRadius: 0,
-                      mozAppearance: "none",
-                      webkitAppearance: "none",
-                      font: "inherit",
-                      color: "currentColor",
-                      width: "100%",
-                      border: 0,
-                      height: "1.1876em",
-                      margin: 0,
-                      display: "block",
-                      padding: "6px 0 7px",
-                      minWidth: 0,
-                      background: "none",
-                      boxSizing: "content-box",
-                      animationName: "mui-auto-fill-cancel",
-                      letterSpacing: "inherit",
-                      animationSuration: "10ms",
-                    }}
-                  />
-                </StandaloneSearchBox>
-              </FormControl>
+              <StandaloneSearchBox
+                onLoad={onLoad}
+                onPlacesChanged={onPlacesChanged}
+              >
+                <input
+                  type="text"
+                  placeholder="Location"
+                  style={{
+                    paddingRight: "24px",
+                    cursor: "pointer",
+                    minWidth: "16px",
+                    userSelect: "none",
+                    borderRadius: 0,
+                    mozAppearance: "none",
+                    webkitAppearance: "none",
+                    font: "inherit",
+                    color: "currentColor",
+                    width: "100%",
+                    border: 0,
+                    height: "1.1876em",
+                    marginLeft: 0,
+                    marginTop: 15,
+                    display: "block",
+                    padding: "6px 0 7px",
+                    minWidth: 0,
+                    background: "none",
+                    boxSizing: "content-box",
+                    animationName: "mui-auto-fill-cancel",
+                    letterSpacing: "inherit",
+                    animationSuration: "10ms",
+                  }}
+                />
+              </StandaloneSearchBox>
             </Grid>
           </Grid>
         </DialogContent>
