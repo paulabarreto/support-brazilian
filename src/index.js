@@ -13,7 +13,7 @@ ReactDOM.render(
       <Auth0ProviderWithHistory>
         <Routes>
           <Route path='/' element={<App/>} />
-          <Route path='map' element={<MyMapComponent/>} />
+          <Route path='map' element={<MyMapComponent authed={true}/>} />
         </Routes>
       </Auth0ProviderWithHistory>
     </Router>

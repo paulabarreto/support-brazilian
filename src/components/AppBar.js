@@ -129,6 +129,7 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={handleClose}
+              // onClickAway={handleClose}
             >
               <Accordion>
                 <AccordionSummary

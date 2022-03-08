@@ -29,7 +29,6 @@ const libraries = ["places"];
 
 export default function AddBusinessDialog(props) {
   const open = props.open;
-
   const {
     register,
     handleSubmit,
@@ -40,6 +39,8 @@ export default function AddBusinessDialog(props) {
   const [confirmationText, setConfirmationText] = React.useState("");
   const [confirmationTitle, setConfirmationTitle] = React.useState("");
   const [autoComplete, setAutoComplete] = React.useState(null);
+  const [lat, setLat] = React.useState(0);
+  const [lng, setLng] = React.useState(0);
 
   const handleOpenConfirmation = () => {
     setOpen(true);
@@ -97,6 +98,8 @@ export default function AddBusinessDialog(props) {
     formData.append("name", name);
     formData.append("description", description);
     formData.append("location", location);
+    formData.append("lat", lat);
+    formData.append("lng", lng);
     formData.append("website", website);
     formData.append("instagram", instagram);
     formData.append("category", category);
@@ -155,11 +158,12 @@ export default function AddBusinessDialog(props) {
   const onPlacesChanged = () => {
     const place = autoComplete.getPlaces();
     const lat = place[0].geometry.location.lat();
-    const lng = place[0].geometry.location.lat();
+    const lng = place[0].geometry.location.lng();
     const address = place[0].formatted_address;
     setLocation(address);
     setLat(lat);
     setLng(lng);
+    console.log(lat, lng)
   };
 
   return (
@@ -182,9 +186,6 @@ export default function AddBusinessDialog(props) {
               <FormControl>
                 <InputLabel htmlFor="name">Name</InputLabel>
                 <Input
-                  {...register("name", { required: true })}
-                  error={errors.name ? true : false}
-                  required={true}
                   onChange={(e) => setName(e.target.value)}
                   id="name"
                   value={name}
@@ -194,11 +195,6 @@ export default function AddBusinessDialog(props) {
                     </InputAdornment>
                   }
                 />
-                {errors.name && (
-                  <p style={{ marginTop: 0, color: "red", fontSize: "small" }}>
-                    Name is Required
-                  </p>
-                )}
               </FormControl>
             </Grid>
             {!props.business && (
@@ -223,10 +219,7 @@ export default function AddBusinessDialog(props) {
               <FormControl fullWidth>
                 <InputLabel htmlFor="description">Description</InputLabel>
                 <Input
-                  {...register("description", { required: true })}
-                  error={errors.description ? true : false}
                   onChange={(e) => setDescription(e.target.value)}
-                  required={true}
                   id="description"
                   defaultValue={description}
                   startAdornment={
@@ -235,11 +228,6 @@ export default function AddBusinessDialog(props) {
                     </InputAdornment>
                   }
                 />
-                {errors.description && (
-                  <p style={{ marginTop: 0, color: "red", fontSize: "small" }}>
-                    Description is Required
-                  </p>
-                )}
               </FormControl>
             </Grid>
             <Grid item xs={12}>
@@ -302,7 +290,8 @@ export default function AddBusinessDialog(props) {
               >
                 <input
                   type="text"
-                  placeholder="Location"
+                  placeholder={props.business ? props.business.location : 'Location'}
+                  // value={props.business ? props.business.location : ''}
                   style={{
                     paddingRight: "24px",
                     cursor: "pointer",
