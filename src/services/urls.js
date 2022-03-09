@@ -23,6 +23,9 @@ const urlService = (endpoint) => {
         case endpoints.GetFavourites:
         url = production ===  true ? `${urls.PRODUCTION_API_URL}/${endpoints.GetFavourites}`
                                     : `${urls.LOCAL_API_URL}/${endpoints.GetFavourites}`;
+        case endpoints.GetCoordinates:
+        url = production ===  true ? `${urls.PRODUCTION_API_URL}/${endpoints.GetCoordinates}`
+                                    : `${urls.LOCAL_API_URL}/${endpoints.GetCoordinates}`;
         break;
         default:
         break;

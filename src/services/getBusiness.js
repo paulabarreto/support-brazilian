@@ -82,4 +82,13 @@ const getBusiness = async(url) => {
     }
   }
 
-  export { getBusiness, getFavourites, getFavouritesList, getBusinessCount};
+  const getAllCoordinates = async (url) => {
+    try{
+      const coordinates = await axios.get(url)
+      return coordinates.data.data
+    } catch (error) {
+      return `Error: ${error}`;
+    }
+  }
+
+  export { getBusiness, getFavourites, getFavouritesList, getBusinessCount, getAllCoordinates };
