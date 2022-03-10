@@ -128,8 +128,8 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
               id="simple-menu"
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
+              keepMounted
               onClose={handleClose}
-              // onClickAway={handleClose}
             >
               <Accordion>
                 <AccordionSummary
@@ -141,7 +141,6 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
                   <Typography className={classes.heading}>Categories</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Typography>
                       <MenuItem
                         selected={selectedIndex === 0}
                         onClick={(event) => handleMenuItemClick(event, 0)}
@@ -178,7 +177,6 @@ export default function SearchAppBar({handleShowFavourites, favesSelected, handl
                           Services
                         </Typography>
                       </MenuItem>
-                    </Typography>
                 </AccordionDetails>
               </Accordion>
               <MenuItem onClick={() => handleShowFavourites(!favesSelected)}>

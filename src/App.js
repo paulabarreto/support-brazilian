@@ -22,17 +22,18 @@ import {
   getBusinessCount,
 } from "./services/getBusiness";
 import { Link } from "react-router-dom";
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grow from '@material-ui/core/Grow';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import FastfoodIcon from '@material-ui/icons/Fastfood';
+import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import Grow from "@material-ui/core/Grow";
+import Paper from "@material-ui/core/Paper";
+import Popper from "@material-ui/core/Popper";
+import MenuItem from "@material-ui/core/MenuItem";
+import MenuList from "@material-ui/core/MenuList";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
+import FastfoodIcon from "@material-ui/icons/Fastfood";
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -117,8 +118,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const options = ['Services', 'Food', 'Groceries'];
-
+const options = ["Services", "Food", "Groceries"];
 
 function App() {
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -348,82 +348,34 @@ function App() {
         favesSelected={favesSelected}
         handleShowFavourites={handleShowFavourites}
       />
-      <Grid style={{ marginTop: 80 + "px" }} container className={classes.root} spacing={2}>
-      <Grid item xs={12}>
-        <Grid container justifyContent="center" spacing={spacing}>
-        <ButtonGroup
-              variant="contained"
-              color="primary"
-              ref={anchorRef}
-              aria-label="split button"
-            >
-                <Button startIcon={<LocationOnIcon/>}>
-                  <Link to={'map'} style={{ color: 'inherit', textDecoration: 'inherit'}}>
-                    Search Near Me
-                  </Link>
-                </Button>
-              <Button onClick={handleClickButtonGroup}>{options[selectedIndex]}</Button>
+      <Grid
+        style={{ marginTop: 80 + "px" }}
+        container
+        className={classes.root}
+        spacing={2}
+      >
+        <Grid item xs={12}>
+          <Grid container justifyContent="center" spacing={spacing}>
+           
               <Button
+                variant="contained"
+                startIcon={<LocationOnIcon />}
                 color="primary"
-                size="small"
-                aria-controls={openButton ? "split-button-menu" : undefined}
-                aria-expanded={openButton ? "true" : undefined}
-                aria-label="select merge strategy"
-                aria-haspopup="menu"
-                onClick={handleToggleButtonGroup}
               >
-                <ArrowDropDownIcon />
-              </Button>
-            </ButtonGroup>
-            <Popper
-              open={openButton}
-              anchorEl={anchorRef.current}
-              role={undefined}
-              transition
-              disablePortal
-            >
-              {({ TransitionProps, placement }) => (
-                <Grow
-                  {...TransitionProps}
-                  style={{
-                    transformOrigin:
-                      placement === "bottom" ? "center top" : "center bottom",
-                  }}
+                <Link
+                  to={"map"}
+                  style={{ color: "inherit", textDecoration: "inherit" }}
                 >
-                  <Paper>
-                    <ClickAwayListener onClickAway={handleCloseButton}>
-                      <MenuList id="split-button-menu">
-                        {options.map((option, index) => (
-                          <MenuItem
-                            key={option}
-                            disabled={index === 2}
-                            selected={index === selectedIndex}
-                            onClick={(event) =>
-                              handleMenuItemClickButtonGroup(event, index)
-                            }
-                          >
-                        
-                            {option === 'Food' && <FastfoodIcon color="primary"/>}
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </MenuList>
-                    </ClickAwayListener>
-                  </Paper>
-                </Grow>
-              )}
-            </Popper>
+                  Search Near Me
+                </Link>
+              </Button>
+              
+          </Grid>
         </Grid>
       </Grid>
-      </Grid>
       <Container maxWidth="md">
-      <Grid
-          container
-          justifyContent="center"
-        >
-          <Grid item xs={12} >
-            
-          </Grid>
+        <Grid container justifyContent="center">
+          <Grid item xs={12}></Grid>
           {isAPIdataLoading &&
             dummyArray.map((skeleton, index) => (
               <Grid

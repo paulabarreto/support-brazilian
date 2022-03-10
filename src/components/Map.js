@@ -12,7 +12,7 @@ import { getAllCoordinates } from "../services/getBusiness";
 const GOOGLE_MAPS_API = process.env.REACT_APP_GOOGLE_API_KEY;
 
 const containerStyle = {
-  width: "400px",
+  width: "900px",
   height: "400px",
 };
 
@@ -77,7 +77,7 @@ function MyMapComponent() {
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
-      zoom={16}
+      zoom={15}
       onUnmount={onUnmount}
       onLoad={onLoad}
     >
