@@ -81,15 +81,15 @@ function MyMapComponent() {
       onUnmount={onUnmount}
       onLoad={onLoad}
     >
-      {markers.map(({ id, lat, lng }) => (
+      {markers.map(({ id, name, lat, lng }) => (
         <Marker
           key={id}
           position={{ lat: lat, lng: lng }}
           onClick={() => handleActiveMarker(id)}
         >
           {activeMarker === id ? (
-            <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-              <div>name</div>
+          <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+              <div>{name}</div>
             </InfoWindow>
           ) : null}
         </Marker>

@@ -24,6 +24,8 @@ import LocationOnIcon from "@material-ui/icons/LocationOn";
 import DescriptionIcon from "@material-ui/icons/Description";
 import axios from "axios";
 import { StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
+import EditIcon from '@material-ui/icons/Edit';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 const libraries = ["places"];
 
@@ -36,6 +38,7 @@ export default function AddBusinessDialog(props) {
   } = useForm();
 
   const [openConfirmation, setOpen] = React.useState(false);
+  const [isLocationEditionEnabled, setEnableLocationEdition] = React.useState(false);
   const [confirmationText, setConfirmationText] = React.useState("");
   const [confirmationTitle, setConfirmationTitle] = React.useState("");
   const [autoComplete, setAutoComplete] = React.useState(null);
@@ -163,8 +166,15 @@ export default function AddBusinessDialog(props) {
     setLocation(address);
     setLat(lat);
     setLng(lng);
-    console.log(lat, lng)
   };
+
+  const enableEdition = () => {
+    if(isLocationEditionEnabled) {
+      setEnableLocationEdition(false)
+    } else {
+      setEnableLocationEdition(true)
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -283,23 +293,37 @@ export default function AddBusinessDialog(props) {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={11} style={{ display: isLocationEditionEnabled ? 'none' : 'block' }}>
+            <FormControl fullWidth>
+                <InputLabel htmlFor="location">Location</InputLabel>
+                <Input
+                  id="location"
+                  value={location}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <LocationOnIcon />
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={11} style={{ display: isLocationEditionEnabled ? 'block' : 'none' }}>
               <StandaloneSearchBox
                 onLoad={onLoad}
                 onPlacesChanged={onPlacesChanged}
               >
                 <input
                   type="text"
-                  placeholder={props.business ? props.business.location : 'Location'}
-                  // value={props.business ? props.business.location : ''}
+                  placeholder="Location"
                   style={{
                     paddingRight: "24px",
                     cursor: "pointer",
                     minWidth: "16px",
                     userSelect: "none",
                     borderRadius: 0,
-                    mozAppearance: "none",
-                    webkitAppearance: "none",
+                    MozAppearance: "none",
+                    WebkitAppearance: "none",
                     font: "inherit",
                     color: "currentColor",
                     width: "100%",
@@ -319,6 +343,15 @@ export default function AddBusinessDialog(props) {
                 />
               </StandaloneSearchBox>
             </Grid>
+            {props.business &&
+              <Grid item xs={1}>
+                <Button 
+                  style={{marginTop: '13px'}}
+                  onClick={ () => enableEdition() }>
+                  <EditIcon color="primary" />
+                </Button>
+              </Grid>
+            }
           </Grid>
         </DialogContent>
         <DialogActions>
