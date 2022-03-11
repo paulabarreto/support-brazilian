@@ -133,7 +133,6 @@ export default function MediaCard(props) {
 
 
   return (
-    <Grid item xs={12} md={6}>
         <Card className={classes.root}>
             <CardHeader
             action={
@@ -198,6 +197,5 @@ export default function MediaCard(props) {
             />
           </CardActions>
         </Card>
-    </Grid>
   );
 }

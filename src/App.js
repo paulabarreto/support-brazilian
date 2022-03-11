@@ -23,24 +23,11 @@ import {
 } from "./services/getBusiness";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Grow from "@material-ui/core/Grow";
-import Paper from "@material-ui/core/Paper";
-import Popper from "@material-ui/core/Popper";
-import MenuItem from "@material-ui/core/MenuItem";
-import MenuList from "@material-ui/core/MenuList";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import FastfoodIcon from "@material-ui/icons/Fastfood";
-import FavoriteIcon from '@material-ui/icons/Favorite';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    "& > * + *": {
-      marginTop: theme.spacing(2),
-    },
   },
   footer: {
     backgroundColor: "#3f51b5",
@@ -348,15 +335,15 @@ function App() {
         favesSelected={favesSelected}
         handleShowFavourites={handleShowFavourites}
       />
-      <Grid
-        style={{ marginTop: 80 + "px" }}
-        container
-        className={classes.root}
-        spacing={2}
-      >
+      <Container maxWidth="md">
         <Grid item xs={12}>
-          <Grid container justifyContent="center" spacing={spacing}>
-           
+          <Grid
+            container
+            justifyContent="center"
+            spacing={spacing}
+            style={{ marginTop: "70px" }}
+          >
+            <Grid item>
               <Button
                 variant="contained"
                 startIcon={<LocationOnIcon />}
@@ -369,63 +356,55 @@ function App() {
                   Search Near Me
                 </Link>
               </Button>
-              
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-      <Container maxWidth="md">
-        <Grid container justifyContent="center">
-          <Grid item xs={12}></Grid>
-          {isAPIdataLoading &&
-            dummyArray.map((skeleton, index) => (
-              <Grid
-                key={index}
-                item
-                xs={12}
-                md={6}
-                style={{ marginTop: 20 + "px" }}
-              >
-                <Stack spacing={1}>
-                  <Skeleton variant="rectangular" width={350} height={300} />
-                </Stack>
+        <Grid item xs={12}>
+          <Grid container justifyContent="center" spacing={spacing}>
+            {isAPIdataLoading &&
+              dummyArray.map((skeleton, index) => (
+                <Grid item>
+                  <Stack spacing={1}>
+                    <Skeleton variant="rectangular" width={350} height={300} />
+                  </Stack>
+                </Grid>
+              ))}
+            {!isAPIdataLoading &&
+              filteredList.length > 0 &&
+              filteredList.map((business, index) => (
+                <Grid item>
+                  <MediaCard
+                    business={business}
+                    key={index}
+                    isAdmin={isAdmin}
+                    page={page}
+                    openConfirmation={handleOpenConfirmation}
+                  />
+                </Grid>
+              ))}
+            {!isAPIdataLoading && filteredList.length === 0 && (
+              <Grid item>
+                <h3>No results to show</h3>
               </Grid>
-            ))}
-          {!isAPIdataLoading &&
-            filteredList.length > 0 &&
-            filteredList.map((business, index) => (
-              <MediaCard
-                business={business}
-                key={index}
-                isAdmin={isAdmin}
-                page={page}
-                openConfirmation={handleOpenConfirmation}
-              />
-            ))}
-          {!isAPIdataLoading && filteredList.length === 0 && (
-            <h3>No results to show</h3>
-          )}
-
-          <Grid item xs={12}>
-            <Grid
-              container
-              justifyContent="center"
-              style={{ marginTop: 30 + "px" }}
-            >
-              <Typography>Page: {page}</Typography>
-            </Grid>
+            )}
           </Grid>
-          <Grid item xs={12}>
-            <Grid
-              container
-              justifyContent="center"
-              style={{ marginTop: 10 + "px" }}
-            >
-              <Pagination
-                count={pageCount}
-                page={page}
-                onChange={handleChange}
-              />
-            </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Grid
+            container
+            justifyContent="center"
+            style={{ marginTop: 30 + "px" }}
+          >
+            <Typography>Page: {page} </Typography>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Grid
+            container
+            justifyContent="center"
+            style={{ marginTop: 10 + "px" }}
+          >
+            <Pagination count={pageCount} page={page} onChange={handleChange} />
           </Grid>
         </Grid>
         <AddBusinessDialog open={open} handleClose={handleClose} user={user} />
