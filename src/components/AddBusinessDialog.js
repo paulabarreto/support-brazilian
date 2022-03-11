@@ -38,7 +38,7 @@ export default function AddBusinessDialog(props) {
   } = useForm();
 
   const [openConfirmation, setOpen] = React.useState(false);
-  const [isLocationEditionEnabled, setEnableLocationEdition] = React.useState(false);
+  const [isLocationEditionEnabled, setEnableLocationEdition] = React.useState(true);
   const [confirmationText, setConfirmationText] = React.useState("");
   const [confirmationTitle, setConfirmationTitle] = React.useState("");
   const [autoComplete, setAutoComplete] = React.useState(null);
