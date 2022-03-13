@@ -84,7 +84,7 @@ function App() {
   };
 
   // For skeleton loading
-  const dummyArray = [1, 2, 3];
+  const dummyArray = [1, 2, 3, 4];
 
   const handleChange = (event, value) => {
     setAPIdataLoading(true);

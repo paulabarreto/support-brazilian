@@ -19,10 +19,10 @@ const containerStyle = {
 const libraries = ["places"];
 const url = urlService(endpoints.GetCoordinates);
 
-function MyMapComponent() {
+export default function MyMapComponent() {
   const [center, setCenter] = useState({
-    lat: -3.745,
-    lng: -38.523,
+    lat: parseFloat(43.661554), 
+    lng: parseFloat(-79.368456)
   });
 
   const { isLoaded } = useJsApiLoader({
@@ -39,21 +39,15 @@ function MyMapComponent() {
         setCenter({ lat, lng });
       }
     );
-    const bounds = new window.google.maps.LatLngBounds();
-    map.fitBounds(bounds);
     setMap(map);
   }, []);
 
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null);
-  }, []);
+  const onLoadMarker = marker => {
+    console.log(marker)
+  }
 
-  const onLoadMarker = (marker) => {
-    console.log("marker: ", marker);
-  };
-
-  const [markers, setMarkers] = React.useState([{ lat: 44.5, lng: -79.3 }]);
-
+  const [markers, setMarkers] = React.useState([{ }]);
+  
   const getCoords = async () => {
     const coordinates = await getAllCoordinates(url);
     const filtered = coordinates.filter((coord) => coord.lat);
@@ -78,13 +72,14 @@ function MyMapComponent() {
       mapContainerStyle={containerStyle}
       center={center}
       zoom={15}
-      onUnmount={onUnmount}
       onLoad={onLoad}
+      onClick={() => setActiveMarker(null)}
     >
       {markers.map(({ id, name, lat, lng }) => (
         <Marker
           key={id}
-          position={{ lat: lat, lng: lng }}
+          onLoad={onLoadMarker}
+          position={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
           onClick={() => handleActiveMarker(id)}
         >
           {activeMarker === id ? (
@@ -96,8 +91,7 @@ function MyMapComponent() {
       ))}
     </GoogleMap>
   ) : (
-    <></>
+    <div>Loading</div>
   );
 }
 
-export default React.memo(MyMapComponent);
