@@ -9,6 +9,10 @@ import {
 import * as endpoints from "../endpoints";
 import urlService from "../services/urls";
 import { getAllCoordinates } from "../services/getBusiness";
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
+
 const GOOGLE_MAPS_API = process.env.REACT_APP_GOOGLE_API_KEY;
 
 const containerStyle = {
@@ -25,6 +29,19 @@ export default function MyMapComponent() {
     lng: parseFloat(-79.368456)
   });
 
+  const [state, setState] = React.useState({
+    checkedA: false
+  });
+
+  const handleChange = (event) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+    if(event.target.checked) {
+      findBrazilianBusiness();
+    } else {
+      centerOnCurrentPosition();
+    }
+  };
+
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: GOOGLE_MAPS_API,
@@ -32,23 +49,31 @@ export default function MyMapComponent() {
   });
 
   const [map, setMap] = React.useState(null);
+  const [zoom, setZoom] = React.useState(10);
+  const [currentPosition, setCurrentPosition] = React.useState(null);
 
-  const onLoad = (map) => {
+  const centerOnCurrentPosition = () => {
     navigator?.geolocation.getCurrentPosition(
       ({ coords: { latitude: lat, longitude: lng } }) => {
         setCenter({ lat, lng });
+        setCurrentPosition({ lat, lng });
+        setZoom(13)
       }
     );
-    if(markers.length > 0) {
-      const bounds = new window.google.maps.LatLngBounds();
-      markers.forEach(({ lat, lng }) => bounds.extend({lat: parseFloat(lat), lng: parseFloat(lng)}));
-      map.fitBounds(bounds);
-    }
+  }
 
+  const onLoad = (map) => {
+    centerOnCurrentPosition();
     setMap(map);
   };
 
-  const [markers, setMarkers] = React.useState([{ }]);
+  const findBrazilianBusiness = () => {
+    const bounds = new window.google.maps.LatLngBounds();
+    markers.forEach(({ lat, lng }) => bounds.extend({lat: parseFloat(lat), lng: parseFloat(lng)}));
+    map.fitBounds(bounds);
+  }
+
+  const [markers, setMarkers] = React.useState([]);
   
   const getCoords = async () => {
     const coordinates = await getAllCoordinates(url);
@@ -71,27 +96,39 @@ export default function MyMapComponent() {
   };
 
   return isLoaded ? (
-    <GoogleMap
-      mapContainerStyle={containerStyle}
-      center={center}
-      zoom={13}
-      onLoad={onLoad}
-      onClick={() => setActiveMarker(null)}
-    >
-      {markers.map(({ _id, name, lat, lng }) => (
+    <div>
+      <FormControlLabel
+        control={<Switch checked={state.checkedA} onChange={handleChange} name="checkedA" />}
+        label="See All Brazilian Business Locations"
+      />
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={zoom}
+        onLoad={onLoad}
+        onClick={() => setActiveMarker(null)}
+      >
+        {markers.map(({ _id, name, lat, lng }) => (
+          <Marker
+            key={_id}
+            position={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
+            onClick={() => handleActiveMarker(_id)}
+          >
+            {activeMarker === _id ? (
+            <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+                <div>{name}</div>
+              </InfoWindow>
+            ) : null}
+          </Marker>
+        ))}
         <Marker
-          key={_id}
-          position={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
-          onClick={() => handleActiveMarker(_id)}
+          position={currentPosition}
+          // icon="/assets/current-location-icon-17.jpg"
         >
-          {activeMarker === _id ? (
-          <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-              <div>{name}</div>
-            </InfoWindow>
-          ) : null}
+
         </Marker>
-      ))}
-    </GoogleMap>
+      </GoogleMap>
+    </div>
   ) : (
     <div>Loading</div>
   );
