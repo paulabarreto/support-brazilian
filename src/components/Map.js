@@ -42,10 +42,6 @@ export default function MyMapComponent() {
     setMap(map);
   }, []);
 
-  const onLoadMarker = marker => {
-    console.log(marker)
-  }
-
   const [markers, setMarkers] = React.useState([{ }]);
   
   const getCoords = async () => {
@@ -75,14 +71,13 @@ export default function MyMapComponent() {
       onLoad={onLoad}
       onClick={() => setActiveMarker(null)}
     >
-      {markers.map(({ id, name, lat, lng }) => (
+      {markers.map(({ _id, name, lat, lng }) => (
         <Marker
-          key={id}
-          onLoad={onLoadMarker}
+          key={_id}
           position={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
-          onClick={() => handleActiveMarker(id)}
+          onClick={() => handleActiveMarker(_id)}
         >
-          {activeMarker === id ? (
+          {activeMarker === _id ? (
           <InfoWindow onCloseClick={() => setActiveMarker(null)}>
               <div>{name}</div>
             </InfoWindow>
