@@ -33,20 +33,27 @@ export default function MyMapComponent() {
 
   const [map, setMap] = React.useState(null);
 
-  const onLoad = React.useCallback(function callback(map) {
+  const onLoad = (map) => {
     navigator?.geolocation.getCurrentPosition(
       ({ coords: { latitude: lat, longitude: lng } }) => {
         setCenter({ lat, lng });
       }
     );
+    if(markers.length > 0) {
+      const bounds = new window.google.maps.LatLngBounds();
+      markers.forEach(({ lat, lng }) => bounds.extend({lat: parseFloat(lat), lng: parseFloat(lng)}));
+      map.fitBounds(bounds);
+    }
+
     setMap(map);
-  }, []);
+  };
 
   const [markers, setMarkers] = React.useState([{ }]);
   
   const getCoords = async () => {
     const coordinates = await getAllCoordinates(url);
     const filtered = coordinates.filter((coord) => coord.lat);
+    
     setMarkers(filtered);
   };
 
@@ -67,7 +74,7 @@ export default function MyMapComponent() {
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
-      zoom={15}
+      zoom={13}
       onLoad={onLoad}
       onClick={() => setActiveMarker(null)}
     >
