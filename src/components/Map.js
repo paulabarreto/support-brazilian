@@ -12,6 +12,7 @@ import { getAllCoordinates } from "../services/getBusiness";
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
+import { Link } from "react-router-dom";
 
 const GOOGLE_MAPS_API = process.env.REACT_APP_GOOGLE_API_KEY;
 
@@ -78,7 +79,6 @@ export default function MyMapComponent() {
   const getCoords = async () => {
     const coordinates = await getAllCoordinates(url);
     const filtered = coordinates.filter((coord) => coord.lat);
-    
     setMarkers(filtered);
   };
 
@@ -108,7 +108,7 @@ export default function MyMapComponent() {
         onLoad={onLoad}
         onClick={() => setActiveMarker(null)}
       >
-        {markers.map(({ _id, name, lat, lng }) => (
+        {markers.map(({ _id, name, website, lat, lng }) => (
           <Marker
             key={_id}
             position={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
@@ -116,7 +116,7 @@ export default function MyMapComponent() {
           >
             {activeMarker === _id ? (
             <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-                <div>{name}</div>
+                <a target="_blank" rel="noreferrer" href={website}><div>{name}</div></a>
               </InfoWindow>
             ) : null}
           </Marker>
@@ -125,7 +125,9 @@ export default function MyMapComponent() {
           position={currentPosition}
           // icon="/assets/current-location-icon-17.jpg"
         >
-
+          <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+            <div>You're here</div>
+          </InfoWindow>
         </Marker>
       </GoogleMap>
     </div>

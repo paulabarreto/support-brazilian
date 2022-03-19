@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -42,8 +42,8 @@ export default function AddBusinessDialog(props) {
   const [confirmationText, setConfirmationText] = React.useState("");
   const [confirmationTitle, setConfirmationTitle] = React.useState("");
   const [autoComplete, setAutoComplete] = React.useState(null);
-  const [lat, setLat] = React.useState(0);
-  const [lng, setLng] = React.useState(0);
+  const [lat, setLat] = React.useState(props.business ? props.business.lat : 0);
+  const [lng, setLng] = React.useState(props.business ? props.business.lng : 0);
 
   const handleOpenConfirmation = () => {
     setOpen(true);
@@ -176,6 +176,13 @@ export default function AddBusinessDialog(props) {
     }
   }
 
+  useEffect(() => {
+    // Taking into consideration that location is mandatory
+    if (props.business) {
+      setEnableLocationEdition(false)
+    }
+  }, []);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Dialog
@@ -245,6 +252,7 @@ export default function AddBusinessDialog(props) {
                 <InputLabel htmlFor="website">Website</InputLabel>
                 <Input
                   id="website"
+                  type="url"
                   defaultValue={website}
                   onChange={(e) => setWebsite(e.target.value)}
                   fullWidth
@@ -293,7 +301,7 @@ export default function AddBusinessDialog(props) {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={11} style={{ display: isLocationEditionEnabled ? 'none' : 'block' }}>
+            <Grid item xs={11} style={{ display: !isLocationEditionEnabled ? 'block' : 'none' }}>
             <FormControl fullWidth>
                 <InputLabel htmlFor="location">Location</InputLabel>
                 <Input
