@@ -78,8 +78,15 @@ export default function MyMapComponent() {
   
   const getCoords = async () => {
     const coordinates = await getAllCoordinates(url);
+    // Some api resp may not have coordinate
     const filtered = coordinates.filter((coord) => coord.lat);
-    setMarkers(filtered);
+    const markersWithSite = filtered.map(business => {
+      return {
+        ...business,
+        site: business.website ? business.website : business.instagram
+      }
+    })
+    setMarkers(markersWithSite);
   };
 
   useEffect(() => {
@@ -108,7 +115,7 @@ export default function MyMapComponent() {
         onLoad={onLoad}
         onClick={() => setActiveMarker(null)}
       >
-        {markers.map(({ _id, name, website, lat, lng }) => (
+        {markers.map(({ _id, name, site, lat, lng }) => (
           <Marker
             key={_id}
             position={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
@@ -116,7 +123,7 @@ export default function MyMapComponent() {
           >
             {activeMarker === _id ? (
             <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-                <a target="_blank" rel="noreferrer" href={website}><div>{name}</div></a>
+                <a target="_blank" rel="noreferrer" href={site}><div>{name}</div></a>
               </InfoWindow>
             ) : null}
           </Marker>
