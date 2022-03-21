@@ -12,7 +12,6 @@ import { getAllCoordinates } from "../services/getBusiness";
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
-import { Link } from "react-router-dom";
 
 const GOOGLE_MAPS_API = process.env.REACT_APP_GOOGLE_API_KEY;
 
@@ -58,7 +57,6 @@ export default function MyMapComponent() {
       ({ coords: { latitude: lat, longitude: lng } }) => {
         setCenter({ lat, lng });
         setCurrentPosition({ lat, lng });
-        setZoom(13)
       }
     );
   }

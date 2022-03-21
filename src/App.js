@@ -51,44 +51,16 @@ function App() {
   const [category, setCategory] = React.useState(0);
   const [searchField, setSearchField] = React.useState("");
   const [pageCount, setPageCount] = React.useState(0);
-  const [isFirstLoad, setFirstLoad] = React.useState(true);
   const [spacing, setSpacing] = React.useState(2);
 
   // For page count track which filter is being used
   const [filter, setFilter] = React.useState("category");
-
-  // Button group
-  const [openButton, setOpenButton] = React.useState(false);
-  const anchorRef = React.useRef(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
-
-  const handleClickButtonGroup = () => {
-    console.info(`You clicked ${options[selectedIndex]}`);
-  };
-
-  const handleMenuItemClickButtonGroup = (event, index) => {
-    setSelectedIndex(index);
-    setOpenButton(false);
-  };
-
-  const handleToggleButtonGroup = () => {
-    setOpenButton((prevOpen) => !prevOpen);
-  };
-
-  const handleCloseButton = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
-
-    setOpen(false);
-  };
 
   // For skeleton loading
   const dummyArray = [1, 2, 3, 4];
 
   const handleChange = (event, value) => {
     setAPIdataLoading(true);
-    setFirstLoad(false);
     setPage(value);
   };
 
@@ -97,7 +69,7 @@ function App() {
   const countUrl = urlService(endpoints.GetBusinessCount);
   const favouritesUrl = urlService(endpoints.GetFavourites);
 
-  const getBBs = async (isAdmin, page) => {
+  const getBBs = async (page) => {
     setAPIdataLoading(true);
     let getURL =
       category === 0 ? `${url}/${page}` : `${url}/${page}/${category}`;
@@ -107,11 +79,11 @@ function App() {
     let list = [];
 
     list = await getBusiness(getURL);
-    if (!isAdmin) {
+    const admin = await checkAdmin()
+    if (!admin) {
       return list.filter((item) => item.adminApproved);
     }
-    list.sort(showPendingApprovalFirst(list));
-    return list;
+    return list.sort(showPendingApprovalFirst(list));
   };
 
   const showPendingApprovalFirst = (list) => {
@@ -139,16 +111,18 @@ function App() {
     setPageCount(numberOfPages);
   };
 
+  const checkAdmin = () => {
+    const admin = user && user.email === process.env.REACT_APP_ADMIN_EMAIL ? true : false;
+    setAdmin(admin);
+    return admin;
+  }
+
   useEffect(() => {
     if (!isLoading) {
-      const checkAdmin =
-        user && user.email === process.env.REACT_APP_ADMIN_EMAIL ? true : false;
-      setAdmin(checkAdmin);
-
       const fetchData = setTimeout(async () => {
         const [brazilianBusinsessList, favouriteBusinessList, pageCount] =
           await Promise.all([
-            getBBs(isAdmin, page),
+            getBBs(page),
             favouritesList(user),
             businessCount(),
           ]);
@@ -159,15 +133,6 @@ function App() {
             favourite: favouriteList.includes(business._id),
           };
         });
-
-        if (isFirstLoad) {
-          updatedFavesList = updatedFavesList.map((item, index) => {
-            return {
-              ...item,
-              position: index,
-            };
-          });
-        }
 
         setList(updatedFavesList);
         setFilteredList(updatedFavesList);
@@ -202,12 +167,10 @@ function App() {
     setCategory(index);
     setFilter("category");
     if (index === 0) {
-      setFirstLoad(true);
       setFilteredList(listByCategory);
       return listByCategory;
     }
-    setFirstLoad(false);
-    listByCategory = await getBBs(isAdmin, page);
+    listByCategory = await getBBs(page);
     setFilteredList(listByCategory);
   };
 
@@ -216,11 +179,6 @@ function App() {
     if (!isAuthenticated) {
       handleOpenConfirmation();
     } else {
-      if (selected) {
-        setFirstLoad(false);
-      } else {
-        setFirstLoad(true);
-      }
       setFavesSelected(selected);
       // const filterFaves = !selected ? businessList : businessList.filter(business => business.favourite)
       const filterFaves = !selected
@@ -241,9 +199,6 @@ function App() {
       return business.name.toLowerCase().includes(e.toLowerCase());
     });
     setFilteredList(filtered);
-    if (e !== "") {
-      setFirstLoad(false);
-    }
     if (e === "") {
       setCategory(0);
     }
