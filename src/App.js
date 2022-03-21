@@ -83,21 +83,7 @@ function App() {
     if (!admin) {
       return list.filter((item) => item.adminApproved);
     }
-    return list.sort(showPendingApprovalFirst(list));
-  };
-
-  const showPendingApprovalFirst = (list) => {
-    list.sort(function (a, b) {
-      const statusA = a.adminApproved;
-      const statusB = b.adminApproved;
-      if (statusA === true && statusB === false) {
-        return 1;
-      }
-      if (statusA === false && statusB === true) {
-        return -1;
-      }
-      return 0;
-    });
+    return list;
   };
 
   const favouritesList = async (user) => {
