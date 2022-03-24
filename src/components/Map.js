@@ -17,19 +17,9 @@ import AppBar from "./AppBar";
 const GOOGLE_MAPS_API = process.env.REACT_APP_GOOGLE_API_KEY;
 
 const containerStyle = {
-  // width: "100%",
-  // height: "500px",
-  // marginTop: "80px"
-    display: 'block',
-    position: 'absolute',
-    top: '0',
-    right: '0',
-    bottom: '0',
-    left: '0',
-    margin: '0',
-    padding: '0',
-    height: '100%',
-    width: '100%',
+  width: "100%",
+  height: "500px",
+  marginTop: "80px"
 };
 
 const libraries = ["places"];
@@ -115,13 +105,6 @@ export default function MyMapComponent() {
         map={true}
         handleClickMapMenu={handleClickMapMenu}
       />
-      <div 
-        style={{
-                position: 'relative',
-                width: '100%',
-                paddingBottom: '56.25%'
-              }}
-      >
 
       <GoogleMap
         mapContainerStyle={containerStyle}
@@ -152,7 +135,6 @@ export default function MyMapComponent() {
           </InfoWindow>
         </Marker>
       </GoogleMap>
-      </div>
     </div>
   ) : (
     <div>Loading</div>
