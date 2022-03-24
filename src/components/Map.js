@@ -12,12 +12,24 @@ import { getAllCoordinates } from "../services/getBusiness";
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
+import AppBar from "./AppBar";
 
 const GOOGLE_MAPS_API = process.env.REACT_APP_GOOGLE_API_KEY;
 
 const containerStyle = {
-  width: "900px",
-  height: "400px",
+  // width: "100%",
+  // height: "500px",
+  // marginTop: "80px"
+    display: 'block',
+    position: 'absolute',
+    top: '0',
+    right: '0',
+    bottom: '0',
+    left: '0',
+    margin: '0',
+    padding: '0',
+    height: '100%',
+    width: '100%',
 };
 
 const libraries = ["places"];
@@ -29,16 +41,13 @@ export default function MyMapComponent() {
     lng: parseFloat(-79.368456)
   });
 
-  const [state, setState] = React.useState({
-    checkedA: false
-  });
 
-  const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
-    if(event.target.checked) {
+  const handleClickMapMenu = (index) => {
+    if(index === 4) {
       findBrazilianBusiness();
     } else {
       centerOnCurrentPosition();
+      setZoom(15)
     }
   };
 
@@ -76,7 +85,7 @@ export default function MyMapComponent() {
   
   const getCoords = async () => {
     const coordinates = await getAllCoordinates(url);
-    // Some api resp may not have coordinate
+    // Some api resp may not have coordinates
     const filtered = coordinates.filter((coord) => coord.lat);
     const markersWithSite = filtered.map(business => {
       return {
@@ -102,10 +111,18 @@ export default function MyMapComponent() {
 
   return isLoaded ? (
     <div>
-      <FormControlLabel
-        control={<Switch checked={state.checkedA} onChange={handleChange} name="checkedA" />}
-        label="See All Brazilian Business Locations"
+      <AppBar 
+        map={true}
+        handleClickMapMenu={handleClickMapMenu}
       />
+      <div 
+        style={{
+                position: 'relative',
+                width: '100%',
+                paddingBottom: '56.25%'
+              }}
+      >
+
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
@@ -135,6 +152,7 @@ export default function MyMapComponent() {
           </InfoWindow>
         </Marker>
       </GoogleMap>
+      </div>
     </div>
   ) : (
     <div>Loading</div>

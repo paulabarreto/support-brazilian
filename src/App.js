@@ -207,6 +207,7 @@ function App() {
         handleClickOpen={handleClickOpen}
         favesSelected={favesSelected}
         handleShowFavourites={handleShowFavourites}
+        map={false}
       />
       <Container maxWidth="md">
         <Grid item xs={12}>

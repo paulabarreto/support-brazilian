@@ -22,6 +22,11 @@ import FastfoodIcon from "@material-ui/icons/Fastfood";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import WorkOutlineIcon from "@material-ui/icons/WorkOutline";
 import AllInclusiveIcon from "@material-ui/icons/AllInclusive";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import MapIcon from "@material-ui/icons/Map";
+import { Link } from "react-router-dom";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -89,9 +94,10 @@ export default function SearchAppBar({
   handleClickOpen,
   onMenuClick,
   onChange,
+  map,
+  handleClickMapMenu,
 }) {
   const classes = useStyles();
-
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [searchValue, setSearchValue] = React.useState("");
@@ -101,11 +107,16 @@ export default function SearchAppBar({
   };
 
   const handleMenuItemClick = (event, index) => {
-    setSearchValue("");
-    onChange("");
     setSelectedIndex(index);
     setAnchorEl(null);
-    onMenuClick(event, index);
+    // Index 4 is for Menu on Map page
+    if (index === 4 || index === 5) {
+      handleClickMapMenu(index);
+    } else {
+      setSearchValue("");
+      onChange("");
+      onMenuClick(event, index);
+    }
   };
 
   const handleChange = (e) => {
@@ -127,7 +138,7 @@ export default function SearchAppBar({
             aria-label="open drawer"
             className={classes.menuButton}
           >
-            <MenuIcon 
+            <MenuIcon
               aria-controls="simple-menu"
               aria-haspopup="true"
               onClick={handleClickListItem}
@@ -139,73 +150,99 @@ export default function SearchAppBar({
               open={Boolean(anchorEl)}
               keepMounted
               onClose={handleClose}
-              style={{width: '250px'}}
+              style={{ width: "250px" }}
             >
-              <MenuList>
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="categories-content"
-                    id="categories-header"
+              {map ? (
+                <MenuList>
+                  <MenuItem onClick={(event) => handleMenuItemClick(event, 4)}>
+                    <ListItemIcon>
+                      <MapIcon color="primary" />
+                    </ListItemIcon>
+                    <ListItemText primary="See all locations" />
+                  </MenuItem>
+                  <MenuItem onClick={(event) => handleMenuItemClick(event, 5)}>
+                    <ListItemIcon>
+                      <LocationOnIcon color="primary" />
+                    </ListItemIcon>
+                    <ListItemText primary="Find near me" />
+                  </MenuItem>
+                </MenuList>
+              ) : (
+                <MenuList>
+                  <Accordion>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="categories-content"
+                      id="categories-header"
+                    >
+                      <AccountTreeIcon color="primary" />
+                      <Typography className={classes.heading}>
+                        Categories
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails style={{ display: "block" }}>
+                      <MenuItem
+                        selected={selectedIndex === 0}
+                        onClick={(event) => handleMenuItemClick(event, 0)}
+                      >
+                        <AllInclusiveIcon color="primary" />
+                        <Typography className={classes.heading}>All</Typography>
+                      </MenuItem>
+                      <MenuItem
+                        selected={selectedIndex === 1}
+                        onClick={(event) => handleMenuItemClick(event, 1)}
+                      >
+                        <FastfoodIcon color="primary" />
+                        <Typography className={classes.heading}>
+                          Food
+                        </Typography>
+                      </MenuItem>
+                      <MenuItem
+                        selected={selectedIndex === 2}
+                        onClick={(event) => handleMenuItemClick(event, 2)}
+                      >
+                        <ShoppingBasketIcon color="primary" />
+                        <Typography className={classes.heading}>
+                          Groceries
+                        </Typography>
+                      </MenuItem>
+                      <MenuItem
+                        selected={selectedIndex === 3}
+                        onClick={(event) => handleMenuItemClick(event, 3)}
+                      >
+                        <WorkOutlineIcon color="primary" />
+                        <Typography className={classes.heading}>
+                          Services
+                        </Typography>
+                      </MenuItem>
+                    </AccordionDetails>
+                  </Accordion>
+                  <MenuItem
+                    onClick={() => handleShowFavourites(!favesSelected)}
                   >
-                    <AccountTreeIcon color="primary" />
+                    <FavoriteIcon color="primary" />
                     <Typography className={classes.heading}>
-                      Categories
+                      Favourites
                     </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails style={{display: 'block'}}>
-                    <MenuItem
-                      selected={selectedIndex === 0}
-                      onClick={(event) => handleMenuItemClick(event, 0)}
-                    >
-                      <AllInclusiveIcon color="primary" />
-                      <Typography className={classes.heading}>All</Typography>
-                    </MenuItem>
-                    <MenuItem
-                      selected={selectedIndex === 1}
-                      onClick={(event) => handleMenuItemClick(event, 1)}
-                    >
-                      <FastfoodIcon color="primary" />
-                      <Typography className={classes.heading}>Food</Typography>
-                    </MenuItem>
-                    <MenuItem
-                      selected={selectedIndex === 2}
-                      onClick={(event) => handleMenuItemClick(event, 2)}
-                    >
-                      <ShoppingBasketIcon color="primary" />
-                      <Typography className={classes.heading}>
-                        Groceries
-                      </Typography>
-                    </MenuItem>
-                    <MenuItem
-                      selected={selectedIndex === 3}
-                      onClick={(event) => handleMenuItemClick(event, 3)}
-                    >
-                      <WorkOutlineIcon color="primary" />
-                      <Typography className={classes.heading}>
-                        Services
-                      </Typography>
-                    </MenuItem>
-                  </AccordionDetails>
-                </Accordion>
-                <MenuItem onClick={() => handleShowFavourites(!favesSelected)}>
-                  <FavoriteIcon color="primary" />
-                  <Typography className={classes.heading}>
-                    Favourites
-                  </Typography>
-                </MenuItem>
-                <MenuItem onClick={() => handleClickOpen()}>
-                  <AddCircleIcon color="primary" />
-                  <Typography className={classes.heading}>
-                    Add New Business
-                  </Typography>
-                </MenuItem>
-              </MenuList>
+                  </MenuItem>
+                  <MenuItem onClick={() => handleClickOpen()}>
+                    <AddCircleIcon color="primary" />
+                    <Typography className={classes.heading}>
+                      Add New Business
+                    </Typography>
+                  </MenuItem>
+                </MenuList>
+              )}
             </Menu>
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            Support Brazilian
-          </Typography>
+            <Typography className={classes.title} variant="h6" noWrap>
+          <Link
+            to={"/"}
+            style={{ color: "inherit", textDecoration: "inherit" }}
+          >
+              Support Brazilian
+          </Link>
+            </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
