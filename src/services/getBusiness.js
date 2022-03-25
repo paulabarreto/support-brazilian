@@ -84,10 +84,12 @@ const getBusiness = async(url) => {
 
   const getAllCoordinates = async (url) => {
     try{
-      const coordinates = await axios.get(url)
-      return coordinates.data.data
+      const resp = await axios.get(url)
+      const coordinates = resp && resp.data ? resp.data.data : [];
+      return coordinates
     } catch (error) {
-      return `Error: ${error}`;
+      //TODO ADD ERROR HANDLING
+      return [];
     }
   }
 

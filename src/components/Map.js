@@ -76,7 +76,7 @@ export default function MyMapComponent() {
   const getCoords = async () => {
     const coordinates = await getAllCoordinates(url);
     // Some api resp may not have coordinates
-    const filtered = coordinates.filter((coord) => coord.lat);
+    const filtered = coordinates.length > 0 ? coordinates.filter((coord) => coord.lat) : [];
     const markersWithSite = filtered.map(business => {
       return {
         ...business,

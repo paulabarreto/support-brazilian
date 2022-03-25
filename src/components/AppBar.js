@@ -42,10 +42,10 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block",
-    },
+    // display: "none",
+    // [theme.breakpoints.up("sm")]: {
+    //   display: "block",
+    // },
   },
   search: {
     position: "relative",
@@ -243,6 +243,7 @@ export default function SearchAppBar({
               Support Brazilian
           </Link>
             </Typography>
+          {!map && 
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -258,6 +259,7 @@ export default function SearchAppBar({
               onChange={(e) => handleChange(e)}
             />
           </div>
+          }
           <AuthNav />
         </Toolbar>
       </AppBar>

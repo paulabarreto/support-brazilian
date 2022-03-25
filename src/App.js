@@ -80,7 +80,7 @@ function App() {
 
     list = await getBusiness(getURL);
     const admin = await checkAdmin()
-    if (!admin) {
+    if (!admin && list) {
       return list.filter((item) => item.adminApproved);
     }
     return list;
@@ -113,12 +113,12 @@ function App() {
             businessCount(),
           ]);
 
-        let updatedFavesList = brazilianBusinsessList.map((business) => {
+        let updatedFavesList = brazilianBusinsessList ? brazilianBusinsessList.map((business) => {
           return {
             ...business,
             favourite: favouriteList.includes(business._id),
           };
-        });
+        }) : [];
 
         setList(updatedFavesList);
         setFilteredList(updatedFavesList);
