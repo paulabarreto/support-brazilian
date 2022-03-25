@@ -25,7 +25,7 @@ import DescriptionIcon from "@material-ui/icons/Description";
 import axios from "axios";
 import { StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
 import EditIcon from '@material-ui/icons/Edit';
-import CancelIcon from '@material-ui/icons/Cancel';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const libraries = ["places"];
 
@@ -315,7 +315,11 @@ export default function AddBusinessDialog(props) {
                 />
               </FormControl>
             </Grid>
-
+            {!props.business &&
+              <Grid item xs={1} style={{alignSelf: "end"}} >
+                <LocationOnIcon />
+              </Grid>
+            }
             <Grid item xs={11} style={{ display: isLocationEditionEnabled ? 'block' : 'none' }}>
               <StandaloneSearchBox
                 onLoad={onLoad}
@@ -356,7 +360,11 @@ export default function AddBusinessDialog(props) {
                 <Button 
                   style={{marginTop: '13px'}}
                   onClick={ () => enableEdition() }>
-                  <EditIcon color="primary" />
+                  {isLocationEditionEnabled ?
+                    <ClearIcon color="primary" />
+                    :
+                    <EditIcon color="primary" />
+                  }
                 </Button>
               </Grid>
             }
@@ -377,8 +385,8 @@ export default function AddBusinessDialog(props) {
       </Dialog>
       <ConfirmationDialog
         open={openConfirmation}
-        handleCloseConfirmation={handleCloseConfirmation}
         confirmation={confirmationText}
+        handleCloseConfirmation={handleCloseConfirmation}
         title={confirmationTitle}
       />
     </form>

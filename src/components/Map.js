@@ -128,7 +128,7 @@ export default function MyMapComponent() {
         ))}
         <Marker
           position={currentPosition}
-          // icon="/assets/current-location-icon-17.jpg"
+          // icon={<LocationSearchingIcon/>}
         >
           <InfoWindow onCloseClick={() => setActiveMarker(null)}>
             <div>You're here</div>
