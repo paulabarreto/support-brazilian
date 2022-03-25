@@ -42,10 +42,10 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    // display: "none",
-    // [theme.breakpoints.up("sm")]: {
-    //   display: "block",
-    // },
+    display: "none",
+    [theme.breakpoints.up("sm")]: {
+      display: "block",
+    },
   },
   search: {
     position: "relative",
@@ -235,7 +235,12 @@ export default function SearchAppBar({
               )}
             </Menu>
           </IconButton>
-            <Typography className={classes.title} variant="h6" noWrap>
+            <Typography 
+              className={classes.title} 
+              variant="h6" 
+              noWrap
+              style={map ? {display: 'block'} : {}}
+            >
           <Link
             to={"/"}
             style={{ color: "inherit", textDecoration: "inherit" }}

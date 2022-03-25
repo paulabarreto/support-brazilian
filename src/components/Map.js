@@ -18,8 +18,8 @@ const GOOGLE_MAPS_API = process.env.REACT_APP_GOOGLE_API_KEY;
 
 const containerStyle = {
   width: "100%",
-  height: "500px",
-  marginTop: "80px"
+  height: "88vh",
+  marginTop: "70px"
 };
 
 const libraries = ["places"];
