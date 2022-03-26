@@ -21,9 +21,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import * as urls from '../constants';
 import * as endpoints from '../endpoints';
 import axios from 'axios';
-import Avatar from '@material-ui/core/Avatar';
 import { yellow } from '@material-ui/core/colors';
-import StarIcon from '@material-ui/icons/Star';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme)=>({
   root: {
@@ -174,11 +173,13 @@ export default function MediaCard(props) {
                 </Button>
               </a>
             }
+            <Tooltip title="Suggest an edit" aria-label="suggest an edit">
+              <Button size="small" color="primary" onClick={handleClickOpen}>
+                <EditIcon/>
+              </Button>
+            </Tooltip>
             {props.isAdmin && 
               <div>
-                <Button size="small" color="primary" onClick={handleClickOpen}>
-                  <EditIcon/>
-                </Button>
                 <Button size="small" color="primary">
                   <DeleteIcon onClick={handleDeleteBusiness}/>
                 </Button>

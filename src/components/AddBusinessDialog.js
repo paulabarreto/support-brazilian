@@ -26,6 +26,8 @@ import axios from "axios";
 import { StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
 import EditIcon from '@material-ui/icons/Edit';
 import ClearIcon from '@material-ui/icons/Clear';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const libraries = ["places"];
 
@@ -38,6 +40,7 @@ export default function AddBusinessDialog(props) {
   } = useForm();
 
   const [openConfirmation, setOpen] = React.useState(false);
+  const [confirmDelete, setConfirmDelete] = React.useState(false);
   const [isLocationEditionEnabled, setEnableLocationEdition] = React.useState(true);
   const [confirmationText, setConfirmationText] = React.useState("");
   const [confirmationTitle, setConfirmationTitle] = React.useState("");
@@ -174,6 +177,15 @@ export default function AddBusinessDialog(props) {
     } else {
       setEnableLocationEdition(true)
     }
+  }
+
+  const requestDeletion = () => {
+    setConfirmationText(
+      `Request Admin to remove ${props.business.name}?`
+    );
+    setConfirmDelete(true)
+    props.handleClose();
+    handleOpenConfirmation();
   }
 
   useEffect(() => {
@@ -371,6 +383,15 @@ export default function AddBusinessDialog(props) {
           </Grid>
         </DialogContent>
         <DialogActions>
+          {props.business && 
+              <Button 
+                color="secondary"
+                style={{position: 'absolute', left: '18px'}}
+                onClick={requestDeletion}
+              >
+                Remove
+              </Button>
+          }
           <Button onClick={props.handleClose} color="primary">
             Cancel
           </Button>
@@ -388,6 +409,7 @@ export default function AddBusinessDialog(props) {
         confirmation={confirmationText}
         handleCloseConfirmation={handleCloseConfirmation}
         title={confirmationTitle}
+        confirmDelete={confirmDelete}
       />
     </form>
   );
