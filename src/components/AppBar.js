@@ -27,6 +27,12 @@ import ListItemText from "@material-ui/core/ListItemText";
 import MapIcon from "@material-ui/icons/Map";
 import { Link } from "react-router-dom";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+import { ThemeProvider } from '@material-ui/core/styles';
+import LockIcon from '@material-ui/icons/Lock';
+
+const theme = {
+  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -96,6 +102,7 @@ export default function SearchAppBar({
   onChange,
   map,
   handleClickMapMenu,
+  handleAdminRequest
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -229,6 +236,12 @@ export default function SearchAppBar({
                     <AddCircleIcon color="primary" />
                     <Typography className={classes.heading}>
                       Add New Business
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem onClick={() => handleAdminRequest()}>
+                    <LockIcon color="primary" />
+                    <Typography className={classes.heading}>
+                      View Admin Requests
                     </Typography>
                   </MenuItem>
                 </MenuList>

@@ -65,6 +65,7 @@ function App() {
   };
 
   const url = urlService(endpoints.GetBusiness);
+  const adminUrl = urlService(endpoints.GetBusinessAdmin);
   const usersUrl = urlService(endpoints.GetUsers);
   const countUrl = urlService(endpoints.GetBusinessCount);
   const favouritesUrl = urlService(endpoints.GetFavourites);
@@ -80,6 +81,7 @@ function App() {
 
     list = await getBusiness(getURL);
     const admin = await checkAdmin()
+    //TODO remove this condition, handle it on the api
     if (!admin && list) {
       return list.filter((item) => item.adminApproved);
     }
@@ -199,6 +201,12 @@ function App() {
     setOpenConfirmation(false);
   };
 
+  const handleAdminRequest = async () => {
+    const list = await getBusiness(adminUrl);
+    setFilteredList(list)
+    setList(list)
+  }
+
   return (
     <div className={classes.root}>
       <SearchAppBar
@@ -208,6 +216,7 @@ function App() {
         favesSelected={favesSelected}
         handleShowFavourites={handleShowFavourites}
         map={false}
+        handleAdminRequest={handleAdminRequest}
       />
       <Container maxWidth="md">
         <Grid item xs={12}>
