@@ -47,6 +47,7 @@ export default function AddBusinessDialog(props) {
   const [autoComplete, setAutoComplete] = React.useState(null);
   const [lat, setLat] = React.useState(props.business ? props.business.lat : 0);
   const [lng, setLng] = React.useState(props.business ? props.business.lng : 0);
+  const [deletionRequested, setDeletionRequested] = React.useState(false);
 
   const handleOpenConfirmation = () => {
     setOpen(true);
@@ -112,6 +113,10 @@ export default function AddBusinessDialog(props) {
     // formData.append('likes', props.business.likes ? props.business.likes : 0);
     formData.append("adminApproved", false);
     formData.append("createdBy", props.user.email);
+    formData.append("editionRequestedBy", props.business ? props.user.email : '');
+    formData.append("deletionRequested", deletionRequested);
+    formData.append("deletionRequestedBy", deletionRequested ? props.user.email : '');
+
 
     const config = {
       headers: {
@@ -186,6 +191,12 @@ export default function AddBusinessDialog(props) {
     setConfirmDelete(true)
     props.handleClose();
     handleOpenConfirmation();
+  }
+
+  const handleConfirmDelete = () => {
+    setDeletionRequested(true)
+    handleCloseConfirmation()
+    onSubmit()
   }
 
   useEffect(() => {
@@ -410,6 +421,7 @@ export default function AddBusinessDialog(props) {
         handleCloseConfirmation={handleCloseConfirmation}
         title={confirmationTitle}
         confirmDelete={confirmDelete}
+        handleConfirmDelete={handleConfirmDelete}
       />
     </form>
   );

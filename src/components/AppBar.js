@@ -102,7 +102,8 @@ export default function SearchAppBar({
   onChange,
   map,
   handleClickMapMenu,
-  handleAdminRequest
+  handleAdminRequest,
+  isAdmin
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -238,13 +239,15 @@ export default function SearchAppBar({
                       Add New Business
                     </Typography>
                   </MenuItem>
-                  <MenuItem onClick={() => handleAdminRequest()}>
-                    <LockIcon color="primary" />
-                    <Typography className={classes.heading}>
-                      View Admin Requests
-                    </Typography>
-                  </MenuItem>
-                </MenuList>
+                  {isAdmin &&
+                    <MenuItem onClick={() => handleAdminRequest()}>
+                      <LockIcon color="primary" />
+                      <Typography className={classes.heading}>
+                        View Admin Requests
+                      </Typography>
+                    </MenuItem>
+                  }
+                  </MenuList>
               )}
             </Menu>
           </IconButton>

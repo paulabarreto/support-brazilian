@@ -217,6 +217,7 @@ function App() {
         handleShowFavourites={handleShowFavourites}
         map={false}
         handleAdminRequest={handleAdminRequest}
+        isAdmin={isAdmin}
       />
       <Container maxWidth="md">
         <Grid item xs={12}>
