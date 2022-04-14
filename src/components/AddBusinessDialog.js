@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -18,7 +17,6 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import LanguageIcon from "@material-ui/icons/Language";
 import FaceIcon from "@material-ui/icons/Face";
 import InstagramIcon from "@material-ui/icons/Instagram";
-import { makeStyles } from "@material-ui/core/styles";
 import ConfirmationDialog from "./ConfirmationDialog";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import DescriptionIcon from "@material-ui/icons/Description";
@@ -26,18 +24,11 @@ import axios from "axios";
 import { StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
 import EditIcon from '@material-ui/icons/Edit';
 import ClearIcon from '@material-ui/icons/Clear';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Tooltip from '@material-ui/core/Tooltip';
 
 const libraries = ["places"];
 
 export default function AddBusinessDialog(props) {
   const open = props.open;
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
 
   const [openConfirmation, setOpen] = React.useState(false);
   const [confirmDelete, setConfirmDelete] = React.useState(false);
@@ -47,7 +38,6 @@ export default function AddBusinessDialog(props) {
   const [autoComplete, setAutoComplete] = React.useState(null);
   const [lat, setLat] = React.useState(props.business ? props.business.lat : 0);
   const [lng, setLng] = React.useState(props.business ? props.business.lng : 0);
-  const [deletionRequested, setDeletionRequested] = React.useState(false);
 
   const handleOpenConfirmation = () => {
     setOpen(true);
@@ -98,7 +88,8 @@ export default function AddBusinessDialog(props) {
       : `${urls.PRODUCTION_API_URL}/${endpoints.AddBusiness}`;
   }
 
-  const onSubmit = () => {
+  const onSubmit = (isDeletionRequested) => {
+    console.log(props.user)
     // event.preventDefault();
     const formData = new FormData();
     formData.append("image", image);
@@ -111,11 +102,11 @@ export default function AddBusinessDialog(props) {
     formData.append("instagram", instagram);
     formData.append("category", category);
     // formData.append('likes', props.business.likes ? props.business.likes : 0);
-    formData.append("adminApproved", false);
+    formData.append("adminApproved", isDeletionRequested ? true : false);
     formData.append("createdBy", props.user.email);
     formData.append("editionRequestedBy", props.business ? props.user.email : '');
-    formData.append("deletionRequested", deletionRequested);
-    formData.append("deletionRequestedBy", deletionRequested ? props.user.email : '');
+    formData.append("deletionRequested", isDeletionRequested);
+    formData.append("deletionRequestedBy", isDeletionRequested ? props.user.email : 'test');
 
 
     const config = {
@@ -194,9 +185,9 @@ export default function AddBusinessDialog(props) {
   }
 
   const handleConfirmDelete = () => {
-    setDeletionRequested(true)
+    const isDeletionRequested = true;
     handleCloseConfirmation()
-    onSubmit()
+    onSubmit(isDeletionRequested)
   }
 
   useEffect(() => {
@@ -207,7 +198,7 @@ export default function AddBusinessDialog(props) {
   }, []);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={() => onSubmit(false)}>
       <Dialog
         open={open}
         onClose={props.handleClose}
@@ -408,7 +399,7 @@ export default function AddBusinessDialog(props) {
           </Button>
           <Button
             disabled={!name || !description || !image || !location || !category}
-            onClick={handleSubmit(onSubmit)}
+            onClick={() => onSubmit(false)}
             color="primary"
           >
             Send

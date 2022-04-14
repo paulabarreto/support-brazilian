@@ -7,7 +7,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 import LanguageIcon from '@material-ui/icons/Language';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import EditIcon from '@material-ui/icons/Edit';
@@ -23,6 +22,7 @@ import * as endpoints from '../endpoints';
 import axios from 'axios';
 import { yellow } from '@material-ui/core/colors';
 import Tooltip from '@material-ui/core/Tooltip';
+import BeenhereIcon from '@material-ui/icons/Beenhere';
 
 const useStyles = makeStyles((theme)=>({
   root: {
@@ -74,7 +74,7 @@ export default function MediaCard(props) {
     axios.delete(`${url}/${props.business._id}`)
         .then((response) => {
           console.log(response)
-          props.getBrazilianBusiness();
+          // props.getBrazilianBusiness();
         }).catch((error) => {
           console.log(error)
           // props.handleClose();
@@ -121,7 +121,7 @@ export default function MediaCard(props) {
   }
 
   const handleApproveBusiness = () => {
-    axios.post(`${url}/${props.business._id}`, {adminApproved: true})
+    axios.post(`${url}/${props.business._id}`, {adminApproved: true, deletionRequested: false})
         .then((response) => {
           console.log(response);
         }).catch((error) => {
@@ -180,13 +180,20 @@ export default function MediaCard(props) {
             </Tooltip>
             {props.isAdmin && 
               <div>
-                <Button size="small" color="primary">
-                  <DeleteIcon onClick={handleDeleteBusiness}/>
-                </Button>
                 {!business.adminApproved && 
                   <Button size="small" color="primary" onClick={handleApproveBusiness}>
                     <CheckIcon />
                   </Button>
+                }
+                {business.deletionRequested &&
+                  <div>
+                    <Button size="small" color="primary" onClick={handleDeleteBusiness}>
+                      <DeleteIcon color="secondary" />
+                    </Button>
+                    <Button size="small" color="primary" onClick={handleApproveBusiness}>
+                      <BeenhereIcon color="primary" />
+                    </Button>
+                  </div>
                 }
               </div>
             }
