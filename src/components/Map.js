@@ -9,9 +9,6 @@ import {
 import * as endpoints from "../endpoints";
 import urlService from "../services/urls";
 import { getAllCoordinates } from "../services/getBusiness";
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import LocationSearchingIcon from '@material-ui/icons/LocationSearching';
 import AppBar from "./AppBar";
 
 const GOOGLE_MAPS_API = process.env.REACT_APP_GOOGLE_API_KEY;
@@ -33,7 +30,7 @@ export default function MyMapComponent() {
 
 
   const handleClickMapMenu = (index) => {
-    if(index === 4) {
+    if(index === 5) {
       findBrazilianBusiness();
     } else {
       centerOnCurrentPosition();
@@ -103,6 +100,7 @@ export default function MyMapComponent() {
     <div>
       <AppBar 
         map={true}
+        defaultIndex={6}
         handleClickMapMenu={handleClickMapMenu}
       />
 

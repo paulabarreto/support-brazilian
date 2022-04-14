@@ -103,11 +103,12 @@ export default function SearchAppBar({
   map,
   handleClickMapMenu,
   handleAdminRequest,
-  isAdmin
+  isAdmin,
+  defaultIndex
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedIndex, setSelectedIndex] = React.useState(defaultIndex ? defaultIndex : 0);
   const [searchValue, setSearchValue] = React.useState("");
 
   const handleClickListItem = (event) => {
@@ -118,7 +119,7 @@ export default function SearchAppBar({
     setSelectedIndex(index);
     setAnchorEl(null);
     // Index 4 is for Menu on Map page
-    if (index === 4 || index === 5) {
+    if (index === 5 || index === 6) {
       handleClickMapMenu(index);
     } else {
       setSearchValue("");
@@ -135,6 +136,13 @@ export default function SearchAppBar({
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleHeartClick = () => {
+    handleShowFavourites(!favesSelected)
+    setAnchorEl(null);
+    setSelectedIndex(4);
+
+  }
 
   return (
     <div className={classes.root}>
@@ -162,13 +170,19 @@ export default function SearchAppBar({
             >
               {map ? (
                 <MenuList>
-                  <MenuItem onClick={(event) => handleMenuItemClick(event, 4)}>
+                  <MenuItem 
+                    onClick={(event) => handleMenuItemClick(event, 5)}
+                    selected={selectedIndex === 5}
+                  >
                     <ListItemIcon>
                       <MapIcon color="primary" />
                     </ListItemIcon>
                     <ListItemText primary="See all locations" />
                   </MenuItem>
-                  <MenuItem onClick={(event) => handleMenuItemClick(event, 5)}>
+                  <MenuItem 
+                    selected={selectedIndex === 6}
+                    onClick={(event) => handleMenuItemClick(event, 6)}
+                  >
                     <ListItemIcon>
                       <LocationOnIcon color="primary" />
                     </ListItemIcon>
@@ -226,7 +240,8 @@ export default function SearchAppBar({
                     </AccordionDetails>
                   </Accordion>
                   <MenuItem
-                    onClick={() => handleShowFavourites(!favesSelected)}
+                    selected={selectedIndex === 4}
+                    onClick={handleHeartClick}
                   >
                     <FavoriteIcon color="primary" />
                     <Typography className={classes.heading}>
