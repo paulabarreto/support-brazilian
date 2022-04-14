@@ -73,7 +73,7 @@ export default function MyMapComponent() {
   const getCoords = async () => {
     const coordinates = await getAllCoordinates(url);
     // Some api resp may not have coordinates
-    const filtered = coordinates.length > 0 ? coordinates.filter((coord) => coord.lat) : [];
+    const filtered = coordinates.length > 0 ? coordinates.filter((coord) => coord.lat && coord.adminApproved) : [];
     const markersWithSite = filtered.map(business => {
       return {
         ...business,
@@ -111,7 +111,7 @@ export default function MyMapComponent() {
         onLoad={onLoad}
         onClick={() => setActiveMarker(null)}
       >
-        {markers.map(({ _id, name, site, lat, lng }) => (
+        {markers.map(({ _id, name, site, location, lat, lng }) => (
           <Marker
             key={_id}
             position={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
@@ -119,7 +119,11 @@ export default function MyMapComponent() {
           >
             {activeMarker === _id ? (
             <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-                <a target="_blank" rel="noreferrer" href={site}><div>{name}</div></a>
+                <div>
+
+                  <a target="_blank" rel="noreferrer" href={site}><div>{name}</div></a>
+                  <div>{location}</div>
+                </div>
               </InfoWindow>
             ) : null}
           </Marker>
