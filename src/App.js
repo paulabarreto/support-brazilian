@@ -156,10 +156,10 @@ function App() {
     setFilter("category");
     if (index === 0) {
       setFilteredList(listByCategory);
-      return listByCategory;
+    } else {
+      listByCategory = await getBBs(page);
+      setFilteredList(listByCategory);
     }
-    listByCategory = await getBBs(page);
-    setFilteredList(listByCategory);
   };
 
   const [favesSelected, setFavesSelected] = useState(false);
