@@ -9,6 +9,7 @@ import Container from "@material-ui/core/Container";
 import React, { useState, useEffect } from "react";
 import * as endpoints from "./endpoints";
 import ConfirmationDialog from "./components/ConfirmationDialog";
+import ContactDialog from "./components/ContactDialog";
 import Typography from "@material-ui/core/Typography";
 import Pagination from "@material-ui/lab/Pagination";
 import Skeleton from "@mui/material/Skeleton";
@@ -133,6 +134,15 @@ function App() {
   }, [isLoading, page, category, searchField]);
 
   const [open, setOpen] = React.useState(false);
+  const [openContactDialog, setOpenContactDialog] = React.useState(false);
+
+  const handleOpenContactDialog = () => {
+    setOpenContactDialog(true)
+  }
+
+  const closeContactDialog = () => {
+    setOpenContactDialog(false)
+  }
 
   const handleClickOpen = () => {
     if (!user && !isLoading) {
@@ -218,6 +228,7 @@ function App() {
         map={false}
         handleAdminRequest={handleAdminRequest}
         isAdmin={isAdmin}
+        handleOpenContactDialog={handleOpenContactDialog}
       />
       <Container maxWidth="md">
         <Grid item xs={12}>
@@ -300,6 +311,7 @@ function App() {
             "Please Sign Up/Login to enable Add Business and Favourite Button"
           }
         />
+        <ContactDialog open={openContactDialog} handleClose={closeContactDialog} />
       </Container>
       <footer className={classes.footer}>
         <Grid container justifyContent="center">

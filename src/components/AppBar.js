@@ -29,6 +29,7 @@ import { Link } from "react-router-dom";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import { ThemeProvider } from '@material-ui/core/styles';
 import LockIcon from '@material-ui/icons/Lock';
+import ContactMailIcon from '@material-ui/icons/ContactMail';
 
 const theme = {
   background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
@@ -104,7 +105,8 @@ export default function SearchAppBar({
   handleClickMapMenu,
   handleAdminRequest,
   isAdmin,
-  defaultIndex
+  defaultIndex,
+  handleOpenContactDialog
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -254,6 +256,12 @@ export default function SearchAppBar({
                       Add New Business
                     </Typography>
                   </MenuItem>
+                  <MenuItem onClick={() => handleOpenContactDialog()}>
+                    <ContactMailIcon color="primary" />
+                    <Typography className={classes.heading}>
+                      Contact
+                    </Typography>
+                  </MenuItem>
                   {isAdmin &&
                     <MenuItem onClick={() => handleAdminRequest()}>
                       <LockIcon color="primary" />
@@ -274,7 +282,7 @@ export default function SearchAppBar({
             >
           <Link
             to={"/"}
-            onClick={() => window.location.reload()}
+            // onClick={() => window.location.reload()}
             style={{ color: "inherit", textDecoration: "inherit" }}
           >
               Support Brazilian

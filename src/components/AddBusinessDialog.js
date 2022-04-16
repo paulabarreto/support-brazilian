@@ -337,6 +337,7 @@ export default function AddBusinessDialog(props) {
             <Grid item xs={11} style={{ display: isLocationEditionEnabled ? 'block' : 'none' }}>
               <StandaloneSearchBox
                 onLoad={onLoad}
+                // bounds={{lat: 43.762687004877236, lng: parseFloat(-79.40569460377111)}}
                 onPlacesChanged={onPlacesChanged}
               >
                 <input
