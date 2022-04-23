@@ -24,6 +24,7 @@ import {
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const options = ["Services", "Food", "Groceries"];
 
 function App() {
+  let { searchLocation } = useParams();
   const { user, isAuthenticated, isLoading } = useAuth0();
 
   const [isAdmin, setAdmin] = useState(false);
@@ -66,12 +68,14 @@ function App() {
   };
 
   const url = urlService(endpoints.GetBusiness);
+  const urlLocationSearch = urlService(endpoints.GetBusinessLocationSearch);
   const adminUrl = urlService(endpoints.GetBusinessAdmin);
   const usersUrl = urlService(endpoints.GetUsers);
   const countUrl = urlService(endpoints.GetBusinessCount);
   const favouritesUrl = urlService(endpoints.GetFavourites);
 
   const getBBs = async (page) => {
+
     setAPIdataLoading(true);
     let getURL =
       category === 0 ? `${url}/${page}` : `${url}/${page}/${category}`;
@@ -79,6 +83,11 @@ function App() {
       getURL = `${url}/${page}/0/${searchField}`;
     }
     let list = [];
+
+    if(searchLocation !== undefined) {
+      list = await getBusiness(`${urlLocationSearch}/${page}/${searchLocation}`);
+      return list
+    }
 
     list = await getBusiness(getURL);
     const admin = await checkAdmin()

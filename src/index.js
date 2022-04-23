@@ -12,7 +12,8 @@ ReactDOM.render(
     <Router>
       <Auth0ProviderWithHistory>
         <Routes>
-          <Route path='/' element={<App/>} />
+          <Route exact path='/' element={<App/>} />
+          <Route path='/:searchLocation' element={<App/>} />
           <Route path='map' element={<MyMapComponent authed={true}/>} />
         </Routes>
       </Auth0ProviderWithHistory>

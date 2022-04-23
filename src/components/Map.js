@@ -10,6 +10,7 @@ import * as endpoints from "../endpoints";
 import urlService from "../services/urls";
 import { getAllCoordinates } from "../services/getBusiness";
 import AppBar from "./AppBar";
+import { Link } from "react-router-dom";
 
 const GOOGLE_MAPS_API = process.env.REACT_APP_GOOGLE_API_KEY;
 
@@ -69,23 +70,74 @@ export default function MyMapComponent() {
   }
 
   const [markers, setMarkers] = React.useState([]);
+  const [markersWithIncompleteAddress, setMarkersWithIncompleteAddress] = React.useState([]);
   
   const getCoords = async () => {
     const coordinates = await getAllCoordinates(url);
     // Some api resp may not have coordinates
-    const filtered = coordinates.length > 0 ? coordinates.filter((coord) => coord.lat && coord.adminApproved) : [];
-    const markersWithSite = filtered.map(business => {
+    // TODO handle admin approved on the api
+    const filtered = coordinates.length > 0 ?
+                      coordinates.filter((coord) => coord.lat &&
+                                                    coord.adminApproved &&
+                                                    isAddressComplete(coord.location)
+                                          ) : [];
+    let markersWithSite = filtered.map(business => {
       return {
         ...business,
         site: business.website ? business.website : business.instagram
       }
     })
+    const markersWithIncompleteAddress = coordinates.length > 0 ? coordinates.filter((coord) => coord.lat &&
+                                                                      coord.adminApproved &&
+                                                                     !isAddressComplete(coord.location))
+                                                                     : []
+    const listWithIncompleteAddress = createListWithIncompleteAddress(markersWithIncompleteAddress)
     setMarkers(markersWithSite);
+    const newMarkers = createNewMarkers(listWithIncompleteAddress)
+    setMarkersWithIncompleteAddress(newMarkers)
   };
+  const createListWithIncompleteAddress = (markers) => {
+    let locationObj = {};
+    for(let i = 0; i < markers.length; i++) {
+        locationObj[markers[i].location] = locationObj[markers[i].location] ? 
+                                           [ ...locationObj[markers[i].location], markers[i]] : [markers[i]]
+    }
+    return locationObj
+  }
+
+  const isAddressComplete = (location) => {
+    let firstWord = location.split(" ")[0]
+    if(!isNaN(firstWord) && !isNaN(parseFloat(firstWord))) {
+      return true
+    }
+    return false
+  }
 
   useEffect(() => {
     getCoords();
   }, []);
+
+  /** Create another markers array with array of names, ids, etc for
+    for each location (lat, lng)
+  */
+ // TODO make original markers list arrays so I can have only one list
+  const createNewMarkers = (list) => {
+    let moreMarkers = []
+    for (const city in list) {
+      moreMarkers = [
+        ...moreMarkers,
+        {
+          _ids: list[city].map(loc => loc._id),
+          names: list[city].map(loc => loc.name),
+          locations: list[city].map(loc => loc.location),
+          sites: list[city].map(loc => loc.site),
+          lat: list[city][0].lat,
+          lng: list[city][0].lng
+        }
+      ]
+    }
+    return moreMarkers
+  }
 
   const [activeMarker, setActiveMarker] = useState(null);
 
@@ -124,6 +176,22 @@ export default function MyMapComponent() {
                   <a target="_blank" rel="noreferrer" href={site}><div>{name}</div></a>
                   <div>{location}</div>
                 </div>
+              </InfoWindow>
+            ) : null}
+          </Marker>
+        ))}
+        {markersWithIncompleteAddress.map(({ _ids, names, sites, locations, lat, lng }) => (
+          <Marker
+            key={_ids[0]}
+            position={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
+            onClick={() => handleActiveMarker(_ids[0])}
+          >
+            {activeMarker === _ids[0] ? (
+            <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+              <div>
+                <div>There are {names.length} <Link to={`/${locations[0]}`}>businesses</Link> in</div>
+                <div>{locations[0]}</div>
+              </div>
               </InfoWindow>
             ) : null}
           </Marker>

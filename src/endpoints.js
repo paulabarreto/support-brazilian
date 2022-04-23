@@ -1,4 +1,5 @@
 export const GetBusiness = 'brazilianBusiness';
+export const GetBusinessLocationSearch = 'locationSearch';
 export const GetBusinessAdmin = 'brazilianBusiness/admin';
 export const GetBusinessCount = 'brazilianBusinessCount';
 export const AddBusiness = 'newBusiness';
