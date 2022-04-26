@@ -282,7 +282,7 @@ export default function SearchAppBar({
             >
           <Link
             to={"/"}
-            // onClick={() => window.location.reload()}
+            onClick={() => window.location.reload()}
             style={{ color: "inherit", textDecoration: "inherit" }}
           >
               Support Brazilian

@@ -89,7 +89,6 @@ export default function AddBusinessDialog(props) {
   }
 
   const onSubmit = (isDeletionRequested) => {
-    console.log(props.user)
     // event.preventDefault();
     const formData = new FormData();
     formData.append("image", image);
@@ -102,12 +101,13 @@ export default function AddBusinessDialog(props) {
     formData.append("instagram", instagram);
     formData.append("category", category);
     // formData.append('likes', props.business.likes ? props.business.likes : 0);
-    formData.append("adminApproved", isDeletionRequested ? true : false);
+    formData.append("adminApproved", false);
     formData.append("createdBy", props.user.email);
-    formData.append("editionRequestedBy", props.business ? props.user.email : '');
-    formData.append("deletionRequested", isDeletionRequested);
-    formData.append("deletionRequestedBy", isDeletionRequested ? props.user.email : 'test');
-
+    if(props.business) {
+      formData.append("editionRequestedBy", props.business ? props.user.email : 'NA');
+      formData.append("deletionRequested", isDeletionRequested);
+      formData.append("deletionRequestedBy", isDeletionRequested ? props.user.email : 'NA');
+    }
 
     const config = {
       headers: {

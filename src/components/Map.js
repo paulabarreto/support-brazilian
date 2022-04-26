@@ -189,8 +189,11 @@ export default function MyMapComponent() {
             {activeMarker === _ids[0] ? (
             <InfoWindow onCloseClick={() => setActiveMarker(null)}>
               <div>
-                <div>There are {names.length} <Link to={`/${locations[0]}`}>businesses</Link> in</div>
-                <div>{locations[0]}</div>
+                <Link to={`/${locations[0]}`}>
+                  See full list for {locations[0]}
+                </Link>
+                <div>There are {names.length} businesses in this location,</div>
+                <div>but we don't have their complete address</div>
               </div>
               </InfoWindow>
             ) : null}

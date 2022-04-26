@@ -86,6 +86,8 @@ function App() {
 
     if(searchLocation !== undefined) {
       list = await getBusiness(`${urlLocationSearch}/${page}/${searchLocation}`);
+      const numberOfPages = Math.round(list.length / 5);
+      setPageCount(numberOfPages);
       return list
     }
 
