@@ -25,14 +25,14 @@ import AllInclusiveIcon from "@material-ui/icons/AllInclusive";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import MapIcon from "@material-ui/icons/Map";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
-import { ThemeProvider } from '@material-ui/core/styles';
-import LockIcon from '@material-ui/icons/Lock';
-import ContactMailIcon from '@material-ui/icons/ContactMail';
+import LockIcon from "@material-ui/icons/Lock";
+import ContactMailIcon from "@material-ui/icons/ContactMail";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 
 const theme = {
-  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+  background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -106,11 +106,15 @@ export default function SearchAppBar({
   handleAdminRequest,
   isAdmin,
   defaultIndex,
-  handleOpenContactDialog
+  handleOpenContactDialog,
+  isSearchLocationOn,
 }) {
   const classes = useStyles();
+  let navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(defaultIndex ? defaultIndex : 0);
+  const [selectedIndex, setSelectedIndex] = React.useState(
+    defaultIndex ? defaultIndex : 0
+  );
   const [searchValue, setSearchValue] = React.useState("");
 
   const handleClickListItem = (event) => {
@@ -140,58 +144,51 @@ export default function SearchAppBar({
   };
 
   const handleHeartClick = () => {
-    handleShowFavourites(!favesSelected)
+    handleShowFavourites(!favesSelected);
     setAnchorEl(null);
     setSelectedIndex(4);
+  };
 
-  }
+  const handleClickBack = () => {
+    navigate("/");
+    window.location.reload();
+  };
 
   return (
     <div className={classes.root}>
       <AppBar position="fixed">
         <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            className={classes.menuButton}
-          >
-            <MenuIcon
-              aria-controls="simple-menu"
-              aria-haspopup="true"
-              onClick={handleClickListItem}
-            />
-
-            <Menu
-              id="simple-menu"
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              keepMounted
-              onClose={handleClose}
-              style={{ width: "250px" }}
+          {isSearchLocationOn || map ? (
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              className={classes.menuButton}
+              onClick={handleClickBack}
             >
-              {map ? (
-                <MenuList>
-                  <MenuItem 
-                    onClick={(event) => handleMenuItemClick(event, 5)}
-                    selected={selectedIndex === 5}
-                  >
-                    <ListItemIcon>
-                      <MapIcon color="primary" />
-                    </ListItemIcon>
-                    <ListItemText primary="See all locations" />
-                  </MenuItem>
-                  <MenuItem 
-                    selected={selectedIndex === 6}
-                    onClick={(event) => handleMenuItemClick(event, 6)}
-                  >
-                    <ListItemIcon>
-                      <LocationOnIcon color="primary" />
-                    </ListItemIcon>
-                    <ListItemText primary="Find near me" />
-                  </MenuItem>
-                </MenuList>
-              ) : (
+              <ArrowBackIosIcon />
+            </IconButton>
+          ) : (
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              className={classes.menuButton}
+            >
+              <MenuIcon
+                aria-controls="simple-menu"
+                aria-haspopup="true"
+                onClick={handleClickListItem}
+              />
+
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                keepMounted
+                onClose={handleClose}
+                style={{ width: "250px" }}
+              >
                 <MenuList>
                   <Accordion>
                     <AccordionSummary
@@ -258,53 +255,51 @@ export default function SearchAppBar({
                   </MenuItem>
                   <MenuItem onClick={() => handleOpenContactDialog()}>
                     <ContactMailIcon color="primary" />
-                    <Typography className={classes.heading}>
-                      Contact
-                    </Typography>
+                    <Typography className={classes.heading}>Contact</Typography>
                   </MenuItem>
-                  {isAdmin &&
+                  {isAdmin && (
                     <MenuItem onClick={() => handleAdminRequest()}>
                       <LockIcon color="primary" />
                       <Typography className={classes.heading}>
                         View Admin Requests
                       </Typography>
                     </MenuItem>
-                  }
-                  </MenuList>
-              )}
-            </Menu>
-          </IconButton>
-            <Typography 
-              className={classes.title} 
-              variant="h6" 
-              noWrap
-              style={map ? {display: 'block'} : {}}
-            >
-          <Link
-            to={"/"}
-            onClick={() => window.location.reload()}
-            style={{ color: "inherit", textDecoration: "inherit" }}
+                  )}
+                </MenuList>
+              </Menu>
+            </IconButton>
+          )}
+          <Typography
+            className={classes.title}
+            variant="h6"
+            noWrap
+            style={map ? { display: "block" } : {}}
           >
+            <Link
+              to={"/"}
+              onClick={() => window.location.reload()}
+              style={{ color: "inherit", textDecoration: "inherit" }}
+            >
               Support Brazilian
-          </Link>
-            </Typography>
-          {!map && 
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
+            </Link>
+          </Typography>
+          {!map && (
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Search…"
+                value={searchValue}
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ "aria-label": "search" }}
+                onChange={(e) => handleChange(e)}
+              />
             </div>
-            <InputBase
-              placeholder="Search…"
-              value={searchValue}
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-              onChange={(e) => handleChange(e)}
-            />
-          </div>
-          }
+          )}
           <AuthNav />
         </Toolbar>
       </AppBar>

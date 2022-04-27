@@ -55,6 +55,7 @@ function App() {
   const [searchField, setSearchField] = React.useState("");
   const [pageCount, setPageCount] = React.useState(0);
   const [spacing, setSpacing] = React.useState(2);
+  const [isSearchLocationOn, setSearchLocation] = React.useState(false);
 
   // For page count track which filter is being used
   const [filter, setFilter] = React.useState("category");
@@ -85,6 +86,7 @@ function App() {
     let list = [];
 
     if(searchLocation !== undefined) {
+      setSearchLocation(true);
       list = await getBusiness(`${urlLocationSearch}/${page}/${searchLocation}`);
       const numberOfPages = Math.round(list.length / 5);
       setPageCount(numberOfPages);
@@ -240,6 +242,7 @@ function App() {
         handleAdminRequest={handleAdminRequest}
         isAdmin={isAdmin}
         handleOpenContactDialog={handleOpenContactDialog}
+        isSearchLocationOn={isSearchLocationOn}
       />
       <Container maxWidth="md">
         <Grid item xs={12}>
