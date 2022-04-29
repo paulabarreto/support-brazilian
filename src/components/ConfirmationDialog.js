@@ -30,14 +30,20 @@ export default function ConfirmationDialog(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          {props.confirmDelete &&
-            <Button onClick={props.handleConfirmDelete} color="primary">
-              Cancel
+          {props.confirmDelete ?
+            <div>
+              <Button onClick={props.handleConfirmDelete} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={props.handleConfirmDelete} color="primary">
+                OK
+              </Button>
+            </div>
+            :
+            <Button onClick={props.handleCloseConfirmation} color="primary">
+              OK
             </Button>
           }
-          <Button onClick={props.handleCloseConfirmation} color="primary">
-            OK
-          </Button>
         </DialogActions>
       </Dialog>
     </div>

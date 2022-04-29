@@ -330,14 +330,7 @@ function App() {
       <footer className={classes.footer}>
         <Grid container justifyContent="center">
           <Typography variant="subtitle2">
-            Created by Paula Barreto |{" "}
-            <a
-              style={{ color: "inherit", textDecoration: "none" }}
-              target="_blank"
-              href="https://www.paulabarreto.ca"
-            >
-              www.paulabarreto.ca
-            </a>
+            Developed by Paula Barreto
           </Typography>
         </Grid>
       </footer>

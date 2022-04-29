@@ -78,7 +78,6 @@ export default function AddBusinessDialog(props) {
   };
 
   const onSubmit = (isDeletionRequested) => {
-    // event.preventDefault();
     const formData = new FormData();
     formData.append("image", image);
     formData.append("name", name);
