@@ -11,8 +11,8 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Select from "@material-ui/core/Select";
-import * as urls from "../constants";
 import * as endpoints from "../endpoints";
+import urlService from "../services/urls";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import LanguageIcon from "@material-ui/icons/Language";
 import FaceIcon from "@material-ui/icons/Face";
@@ -77,17 +77,6 @@ export default function AddBusinessDialog(props) {
     setCategory("");
   };
 
-  let url;
-  if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-    url = props.business
-      ? `${urls.LOCAL_API_URL}/${endpoints.GetBusiness}`
-      : `${urls.LOCAL_API_URL}/${endpoints.AddBusiness}`;
-  } else {
-    url = props.business
-      ? `${urls.PRODUCTION_API_URL}/${endpoints.GetBusiness}`
-      : `${urls.PRODUCTION_API_URL}/${endpoints.AddBusiness}`;
-  }
-
   const onSubmit = (isDeletionRequested) => {
     // event.preventDefault();
     const formData = new FormData();
@@ -115,15 +104,17 @@ export default function AddBusinessDialog(props) {
       },
     };
     if (props.business) {
+      const url = urlService(endpoints.GetBusiness);
       axios
-        .post(`${url}/${props.business._id}`, formData, config)
-        .then((response) => {
-          props.handleClose();
-        })
-        .catch((error) => {
-          props.handleClose();
-        });
+      .post(`${url}/${props.business._id}`, formData, config)
+      .then((response) => {
+        props.handleClose();
+      })
+      .catch((error) => {
+        props.handleClose();
+      });
     } else {
+      const url = urlService(endpoints.AddBusiness);
       axios
         .post(url, formData, config)
         .then((response) => {

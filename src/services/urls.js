@@ -40,6 +40,10 @@ const urlService = (endpoint) => {
         url = production ===  true ? `${urls.PRODUCTION_API_URL}/${endpoints.GetCoordinates}`
                                     : `${urls.LOCAL_API_URL}/${endpoints.GetCoordinates}`;
         break;
+        case endpoints.AddBusiness:
+        url = production ===  true ? `${urls.PRODUCTION_API_URL}/${endpoints.AddBusiness}`
+                                    : `${urls.LOCAL_API_URL}/${endpoints.AddBusiness}`;
+        break;
         default:
         break;
     }
