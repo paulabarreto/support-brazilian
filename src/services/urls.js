@@ -16,6 +16,10 @@ const urlService = (endpoint) => {
         url = production ===  true ? `${urls.PRODUCTION_API_URL}/${endpoints.GetBusinessLocationSearch}`
                                     : `${urls.LOCAL_API_URL}/${endpoints.GetBusinessLocationSearch}`;
         break;
+        case endpoints.SendEmail:
+        url = production ===  true ? `${urls.PRODUCTION_API_URL}/${endpoints.SendEmail}`
+                                    : `${urls.LOCAL_API_URL}/${endpoints.SendEmail}`;
+        break;
         case endpoints.GetBusinessAdmin:
         url = production ===  true ? `${urls.PRODUCTION_API_URL}/${endpoints.GetBusinessAdmin}`
                                     : `${urls.LOCAL_API_URL}/${endpoints.GetBusinessAdmin}`;
