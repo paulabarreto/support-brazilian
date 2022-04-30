@@ -30,13 +30,13 @@ export default function MyMapComponent() {
   });
 
 
-  const handleClickMapMenu = (index) => {
-    if(index === 5) {
-      findBrazilianBusiness();
-    } else {
-      centerOnCurrentPosition();
-      setZoom(15)
-    }
+  const handleClickExpand = (isExpandSelected) => {
+      if(isExpandSelected) {
+        centerOnCurrentPosition();
+        setZoom(10)
+      } else {
+        findBrazilianBusiness()
+      }
   };
 
   const { isLoaded } = useJsApiLoader({
@@ -153,7 +153,7 @@ export default function MyMapComponent() {
       <AppBar 
         map={true}
         defaultIndex={6}
-        handleClickMapMenu={handleClickMapMenu}
+        handleClickExpand={handleClickExpand}
       />
 
       <GoogleMap

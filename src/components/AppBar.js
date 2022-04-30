@@ -22,14 +22,13 @@ import FastfoodIcon from "@material-ui/icons/Fastfood";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import WorkOutlineIcon from "@material-ui/icons/WorkOutline";
 import AllInclusiveIcon from "@material-ui/icons/AllInclusive";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import MapIcon from "@material-ui/icons/Map";
 import { Link, useNavigate } from "react-router-dom";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
 import LockIcon from "@material-ui/icons/Lock";
 import ContactMailIcon from "@material-ui/icons/ContactMail";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
+import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan';
 
 const theme = {
   background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
@@ -102,7 +101,7 @@ export default function SearchAppBar({
   onMenuClick,
   onChange,
   map,
-  handleClickMapMenu,
+  handleClickExpand,
   handleAdminRequest,
   isAdmin,
   defaultIndex,
@@ -116,6 +115,12 @@ export default function SearchAppBar({
     defaultIndex ? defaultIndex : 0
   );
   const [searchValue, setSearchValue] = React.useState("");
+  const [isExpandSelected, setIsExpandSelected] = React.useState(false);
+
+  const handleClickExpandButton = () => {
+    handleClickExpand(isExpandSelected)
+    setIsExpandSelected(isExpandSelected ? false : true)
+  }
 
   const handleClickListItem = (event) => {
     setAnchorEl(event.currentTarget);
@@ -124,14 +129,9 @@ export default function SearchAppBar({
   const handleMenuItemClick = (event, index) => {
     setSelectedIndex(index);
     setAnchorEl(null);
-    // Index 4 is for Menu on Map page
-    if (index === 5 || index === 6) {
-      handleClickMapMenu(index);
-    } else {
-      setSearchValue("");
-      onChange("");
-      onMenuClick(event, index);
-    }
+    setSearchValue("");
+    onChange("");
+    onMenuClick(event, index)
   };
 
   const handleChange = (e) => {
@@ -283,7 +283,17 @@ export default function SearchAppBar({
               Support Brazilian
             </Link>
           </Typography>
-          {!map && (
+          {map ?
+            <IconButton
+            edge="start"
+            color={isExpandSelected ? "secondary" : "inherit"}
+            aria-label="open drawer"
+            className={classes.menuButton}
+            onClick={handleClickExpandButton}
+            >
+              <SettingsOverscanIcon/>
+            </IconButton>
+           : (
             <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <SearchIcon />
