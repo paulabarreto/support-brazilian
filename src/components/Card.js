@@ -26,7 +26,7 @@ import BeenhereIcon from '@material-ui/icons/Beenhere';
 
 const useStyles = makeStyles((theme)=>({
   root: {
-    width: 345,
+    width: 300,
     marginTop: '20px',
   },
   gridRoot: {
@@ -38,11 +38,7 @@ const useStyles = makeStyles((theme)=>({
   },
   cardActionArea: {
     height: 300
-  },
-  pink: {
-    color: yellow[500],
-    backgroundColor: 'white',
-  },
+  }
 }));
 
 export default function MediaCard(props) {

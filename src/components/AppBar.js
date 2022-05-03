@@ -294,20 +294,30 @@ export default function SearchAppBar({
               <SettingsOverscanIcon/>
             </IconButton>
            : (
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
+            <div>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                className={classes.menuButton}
+              >
+                <SettingsOverscanIcon/>
+              </IconButton>
+              <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
+                <InputBase
+                  placeholder="Search…"
+                  value={searchValue}
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                  inputProps={{ "aria-label": "search" }}
+                  onChange={(e) => handleChange(e)}
+                />
               </div>
-              <InputBase
-                placeholder="Search…"
-                value={searchValue}
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ "aria-label": "search" }}
-                onChange={(e) => handleChange(e)}
-              />
             </div>
           )}
           <AuthNav />

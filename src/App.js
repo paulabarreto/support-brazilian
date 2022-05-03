@@ -1,5 +1,6 @@
 import "@fontsource/roboto";
 import SearchAppBar from "./components/AppBar";
+import NavigationBar from "./components/NavigationBar";
 import MediaCard from "./components/Card";
 import AddBusinessDialog from "./components/AddBusinessDialog";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -21,9 +22,6 @@ import {
   getFavouritesList,
   getBusinessCount,
 } from "./services/getBusiness";
-import { Link } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
 import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,8 +33,7 @@ const useStyles = makeStyles((theme) => ({
     height: 30,
     color: "white",
     paddingTop: 10,
-  },
-  margin: theme.spacing(1),
+  }
 }));
 
 const options = ["Services", "Food", "Groceries"];
@@ -54,7 +51,7 @@ function App() {
   const [category, setCategory] = React.useState(0);
   const [searchField, setSearchField] = React.useState("");
   const [pageCount, setPageCount] = React.useState(0);
-  const [spacing, setSpacing] = React.useState(2);
+  const [spacing, setSpacing] = React.useState(4);
   const [isSearchLocationOn, setSearchLocation] = React.useState(false);
 
   // For page count track which filter is being used
@@ -232,7 +229,8 @@ function App() {
 
   return (
     <div className={classes.root}>
-      <SearchAppBar
+      <NavigationBar/>
+      {/* <SearchAppBar
         onMenuClick={(e, index) => handleMenuItemClick(e, index)}
         onChange={(e) => handleSearchField(e)}
         handleClickOpen={handleClickOpen}
@@ -243,31 +241,8 @@ function App() {
         isAdmin={isAdmin}
         handleOpenContactDialog={handleOpenContactDialog}
         isSearchLocationOn={isSearchLocationOn}
-      />
-      <Container maxWidth="md">
-        <Grid item xs={12}>
-          <Grid
-            container
-            justifyContent="center"
-            spacing={spacing}
-            style={{ marginTop: "70px" }}
-          >
-            <Grid item>
-              <Button
-                variant="contained"
-                startIcon={<LocationOnIcon />}
-                color="primary"
-              >
-                <Link
-                  to={"map"}
-                  style={{ color: "inherit", textDecoration: "inherit" }}
-                >
-                  Search Near Me
-                </Link>
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
+      /> */}
+      <Container maxWidth="lg">
         <Grid item xs={12}>
           <Grid container justifyContent="center" spacing={spacing}>
             {isAPIdataLoading &&
