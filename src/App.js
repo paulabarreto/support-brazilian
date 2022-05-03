@@ -229,7 +229,14 @@ function App() {
 
   return (
     <div className={classes.root}>
-      <NavigationBar/>
+      <NavigationBar
+        handleShowFavourites={handleShowFavourites}
+        favesSelected={favesSelected}
+        handleClickOpen={handleClickOpen}
+        handleOpenContactDialog={handleOpenContactDialog}
+        onMenuClick={(e, index) => handleMenuItemClick(e, index)}
+        isSearchLocationOn={isSearchLocationOn}
+      />
       {/* <SearchAppBar
         onMenuClick={(e, index) => handleMenuItemClick(e, index)}
         onChange={(e) => handleSearchField(e)}

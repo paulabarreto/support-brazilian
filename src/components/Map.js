@@ -9,7 +9,7 @@ import {
 import * as endpoints from "../endpoints";
 import urlService from "../services/urls";
 import { getAllCoordinates } from "../services/getBusiness";
-import AppBar from "./AppBar";
+import NavigationBar from "./NavigationBar";
 import { Link } from "react-router-dom";
 
 const GOOGLE_MAPS_API = process.env.REACT_APP_GOOGLE_API_KEY;
@@ -150,7 +150,7 @@ export default function MyMapComponent() {
 
   return isLoaded ? (
     <div>
-      <AppBar 
+      <NavigationBar 
         map={true}
         defaultIndex={6}
         handleClickExpand={handleClickExpand}

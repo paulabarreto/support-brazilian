@@ -19,8 +19,16 @@ import CategoryIcon from "@material-ui/icons/Category";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import ContactMailIcon from "@material-ui/icons/ContactMail";
 import Container from "@material-ui/core/Container";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
+import AuthNav from "./authentication/AuthNav";
+import AllInclusiveIcon from "@material-ui/icons/AllInclusive";
+import FastfoodIcon from "@material-ui/icons/Fastfood";
+import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
+import WorkOutlineIcon from "@material-ui/icons/WorkOutline";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import SettingsOverscanIcon from "@material-ui/icons/SettingsOverscan";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -87,15 +95,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar({
+  handleShowFavourites,
+  favesSelected,
+  defaultIndex,
+  handleClickOpen,
+  handleOpenContactDialog,
+  onMenuClick,
+  isSearchLocationOn,
+  map,
+  handleClickExpand,
+}) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selectedIndex, setSelectedIndex] = React.useState(
+    defaultIndex ? defaultIndex : 0
+  );
+  const [isExpandSelected, setIsExpandSelected] = React.useState(false);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const navigate = useNavigate();
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleProfileMenuOpen = (event) => {
+  const handleCategoriesMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -112,6 +134,28 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleHeartClick = () => {
+    handleShowFavourites(!favesSelected);
+    setAnchorEl(null);
+    setSelectedIndex(4);
+  };
+
+  const handleMenuItemClick = (event, index) => {
+    setSelectedIndex(index);
+    setAnchorEl(null);
+    onMenuClick(event, index);
+  };
+
+  const handleClickBack = () => {
+    navigate("/");
+    window.location.reload();
+  };
+
+  const handleClickExpandButton = () => {
+    handleClickExpand(isExpandSelected);
+    setIsExpandSelected(isExpandSelected ? false : true);
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -123,8 +167,42 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem
+        selected={selectedIndex === 0}
+        onClick={(event) => handleMenuItemClick(event, 0)}
+      >
+        <ListItemIcon>
+          <AllInclusiveIcon color="primary" />
+        </ListItemIcon>
+        <Typography className={classes.heading}>All</Typography>
+      </MenuItem>
+      <MenuItem
+        selected={selectedIndex === 1}
+        onClick={(event) => handleMenuItemClick(event, 1)}
+      >
+        <ListItemIcon>
+          <FastfoodIcon color="primary" />
+        </ListItemIcon>
+        <Typography className={classes.heading}>Food</Typography>
+      </MenuItem>
+      <MenuItem
+        selected={selectedIndex === 2}
+        onClick={(event) => handleMenuItemClick(event, 2)}
+      >
+        <ListItemIcon>
+          <ShoppingBasketIcon color="primary" />
+        </ListItemIcon>
+        <Typography className={classes.heading}>Groceries</Typography>
+      </MenuItem>
+      <MenuItem
+        selected={selectedIndex === 3}
+        onClick={(event) => handleMenuItemClick(event, 3)}
+      >
+        <ListItemIcon>
+          <WorkOutlineIcon color="primary" />
+        </ListItemIcon>
+        <Typography className={classes.heading}>Services</Typography>
+      </MenuItem>
     </Menu>
   );
 
@@ -155,7 +233,7 @@ export default function PrimarySearchAppBar() {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem onClick={handleCategoriesMenuOpen}>
         <IconButton
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
@@ -171,73 +249,111 @@ export default function PrimarySearchAppBar() {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Container maxWidth="lg">
-        <Grid item xs={11}>
-        
-          <Toolbar>
-            <Typography className={classes.title} variant="h6" noWrap>
-              Support Brazilian
-            </Typography>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ "aria-label": "search" }}
-              />
-            </div>
-            <div className={classes.grow} />
-            <div className={classes.sectionDesktop}>
-              <Link
-                to={"map"}
-                style={{ color: "inherit", textDecoration: "inherit" }}
-              >
-                <IconButton aria-label="show near me" color="inherit">
-                  <LocationOnIcon />
+          <Grid item xs={11}>
+            <Toolbar>
+              {isSearchLocationOn || map ? (
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  aria-label="open drawer"
+                  className={classes.menuButton}
+                  onClick={handleClickBack}
+                >
+                  <ArrowBackIosIcon />
                 </IconButton>
-              </Link>
-              <IconButton aria-label="show favourites" color="inherit">
-                <FavoriteIcon />
-              </IconButton>
-              <IconButton aria-label="show favourites" color="inherit">
-                <CategoryIcon />
-              </IconButton>
-              <IconButton aria-label="add new business" color="inherit">
-                <AddCircleIcon />
-              </IconButton>
-              <IconButton aria-label="add new business" color="inherit">
-                <ContactMailIcon />
-              </IconButton>
-              <IconButton
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            </div>
-            <div className={classes.sectionMobile}>
-              <IconButton
-                aria-label="show more"
-                aria-controls={mobileMenuId}
-                aria-haspopup="true"
-                onClick={handleMobileMenuOpen}
-                color="inherit"
-              >
-                <MoreIcon />
-              </IconButton>
-            </div>
-          </Toolbar>
-        </Grid>
+              ) : (
+                <div></div>
+              )}
+              <Typography className={classes.title} variant="h6" noWrap>
+                Support Brazilian
+              </Typography>
+              {!map && (
+                <div className={classes.search}>
+                  <div className={classes.searchIcon}>
+                    <SearchIcon />
+                  </div>
+                  <InputBase
+                    placeholder="Search…"
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput,
+                    }}
+                    inputProps={{ "aria-label": "search" }}
+                  />
+                </div>
+              )}
+              <div className={classes.grow} />
+
+              <div className={classes.sectionDesktop}>
+                {map ? (
+                  <IconButton
+                    edge="start"
+                    color={isExpandSelected ? "secondary" : "inherit"}
+                    aria-label="open drawer"
+                    className={classes.menuButton}
+                    onClick={handleClickExpandButton}
+                  >
+                    <SettingsOverscanIcon />
+                  </IconButton>
+                ) : (
+                  <div>
+                    <Link
+                      to={"map"}
+                      style={{ color: "inherit", textDecoration: "inherit" }}
+                    >
+                      <IconButton aria-label="show near me" color="inherit">
+                        <LocationOnIcon />
+                      </IconButton>
+                    </Link>
+                    <IconButton
+                      aria-label="show favourites"
+                      color="inherit"
+                      selected={selectedIndex === 4}
+                      onClick={handleHeartClick}
+                    >
+                      <FavoriteIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="show categories"
+                      color="inherit"
+                      onClick={handleCategoriesMenuOpen}
+                    >
+                      <CategoryIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="add new business"
+                      color="inherit"
+                      onClick={() => handleClickOpen()}
+                    >
+                      <AddCircleIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="contact us"
+                      color="inherit"
+                      onClick={() => handleOpenContactDialog()}
+                    >
+                      <ContactMailIcon />
+                    </IconButton>
+                    <AuthNav />
+                  </div>
+                )}
+              </div>
+
+              <div className={classes.sectionMobile}>
+                <IconButton
+                  aria-label="show more"
+                  aria-controls={mobileMenuId}
+                  aria-haspopup="true"
+                  onClick={handleMobileMenuOpen}
+                  color="inherit"
+                >
+                  <MoreIcon />
+                </IconButton>
+              </div>
+            </Toolbar>
+          </Grid>
         </Container>
       </AppBar>
       {renderMobileMenu}
