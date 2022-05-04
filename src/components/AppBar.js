@@ -26,8 +26,6 @@ import { Link, useNavigate } from "react-router-dom";
 import LockIcon from "@material-ui/icons/Lock";
 import ContactMailIcon from "@material-ui/icons/ContactMail";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import Button from "@material-ui/core/Button";
-import Icon from "@material-ui/core/Icon";
 import SettingsOverscanIcon from "@material-ui/icons/SettingsOverscan";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 
@@ -124,9 +122,9 @@ export default function SearchAppBar({
     setIsExpandSelected(isExpandSelected ? false : true);
   };
 
-  // const handleClickListItem = (event) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
+  const handleClickListItem = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAuthAnchorEl(event.currentTarget);
@@ -182,9 +180,7 @@ export default function SearchAppBar({
       open={Boolean(authAnchorEl)}
 
     >
-      <MenuItem
-        // onClick={(event) => handleMenuItemClick(event, 0)}
-      >
+      <MenuItem>
         <AuthNav/>
       </MenuItem>
     </Menu>
@@ -214,7 +210,7 @@ export default function SearchAppBar({
               <MenuIcon
                 aria-controls="simple-menu"
                 aria-haspopup="true"
-                // onClick={handleClickListItem}
+                onClick={handleClickListItem}
               />
 
               <Menu

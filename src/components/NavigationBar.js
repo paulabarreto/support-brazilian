@@ -161,7 +161,7 @@ export default function PrimarySearchAppBar({
       anchorEl={anchorEl}
       id={menuId}
       keepMounted
-      open={isMenuOpen}
+      open={Boolean(anchorEl)}
       onClose={handleMenuClose}
     >
       <MenuItem
@@ -202,84 +202,7 @@ export default function PrimarySearchAppBar({
       </MenuItem>
     </Menu>
   );
-
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Authentication</p>
-      </MenuItem>
-      <MenuItem>
-        <Link
-          to={"map"}
-          style={{ color: "inherit", textDecoration: "inherit" }}
-        >
-          <IconButton aria-label="show near me" color="inherit">
-            <LocationOnIcon />
-          </IconButton>
-        </Link>
-        <p>Search Near Me</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          aria-label="show favourites"
-          color="inherit"
-          selected={selectedIndex === 4}
-          onClick={handleHeartClick}
-        >
-          <FavoriteIcon />
-        </IconButton>
-        <p>Show My Favourites</p>
-      </MenuItem>
-      <MenuItem onClick={handleCategoriesMenuOpen}>
-        <IconButton
-          aria-label="show categories"
-          color="inherit"
-          onClick={handleCategoriesMenuOpen}
-        >
-          <CategoryIcon />
-        </IconButton>
-        <p>Show Categories</p>
-      </MenuItem>
-      <MenuItem onClick={handleCategoriesMenuOpen}>
-        <IconButton
-          aria-label="add new business"
-          color="inherit"
-          onClick={() => handleClickOpen()}
-        >
-          <AddCircleIcon />
-        </IconButton>
-        <p>Add A New Business</p>
-      </MenuItem>
-      <MenuItem onClick={handleCategoriesMenuOpen}>
-        <IconButton
-          aria-label="contact us"
-          color="inherit"
-          onClick={() => handleOpenContactDialog()}
-        >
-          <ContactMailIcon />
-        </IconButton>
-        <p>Contact Administrator</p>
-      </MenuItem>
-    </Menu>
-  );
-
+  
   return (
     <div className={classes.grow}>
       <AppBar position="fixed">
@@ -373,6 +296,7 @@ export default function PrimarySearchAppBar({
                   </div>
                 )}
               </div>
+              {renderMenu}
             </Toolbar>
           </Grid>
         </Container>
