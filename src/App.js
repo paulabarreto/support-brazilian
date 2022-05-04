@@ -91,7 +91,7 @@ function App() {
     if(searchLocation !== undefined) {
       setSearchLocation(true);
       list = await getBusiness(`${urlLocationSearch}/${page}/${searchLocation}`);
-      const numberOfPages = Math.round(list.length / 5);
+      const numberOfPages = Math.round(list.length / 12);
       setPageCount(numberOfPages);
       return list
     }
@@ -112,7 +112,7 @@ function App() {
 
   const businessCount = async () => {
     const count = await getBusinessCount(`${countUrl}/${filter}/${category}`);
-    const numberOfPages = Math.round(count / 5);
+    const numberOfPages = Math.round(count / 12);
     setPageCount(numberOfPages);
   };
 
