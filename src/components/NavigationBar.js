@@ -100,6 +100,7 @@ export default function PrimarySearchAppBar({
   isSearchLocationOn,
   map,
   handleClickExpand,
+  onChange,
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -108,8 +109,9 @@ export default function PrimarySearchAppBar({
   );
   const [isExpandSelected, setIsExpandSelected] = React.useState(false);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  
+  const [searchValue, setSearchValue] = React.useState("");
+
   const navigate = useNavigate();
 
   const handleCategoriesMenuOpen = (event) => {
@@ -143,6 +145,11 @@ export default function PrimarySearchAppBar({
     setSelectedIndex(index);
     setAnchorEl(null);
     onMenuClick(event, index);
+  };
+
+  const handleChange = (e) => {
+    onChange(e.target.value);
+    setSearchValue(e.target.value);
   };
 
   const handleClickBack = () => {
@@ -237,6 +244,8 @@ export default function PrimarySearchAppBar({
                       input: classes.inputInput,
                     }}
                     inputProps={{ "aria-label": "search" }}
+                    onChange={(e) => handleChange(e)}
+                    value={searchValue}
                   />
                 </div>
               )}

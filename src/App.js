@@ -242,6 +242,7 @@ function App() {
         handleOpenContactDialog={handleOpenContactDialog}
         onMenuClick={(e, index) => handleMenuItemClick(e, index)}
         isSearchLocationOn={isSearchLocationOn}
+        onChange={(e) => handleSearchField(e)}
       />
       <div className={classes.sectionMobile}>
         <SearchAppBar
