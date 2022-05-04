@@ -58,7 +58,7 @@ function App() {
   const [filter, setFilter] = React.useState("category");
 
   // For skeleton loading
-  const dummyArray = [1, 2, 3, 4];
+  const dummyArray = [1, 2, 3, 4, 5, 6];
 
   const handleChange = (event, value) => {
     setAPIdataLoading(true);
@@ -249,7 +249,7 @@ function App() {
         handleOpenContactDialog={handleOpenContactDialog}
         isSearchLocationOn={isSearchLocationOn}
       /> */}
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" style={{marginTop: '100px'}}>
         <Grid item xs={12}>
           <Grid container justifyContent="center" spacing={spacing}>
             {isAPIdataLoading &&
