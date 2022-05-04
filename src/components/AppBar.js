@@ -283,7 +283,7 @@ export default function SearchAppBar({
               Support Brazilian
             </Link>
           </Typography>
-          {map ?
+          {map &&
             <IconButton
             edge="start"
             color={isExpandSelected ? "secondary" : "inherit"}
@@ -293,17 +293,8 @@ export default function SearchAppBar({
             >
               <SettingsOverscanIcon/>
             </IconButton>
-           : (
-            <div>
-              <IconButton
-                edge="start"
-                color="inherit"
-                aria-label="open drawer"
-                className={classes.menuButton}
-              >
-                <SettingsOverscanIcon/>
-              </IconButton>
-              <div className={classes.search}>
+          }
+          <div className={classes.search}>
                 <div className={classes.searchIcon}>
                   <SearchIcon />
                 </div>
@@ -318,8 +309,6 @@ export default function SearchAppBar({
                   onChange={(e) => handleChange(e)}
                 />
               </div>
-            </div>
-          )}
           <AuthNav />
         </Toolbar>
       </AppBar>

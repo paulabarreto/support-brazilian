@@ -88,12 +88,6 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
     },
   },
-  sectionMobile: {
-    display: "flex",
-    [theme.breakpoints.up("md")]: {
-      display: "none",
-    },
-  },
 }));
 
 export default function PrimarySearchAppBar({
@@ -114,11 +108,15 @@ export default function PrimarySearchAppBar({
   );
   const [isExpandSelected, setIsExpandSelected] = React.useState(false);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const navigate = useNavigate();
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const navigate = useNavigate();
 
   const handleCategoriesMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -218,23 +216,7 @@ export default function PrimarySearchAppBar({
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleCategoriesMenuOpen}>
+      <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
@@ -243,7 +225,59 @@ export default function PrimarySearchAppBar({
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <p>Authentication</p>
+      </MenuItem>
+      <MenuItem>
+        <Link
+          to={"map"}
+          style={{ color: "inherit", textDecoration: "inherit" }}
+        >
+          <IconButton aria-label="show near me" color="inherit">
+            <LocationOnIcon />
+          </IconButton>
+        </Link>
+        <p>Search Near Me</p>
+      </MenuItem>
+      <MenuItem>
+        <IconButton
+          aria-label="show favourites"
+          color="inherit"
+          selected={selectedIndex === 4}
+          onClick={handleHeartClick}
+        >
+          <FavoriteIcon />
+        </IconButton>
+        <p>Show My Favourites</p>
+      </MenuItem>
+      <MenuItem onClick={handleCategoriesMenuOpen}>
+        <IconButton
+          aria-label="show categories"
+          color="inherit"
+          onClick={handleCategoriesMenuOpen}
+        >
+          <CategoryIcon />
+        </IconButton>
+        <p>Show Categories</p>
+      </MenuItem>
+      <MenuItem onClick={handleCategoriesMenuOpen}>
+        <IconButton
+          aria-label="add new business"
+          color="inherit"
+          onClick={() => handleClickOpen()}
+        >
+          <AddCircleIcon />
+        </IconButton>
+        <p>Add A New Business</p>
+      </MenuItem>
+      <MenuItem onClick={handleCategoriesMenuOpen}>
+        <IconButton
+          aria-label="contact us"
+          color="inherit"
+          onClick={() => handleOpenContactDialog()}
+        >
+          <ContactMailIcon />
+        </IconButton>
+        <p>Contact Administrator</p>
       </MenuItem>
     </Menu>
   );
@@ -340,18 +374,6 @@ export default function PrimarySearchAppBar({
                     <AuthNav />
                   </div>
                 )}
-              </div>
-
-              <div className={classes.sectionMobile}>
-                <IconButton
-                  aria-label="show more"
-                  aria-controls={mobileMenuId}
-                  aria-haspopup="true"
-                  onClick={handleMobileMenuOpen}
-                  color="inherit"
-                >
-                  <MoreIcon />
-                </IconButton>
               </div>
             </Toolbar>
           </Grid>

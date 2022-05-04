@@ -28,6 +28,12 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
+  sectionMobile: {
+    display: "flex",
+    [theme.breakpoints.up("md")]: {
+      display: "none",
+    },
+  },
   footer: {
     backgroundColor: "#3f51b5",
     height: 30,
@@ -237,18 +243,21 @@ function App() {
         onMenuClick={(e, index) => handleMenuItemClick(e, index)}
         isSearchLocationOn={isSearchLocationOn}
       />
-      {/* <SearchAppBar
-        onMenuClick={(e, index) => handleMenuItemClick(e, index)}
-        onChange={(e) => handleSearchField(e)}
-        handleClickOpen={handleClickOpen}
-        favesSelected={favesSelected}
-        handleShowFavourites={handleShowFavourites}
-        map={false}
-        handleAdminRequest={handleAdminRequest}
-        isAdmin={isAdmin}
-        handleOpenContactDialog={handleOpenContactDialog}
-        isSearchLocationOn={isSearchLocationOn}
-      /> */}
+      <div className={classes.sectionMobile}>
+        <SearchAppBar
+          onMenuClick={(e, index) => handleMenuItemClick(e, index)}
+          onChange={(e) => handleSearchField(e)}
+          handleClickOpen={handleClickOpen}
+          favesSelected={favesSelected}
+          handleShowFavourites={handleShowFavourites}
+          map={false}
+          handleAdminRequest={handleAdminRequest}
+          isAdmin={isAdmin}
+          handleOpenContactDialog={handleOpenContactDialog}
+          isSearchLocationOn={isSearchLocationOn}
+        />
+      </div>
+
       <Container maxWidth="lg" style={{marginTop: '100px'}}>
         <Grid item xs={12}>
           <Grid container justifyContent="center" spacing={spacing}>
