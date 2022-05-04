@@ -26,9 +26,10 @@ import { Link, useNavigate } from "react-router-dom";
 import LockIcon from "@material-ui/icons/Lock";
 import ContactMailIcon from "@material-ui/icons/ContactMail";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
-import SettingsOverscanIcon from '@material-ui/icons/SettingsOverscan';
+import Button from "@material-ui/core/Button";
+import Icon from "@material-ui/core/Icon";
+import SettingsOverscanIcon from "@material-ui/icons/SettingsOverscan";
+import AccountCircle from "@material-ui/icons/AccountCircle";
 
 const theme = {
   background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
@@ -116,14 +117,19 @@ export default function SearchAppBar({
   );
   const [searchValue, setSearchValue] = React.useState("");
   const [isExpandSelected, setIsExpandSelected] = React.useState(false);
+  const [authAnchorEl, setAuthAnchorEl] = React.useState(null);
 
   const handleClickExpandButton = () => {
-    handleClickExpand(isExpandSelected)
-    setIsExpandSelected(isExpandSelected ? false : true)
-  }
+    handleClickExpand(isExpandSelected);
+    setIsExpandSelected(isExpandSelected ? false : true);
+  };
 
-  const handleClickListItem = (event) => {
-    setAnchorEl(event.currentTarget);
+  // const handleClickListItem = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
+
+  const handleProfileMenuOpen = (event) => {
+    setAuthAnchorEl(event.currentTarget);
   };
 
   const handleMenuItemClick = (event, index) => {
@@ -131,7 +137,7 @@ export default function SearchAppBar({
     setAnchorEl(null);
     setSearchValue("");
     onChange("");
-    onMenuClick(event, index)
+    onMenuClick(event, index);
   };
 
   const handleChange = (e) => {
@@ -153,6 +159,36 @@ export default function SearchAppBar({
     navigate("/");
     window.location.reload();
   };
+
+  const handleMenuClose = () => {
+    setAuthAnchorEl(null)
+  }
+
+  const menuId = "auth-menu";
+  const renderProfileMenu = (
+    <Menu
+      id={menuId}
+      onClose={handleMenuClose}
+      keepMounted
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      anchorEl={authAnchorEl}
+      open={Boolean(authAnchorEl)}
+
+    >
+      <MenuItem
+        // onClick={(event) => handleMenuItemClick(event, 0)}
+      >
+        <AuthNav/>
+      </MenuItem>
+    </Menu>
+  );
 
   return (
     <div className={classes.root}>
@@ -178,7 +214,7 @@ export default function SearchAppBar({
               <MenuIcon
                 aria-controls="simple-menu"
                 aria-haspopup="true"
-                onClick={handleClickListItem}
+                // onClick={handleClickListItem}
               />
 
               <Menu
@@ -283,33 +319,43 @@ export default function SearchAppBar({
               Support Brazilian
             </Link>
           </Typography>
-          {map &&
+          {map && (
             <IconButton
-            edge="start"
-            color={isExpandSelected ? "secondary" : "inherit"}
-            aria-label="open drawer"
-            className={classes.menuButton}
-            onClick={handleClickExpandButton}
+              edge="start"
+              color={isExpandSelected ? "secondary" : "inherit"}
+              aria-label="open drawer"
+              className={classes.menuButton}
+              onClick={handleClickExpandButton}
             >
-              <SettingsOverscanIcon/>
+              <SettingsOverscanIcon />
             </IconButton>
-          }
+          )}
           <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                  <SearchIcon />
-                </div>
-                <InputBase
-                  placeholder="Search…"
-                  value={searchValue}
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
-                  }}
-                  inputProps={{ "aria-label": "search" }}
-                  onChange={(e) => handleChange(e)}
-                />
-              </div>
-          <AuthNav />
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Search…"
+              value={searchValue}
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ "aria-label": "search" }}
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+          {/* <AuthNav /> */}
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="profile"
+            aria-controls="auth-menu"
+            onClick={handleProfileMenuOpen}
+          >
+            <AccountCircle />
+          </IconButton>
+          {renderProfileMenu}
         </Toolbar>
       </AppBar>
     </div>
