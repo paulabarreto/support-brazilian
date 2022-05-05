@@ -9,34 +9,46 @@ import {
 import * as endpoints from "../endpoints";
 import urlService from "../services/urls";
 import { getAllCoordinates } from "../services/getBusiness";
-import NavigationBar from "./NavigationBar";
+import AppBarDesktop from "./appBar/AppBarDesktop";
 import { Link } from "react-router-dom";
+import AppBarMobile from "./appBar/AppBarMobile";
+import { makeStyles } from "@material-ui/core/styles";
 
 const GOOGLE_MAPS_API = process.env.REACT_APP_GOOGLE_API_KEY;
 
 const containerStyle = {
   width: "100%",
   height: "88vh",
-  marginTop: "70px"
+  marginTop: "70px",
 };
 
 const libraries = ["places"];
 const url = urlService(endpoints.GetCoordinates);
 
+const useStyles = makeStyles((theme) => ({
+  sectionMobile: {
+    display: "flex",
+    [theme.breakpoints.up("md")]: {
+      display: "none",
+    },
+  }
+}));
+
 export default function MyMapComponent() {
   const [center, setCenter] = useState({
-    lat: parseFloat(43.661554), 
-    lng: parseFloat(-79.368456)
+    lat: parseFloat(43.661554),
+    lng: parseFloat(-79.368456),
   });
 
+  const classes = useStyles();
 
   const handleClickExpand = (isExpandSelected) => {
-      if(isExpandSelected) {
-        centerOnCurrentPosition();
-        setZoom(10)
-      } else {
-        findBrazilianBusiness()
-      }
+    if (isExpandSelected) {
+      centerOnCurrentPosition();
+      setZoom(10);
+    } else {
+      findBrazilianBusiness();
+    }
   };
 
   const { isLoaded } = useJsApiLoader({
@@ -56,7 +68,7 @@ export default function MyMapComponent() {
         setCurrentPosition({ lat, lng });
       }
     );
-  }
+  };
 
   const onLoad = (map) => {
     centerOnCurrentPosition();
@@ -65,53 +77,68 @@ export default function MyMapComponent() {
 
   const findBrazilianBusiness = () => {
     const bounds = new window.google.maps.LatLngBounds();
-    markers.forEach(({ lat, lng }) => bounds.extend({lat: parseFloat(lat), lng: parseFloat(lng)}));
+    markers.forEach(({ lat, lng }) =>
+      bounds.extend({ lat: parseFloat(lat), lng: parseFloat(lng) })
+    );
     map.fitBounds(bounds);
-  }
+  };
 
   const [markers, setMarkers] = React.useState([]);
-  const [markersWithIncompleteAddress, setMarkersWithIncompleteAddress] = React.useState([]);
-  
+  const [markersWithIncompleteAddress, setMarkersWithIncompleteAddress] =
+    React.useState([]);
+
   const getCoords = async () => {
     const coordinates = await getAllCoordinates(url);
     // Some api resp may not have coordinates
     // TODO handle admin approved on the api
-    const filtered = coordinates.length > 0 ?
-                      coordinates.filter((coord) => coord.lat &&
-                                                    coord.adminApproved &&
-                                                    isAddressComplete(coord.location)
-                                          ) : [];
-    let markersWithSite = filtered.map(business => {
+    const filtered =
+      coordinates.length > 0
+        ? coordinates.filter(
+            (coord) =>
+              coord.lat &&
+              coord.adminApproved &&
+              isAddressComplete(coord.location)
+          )
+        : [];
+    let markersWithSite = filtered.map((business) => {
       return {
         ...business,
-        site: business.website ? business.website : business.instagram
-      }
-    })
-    const markersWithIncompleteAddress = coordinates.length > 0 ? coordinates.filter((coord) => coord.lat &&
-                                                                      coord.adminApproved &&
-                                                                     !isAddressComplete(coord.location))
-                                                                     : []
-    const listWithIncompleteAddress = createListWithIncompleteAddress(markersWithIncompleteAddress)
+        site: business.website ? business.website : business.instagram,
+      };
+    });
+    const markersWithIncompleteAddress =
+      coordinates.length > 0
+        ? coordinates.filter(
+            (coord) =>
+              coord.lat &&
+              coord.adminApproved &&
+              !isAddressComplete(coord.location)
+          )
+        : [];
+    const listWithIncompleteAddress = createListWithIncompleteAddress(
+      markersWithIncompleteAddress
+    );
     setMarkers(markersWithSite);
-    const newMarkers = createNewMarkers(listWithIncompleteAddress)
-    setMarkersWithIncompleteAddress(newMarkers)
+    const newMarkers = createNewMarkers(listWithIncompleteAddress);
+    setMarkersWithIncompleteAddress(newMarkers);
   };
   const createListWithIncompleteAddress = (markers) => {
     let locationObj = {};
-    for(let i = 0; i < markers.length; i++) {
-        locationObj[markers[i].location] = locationObj[markers[i].location] ? 
-                                           [ ...locationObj[markers[i].location], markers[i]] : [markers[i]]
+    for (let i = 0; i < markers.length; i++) {
+      locationObj[markers[i].location] = locationObj[markers[i].location]
+        ? [...locationObj[markers[i].location], markers[i]]
+        : [markers[i]];
     }
-    return locationObj
-  }
+    return locationObj;
+  };
 
   const isAddressComplete = (location) => {
-    let firstWord = location.split(" ")[0]
-    if(!isNaN(firstWord) && !isNaN(parseFloat(firstWord))) {
-      return true
+    let firstWord = location.split(" ")[0];
+    if (!isNaN(firstWord) && !isNaN(parseFloat(firstWord))) {
+      return true;
     }
-    return false
-  }
+    return false;
+  };
 
   useEffect(() => {
     getCoords();
@@ -120,24 +147,24 @@ export default function MyMapComponent() {
   /** Create another markers array with array of names, ids, etc for
     for each location (lat, lng)
   */
- // TODO make original markers list arrays so I can have only one list
+  // TODO make original markers list arrays so I can have only one list
   const createNewMarkers = (list) => {
-    let moreMarkers = []
+    let moreMarkers = [];
     for (const city in list) {
       moreMarkers = [
         ...moreMarkers,
         {
-          _ids: list[city].map(loc => loc._id),
-          names: list[city].map(loc => loc.name),
-          locations: list[city].map(loc => loc.location),
-          sites: list[city].map(loc => loc.site),
+          _ids: list[city].map((loc) => loc._id),
+          names: list[city].map((loc) => loc.name),
+          locations: list[city].map((loc) => loc.location),
+          sites: list[city].map((loc) => loc.site),
           lat: list[city][0].lat,
-          lng: list[city][0].lng
-        }
-      ]
+          lng: list[city][0].lng,
+        },
+      ];
     }
-    return moreMarkers
-  }
+    return moreMarkers;
+  };
 
   const [activeMarker, setActiveMarker] = useState(null);
 
@@ -150,12 +177,18 @@ export default function MyMapComponent() {
 
   return isLoaded ? (
     <div>
-      <NavigationBar 
+      <AppBarDesktop
         map={true}
         defaultIndex={6}
         handleClickExpand={handleClickExpand}
       />
-
+      <div className={classes.sectionMobile}>
+        <AppBarMobile
+          map={true}
+          defaultIndex={6}
+          handleClickExpand={handleClickExpand}
+        />
+      </div>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
@@ -170,35 +203,40 @@ export default function MyMapComponent() {
             onClick={() => handleActiveMarker(_id)}
           >
             {activeMarker === _id ? (
-            <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+              <InfoWindow onCloseClick={() => setActiveMarker(null)}>
                 <div>
-
-                  <a target="_blank" rel="noreferrer" href={site}><div>{name}</div></a>
+                  <a target="_blank" rel="noreferrer" href={site}>
+                    <div>{name}</div>
+                  </a>
                   <div>{location}</div>
                 </div>
               </InfoWindow>
             ) : null}
           </Marker>
         ))}
-        {markersWithIncompleteAddress.map(({ _ids, names, sites, locations, lat, lng }) => (
-          <Marker
-            key={_ids[0]}
-            position={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
-            onClick={() => handleActiveMarker(_ids[0])}
-          >
-            {activeMarker === _ids[0] ? (
-            <InfoWindow onCloseClick={() => setActiveMarker(null)}>
-              <div>
-                <Link to={`/${locations[0]}`}>
-                  See full list for {locations[0]}
-                </Link>
-                <div>There are {names.length} businesses in this location,</div>
-                <div>but we don't have their complete address</div>
-              </div>
-              </InfoWindow>
-            ) : null}
-          </Marker>
-        ))}
+        {markersWithIncompleteAddress.map(
+          ({ _ids, names, sites, locations, lat, lng }) => (
+            <Marker
+              key={_ids[0]}
+              position={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
+              onClick={() => handleActiveMarker(_ids[0])}
+            >
+              {activeMarker === _ids[0] ? (
+                <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+                  <div>
+                    <Link to={`/${locations[0]}`}>
+                      See full list for {locations[0]}
+                    </Link>
+                    <div>
+                      There are {names.length} businesses in this location,
+                    </div>
+                    <div>but we don't have their complete address</div>
+                  </div>
+                </InfoWindow>
+              ) : null}
+            </Marker>
+          )
+        )}
         <Marker
           position={currentPosition}
           // icon={<LocationSearchingIcon/>}
@@ -213,4 +251,3 @@ export default function MyMapComponent() {
     <div>Loading</div>
   );
 }
-

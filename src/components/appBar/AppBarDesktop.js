@@ -22,7 +22,7 @@ import ContactMailIcon from "@material-ui/icons/ContactMail";
 import Container from "@material-ui/core/Container";
 import { Link, useNavigate } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
-import AuthNav from "./authentication/AuthNav";
+import AuthNav from "../authentication/AuthNav";
 import AllInclusiveIcon from "@material-ui/icons/AllInclusive";
 import FastfoodIcon from "@material-ui/icons/Fastfood";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
@@ -229,9 +229,15 @@ export default function PrimarySearchAppBar({
               ) : (
                 <div></div>
               )}
-              <Typography className={classes.title} variant="h6" noWrap>
-                Support Brazilian
-              </Typography>
+              <Link
+                to={"/"}
+                onClick={() => window.location.reload()}
+                style={{ color: "inherit", textDecoration: "inherit" }}
+              >
+                <Typography className={classes.title} variant="h6" noWrap>
+                  Support Brazilian
+                </Typography>
+              </Link>
               {!map && (
                 <div className={classes.search}>
                   <div className={classes.searchIcon}>

@@ -10,7 +10,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
-import AuthNav from "./authentication/AuthNav";
+import AuthNav from "../authentication/AuthNav";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -159,8 +159,8 @@ export default function SearchAppBar({
   };
 
   const handleMenuClose = () => {
-    setAuthAnchorEl(null)
-  }
+    setAuthAnchorEl(null);
+  };
 
   const menuId = "auth-menu";
   const renderProfileMenu = (
@@ -169,19 +169,18 @@ export default function SearchAppBar({
       onClose={handleMenuClose}
       keepMounted
       anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       anchorEl={authAnchorEl}
       open={Boolean(authAnchorEl)}
-
     >
       <MenuItem>
-        <AuthNav/>
+        <AuthNav />
       </MenuItem>
     </Menu>
   );
@@ -315,7 +314,7 @@ export default function SearchAppBar({
               Support Brazilian
             </Link>
           </Typography>
-          {map && (
+          {map ? (
             <IconButton
               edge="start"
               color={isExpandSelected ? "secondary" : "inherit"}
@@ -325,33 +324,35 @@ export default function SearchAppBar({
             >
               <SettingsOverscanIcon />
             </IconButton>
-          )}
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
+          ) : (
+            <div>
+              <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
+                <InputBase
+                  placeholder="Search…"
+                  value={searchValue}
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                  inputProps={{ "aria-label": "search" }}
+                  onChange={(e) => handleChange(e)}
+                />
+              </div>
+              <IconButton
+                edge="end"
+                color="inherit"
+                aria-label="profile"
+                aria-controls="auth-menu"
+                onClick={handleProfileMenuOpen}
+              >
+                <AccountCircle />
+              </IconButton>
+              {renderProfileMenu}
             </div>
-            <InputBase
-              placeholder="Search…"
-              value={searchValue}
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-              onChange={(e) => handleChange(e)}
-            />
-          </div>
-          {/* <AuthNav /> */}
-          <IconButton
-            edge="end"
-            color="inherit"
-            aria-label="profile"
-            aria-controls="auth-menu"
-            onClick={handleProfileMenuOpen}
-          >
-            <AccountCircle />
-          </IconButton>
-          {renderProfileMenu}
+          )}
         </Toolbar>
       </AppBar>
     </div>

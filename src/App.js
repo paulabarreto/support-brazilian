@@ -1,6 +1,6 @@
 import "@fontsource/roboto";
-import SearchAppBar from "./components/AppBar";
-import NavigationBar from "./components/NavigationBar";
+import AppBarMobile from "./components/appBar/AppBarMobile";
+import AppBarDesktop from "./components/appBar/AppBarDesktop";
 import MediaCard from "./components/Card";
 import AddBusinessDialog from "./components/AddBusinessDialog";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -235,7 +235,7 @@ function App() {
 
   return (
     <div className={classes.root}>
-      <NavigationBar
+      <AppBarDesktop
         handleShowFavourites={handleShowFavourites}
         favesSelected={favesSelected}
         handleClickOpen={handleClickOpen}
@@ -245,7 +245,7 @@ function App() {
         onChange={(e) => handleSearchField(e)}
       />
       <div className={classes.sectionMobile}>
-        <SearchAppBar
+        <AppBarMobile
           onMenuClick={(e, index) => handleMenuItemClick(e, index)}
           onChange={(e) => handleSearchField(e)}
           handleClickOpen={handleClickOpen}
