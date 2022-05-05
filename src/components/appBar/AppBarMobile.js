@@ -28,6 +28,7 @@ import ContactMailIcon from "@material-ui/icons/ContactMail";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import SettingsOverscanIcon from "@material-ui/icons/SettingsOverscan";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
 
 const theme = {
   background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
@@ -221,6 +222,7 @@ export default function SearchAppBar({
                 style={{ width: "250px" }}
               >
                 <MenuList>
+                
                   <Accordion>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -269,6 +271,20 @@ export default function SearchAppBar({
                       </MenuItem>
                     </AccordionDetails>
                   </Accordion>
+                  <Link
+                    to={"map"}
+                    style={{ color: "inherit", textDecoration: "inherit" }}
+                  >
+                  <MenuItem
+                    selected={selectedIndex === 5}
+                  >
+
+                    <LocationOnIcon color="primary" />
+                    <Typography className={classes.heading}>
+                      Search Near Me
+                    </Typography>
+                  </MenuItem>
+                    </Link>
                   <MenuItem
                     selected={selectedIndex === 4}
                     onClick={handleHeartClick}
@@ -325,7 +341,7 @@ export default function SearchAppBar({
               <SettingsOverscanIcon />
             </IconButton>
           ) : (
-            <div>
+            
               <div className={classes.search}>
                 <div className={classes.searchIcon}>
                   <SearchIcon />
@@ -341,18 +357,18 @@ export default function SearchAppBar({
                   onChange={(e) => handleChange(e)}
                 />
               </div>
-              <IconButton
-                edge="end"
-                color="inherit"
-                aria-label="profile"
-                aria-controls="auth-menu"
-                onClick={handleProfileMenuOpen}
-              >
-                <AccountCircle />
-              </IconButton>
-              {renderProfileMenu}
-            </div>
-          )}
+            
+            )}
+            <IconButton
+              edge="end"
+              color="inherit"
+              aria-label="profile"
+              aria-controls="auth-menu"
+              onClick={handleProfileMenuOpen}
+            >
+              <AccountCircle />
+            </IconButton>
+            {renderProfileMenu}
         </Toolbar>
       </AppBar>
     </div>
