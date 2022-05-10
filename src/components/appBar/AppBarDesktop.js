@@ -5,15 +5,9 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
-import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import Button from "@material-ui/core/Button";
 import SearchIcon from "@material-ui/icons/Search";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import MoreIcon from "@material-ui/icons/MoreVert";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import CategoryIcon from "@material-ui/icons/Category";
@@ -94,7 +88,6 @@ const useStyles = makeStyles((theme) => ({
 export default function PrimarySearchAppBar({
   handleShowFavourites,
   favesSelected,
-  defaultIndex,
   handleClickOpen,
   handleOpenContactDialog,
   onMenuClick,
@@ -107,9 +100,7 @@ export default function PrimarySearchAppBar({
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(
-    defaultIndex ? defaultIndex : 0
-  );
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [isExpandSelected, setIsExpandSelected] = React.useState(false);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   
@@ -118,10 +109,6 @@ export default function PrimarySearchAppBar({
   const navigate = useNavigate();
 
   const handleCategoriesMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -134,14 +121,10 @@ export default function PrimarySearchAppBar({
     handleMobileMenuClose();
   };
 
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
   const handleHeartClick = () => {
     handleShowFavourites(!favesSelected);
     setAnchorEl(null);
-    setSelectedIndex(4);
+    setSelectedIndex(selectedIndex === 4 ? 0 : 4);
   };
 
   const handleMenuItemClick = (event, index) => {
@@ -283,15 +266,14 @@ export default function PrimarySearchAppBar({
                     </Link>
                     <IconButton
                       aria-label="show favourites"
-                      color="inherit"
-                      selected={selectedIndex === 4}
+                      color={selectedIndex === 4 ? "secondary" : "inherit"}
                       onClick={handleHeartClick}
                     >
                       <FavoriteIcon />
                     </IconButton>
                     <IconButton
                       aria-label="show categories"
-                      color="inherit"
+                      color={selectedIndex === 1 || selectedIndex === 2 || selectedIndex === 3 ? "secondary" : "inherit"}
                       onClick={handleCategoriesMenuOpen}
                     >
                       <CategoryIcon />

@@ -179,13 +179,11 @@ export default function MyMapComponent() {
     <div>
       <AppBarDesktop
         map={true}
-        defaultIndex={6}
         handleClickExpand={handleClickExpand}
       />
       <div className={classes.sectionMobile}>
         <AppBarMobile
           map={true}
-          defaultIndex={6}
           handleClickExpand={handleClickExpand}
         />
       </div>
