@@ -243,6 +243,8 @@ function App() {
         onMenuClick={(e, index) => handleMenuItemClick(e, index)}
         isSearchLocationOn={isSearchLocationOn}
         onChange={(e) => handleSearchField(e)}
+        isAdmin={isAdmin}
+        handleAdminRequest={handleAdminRequest}
       />
       <div className={classes.sectionMobile}>
         <AppBarMobile

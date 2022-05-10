@@ -30,6 +30,7 @@ import WorkOutlineIcon from "@material-ui/icons/WorkOutline";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import SettingsOverscanIcon from "@material-ui/icons/SettingsOverscan";
+import LockIcon from "@material-ui/icons/Lock";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -101,6 +102,8 @@ export default function PrimarySearchAppBar({
   map,
   handleClickExpand,
   onChange,
+  isAdmin,
+  handleAdminRequest,
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -307,6 +310,15 @@ export default function PrimarySearchAppBar({
                     >
                       <ContactMailIcon />
                     </IconButton>
+                    {isAdmin && (
+                    <IconButton
+                      aria-label="contact us"
+                      color="inherit"
+                      onClick={() => handleAdminRequest()}
+                    >
+                      <LockIcon/>
+                    </IconButton>
+                  )}
                     <AuthNav />
                   </div>
                 )}
