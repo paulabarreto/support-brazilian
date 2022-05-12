@@ -6,7 +6,7 @@ import { getBusiness } from "../services/getBusiness";
 import { useAuth0 } from "@auth0/auth0-react";
 import MediaCard from "./Card";
 
-const LIMIT = 2;
+const LIMIT = 6;
 
 export default function BusinessList() {
   const [braBusList, setBraBusList] = useState([]);
@@ -21,43 +21,33 @@ export default function BusinessList() {
   const [isAPIdataLoading, setAPIdataLoading] = useState(true);
   const { user, isAuthenticated, isLoading } = useAuth0();
 
-  const url = urlService(endpoints.GetBusiness);
+  const url = urlService(endpoints.GetBusinessList);
 
   const fetchData = () => {
-      const newLimit = visible + LIMIT
-      const dataToAdd = braBusList.slice(visible, newLimit)
+    const newLimit = visible + LIMIT;
+    const dataToAdd = braBusList.slice(visible, newLimit);
 
-      if(braBusList.length > postData.length) {
-          setPostData([...postData].concat(dataToAdd))
-          setVisible(newLimit)
-      } else {
-          setHasMore(false)
-      }
-  }
+    if (braBusList.length > postData.length) {
+      setPostData([...postData].concat(dataToAdd));
+      setVisible(newLimit);
+    } else {
+      setHasMore(false);
+    }
+  };
 
   const getBBs = async (page) => {
     setAPIdataLoading(true);
-    let getURL =
-      category === 0 ? `${url}/${page}` : `${url}/${page}/${category}`;
-    if (searchField !== "") {
-      getURL = `${url}/${page}/0/${searchField}`;
-    }
-    let list = [];
-
-    list = await getBusiness(getURL);
+    const list = await getBusiness(url);
     return list;
   };
 
   useEffect(() => {
     if (!isLoading) {
       const fetchData2 = setTimeout(async () => {
-        const [brazilianBusinsessList] =
-          await Promise.all([
-            getBBs(page),
-          ]);
-        
+        const [brazilianBusinsessList] = await Promise.all([getBBs(page)]);
+
         setBraBusList(brazilianBusinsessList);
-        setPostData(brazilianBusinsessList.slice(0, LIMIT))
+        setPostData(brazilianBusinsessList.slice(0, LIMIT));
         setAPIdataLoading(false);
         return brazilianBusinsessList;
       }, 2500);
@@ -78,23 +68,17 @@ export default function BusinessList() {
         </p>
       }
       refreshFunction={fetchData}
-  pullDownToRefresh
-  pullDownToRefreshThreshold={7}
-  pullDownToRefreshContent={
-    <h3 style={{ textAlign: 'center' }}>&#8595; Pull down to refresh</h3>
-  }
-  releaseToRefreshContent={
-    <h3 style={{ textAlign: 'center' }}>&#8593; Release to refresh</h3>
-  }
-      
+      pullDownToRefresh
+      pullDownToRefreshThreshold={7}
+      pullDownToRefreshContent={
+        <h3 style={{ textAlign: "center" }}>&#8595; Pull down to refresh</h3>
+      }
+      releaseToRefreshContent={
+        <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
+      }
     >
       {postData.map((item, index) => {
-          return (
-            <MediaCard
-            business={item}
-            key={index}
-          />
-          )
+        return <MediaCard business={item} key={index} />;
       })}
     </InfiniteScroll>
   );

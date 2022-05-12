@@ -1,4 +1,5 @@
 export const GetBusiness = 'brazilianBusiness';
+export const GetBusinessList = 'brazilianBusinessList'; // infinite scroll
 export const GetBusinessLocationSearch = 'locationSearch';
 export const GetBusinessAdmin = 'brazilianBusiness/admin';
 export const GetBusinessCount = 'brazilianBusinessCount';
