@@ -6,7 +6,7 @@ import MyMapComponent from './components/Map';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Auth0ProviderWithHistory from "./auth/auth0-provider-with-history";
-import InfiniteScroll from './components/InfiniteScroll';
+import InfiniteScroll from './components/BusinessList';
 
 ReactDOM.render(
   <React.StrictMode>

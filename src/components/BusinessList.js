@@ -5,6 +5,8 @@ import * as endpoints from "../endpoints";
 import { getBusiness } from "../services/getBusiness";
 import { useAuth0 } from "@auth0/auth0-react";
 import MediaCard from "./Card";
+import Grid from "@material-ui/core/Grid";
+import Container from "@material-ui/core/Container";
 
 const LIMIT = 6;
 
@@ -61,7 +63,6 @@ export default function BusinessList() {
       dataLength={postData.length} //This is important field to render the next data
       next={fetchData}
       hasMore={hasMore}
-      loader={<h4>Loading...</h4>}
       endMessage={
         <p style={{ textAlign: "center" }}>
           <b>Yay! You have seen it all</b>
@@ -77,9 +78,19 @@ export default function BusinessList() {
         <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
       }
     >
-      {postData.map((item, index) => {
-        return <MediaCard business={item} key={index} />;
-      })}
+      <Container maxWidth="lg" style={{ marginTop: "30px" }}>
+        <Grid item xs={12}>
+          <Grid container justifyContent="center" spacing={4}>
+            {postData.map((card, index) => {
+              return (
+                <Grid item>
+                  <MediaCard business={card} key={index} />
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Grid>
+      </Container>
     </InfiniteScroll>
   );
 }

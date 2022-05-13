@@ -11,6 +11,7 @@ import React, { useState, useEffect } from "react";
 import * as endpoints from "./endpoints";
 import ConfirmationDialog from "./components/ConfirmationDialog";
 import ContactDialog from "./components/ContactDialog";
+import BusinessList from "./components/BusinessList";
 import Typography from "@material-ui/core/Typography";
 import Pagination from "@material-ui/lab/Pagination";
 import Skeleton from "@mui/material/Skeleton";
@@ -272,7 +273,7 @@ function App() {
                   </Stack>
                 </Grid>
               ))}
-            {!isAPIdataLoading &&
+            {/* {!isAPIdataLoading &&
               filteredList.length > 0 &&
               filteredList.map((business, index) => (
                 <Grid item>
@@ -284,7 +285,7 @@ function App() {
                     openConfirmation={handleOpenConfirmation}
                   />
                 </Grid>
-              ))}
+              ))} */}
             {!isAPIdataLoading && filteredList.length === 0 && (
               <Grid item>
                 <h3>No results to show</h3>
@@ -292,6 +293,7 @@ function App() {
             )}
           </Grid>
         </Grid>
+        <BusinessList/>
         <Grid item xs={12}>
           <Grid
             container
