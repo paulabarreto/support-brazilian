@@ -10,20 +10,20 @@ import Container from "@material-ui/core/Container";
 
 const LIMIT = 6;
 
-export default function BusinessList() {
+export default function BusinessList({
+  category
+}) {
   const [braBusList, setBraBusList] = useState([]);
   const [postData, setPostData] = useState([]);
   const [visible, setVisible] = useState(LIMIT);
   const [hasMore, setHasMore] = useState(true);
 
-  const [page, setPage] = React.useState(1);
-  const [category, setCategory] = React.useState(0);
   const [searchField, setSearchField] = React.useState("");
   const [filteredList, setFilteredList] = useState([]);
   const [isAPIdataLoading, setAPIdataLoading] = useState(true);
   const { user, isAuthenticated, isLoading } = useAuth0();
 
-  const url = urlService(endpoints.GetBusinessList);
+  const url = urlService(endpoints.GetBusiness);
 
   const fetchData = () => {
     const newLimit = visible + LIMIT;
@@ -37,16 +37,18 @@ export default function BusinessList() {
     }
   };
 
-  const getBBs = async (page) => {
+  const getBBs = async () => {
     setAPIdataLoading(true);
-    const list = await getBusiness(url);
+    let getURL = category === 0 ? url : `${url}/${category}`;
+    const list = await getBusiness(getURL);
     return list;
   };
 
   useEffect(() => {
+    let brazilianBusinsessList = []
     if (!isLoading) {
       const fetchData2 = setTimeout(async () => {
-        const [brazilianBusinsessList] = await Promise.all([getBBs(page)]);
+        brazilianBusinsessList = await getBBs();
 
         setBraBusList(brazilianBusinsessList);
         setPostData(brazilianBusinsessList.slice(0, LIMIT));

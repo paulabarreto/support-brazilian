@@ -69,14 +69,13 @@ function App() {
   const urlLocationSearch = urlService(endpoints.GetBusinessLocationSearch);
   const adminUrl = urlService(endpoints.GetBusinessAdmin);
   const usersUrl = urlService(endpoints.GetUsers);
-  const countUrl = urlService(endpoints.GetBusinessCount);
   const favouritesUrl = urlService(endpoints.GetFavourites);
 
   const getBBs = async () => {
 
     setAPIdataLoading(true);
     let getURL =
-      category === 0 ? `${url}/${1}` : `${url}/${1}/${category}`;
+      category === 0 ? `${url}` : `${url}/${category}`;
     if (searchField !== "") {
       getURL = `${url}/${1}/0/${searchField}`;
     }
@@ -261,7 +260,6 @@ function App() {
                     business={business}
                     key={index}
                     isAdmin={isAdmin}
-                    page={page}
                     openConfirmation={handleOpenConfirmation}
                   />
                 </Grid>
@@ -273,7 +271,9 @@ function App() {
             )}
           </Grid>
         </Grid>
-        <BusinessList/>
+        <BusinessList
+          category={category}
+        />
         <AddBusinessDialog open={open} handleClose={handleClose} user={user} />
         <ConfirmationDialog
           open={openConfirmation}
