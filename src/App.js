@@ -54,10 +54,8 @@ function App() {
   const [filteredList, setFilteredList] = useState([]);
   const [favouriteList, setFavouriteList] = useState([]);
   const [isAPIdataLoading, setAPIdataLoading] = useState(true);
-  const [page, setPage] = React.useState(1);
   const [category, setCategory] = React.useState(0);
   const [searchField, setSearchField] = React.useState("");
-  const [pageCount, setPageCount] = React.useState(0);
   const [spacing, setSpacing] = React.useState(4);
   const [isSearchLocationOn, setSearchLocation] = React.useState(false);
 
@@ -67,11 +65,6 @@ function App() {
   // For skeleton loading
   const dummyArray = [1, 2, 3, 4, 5, 6];
 
-  const handleChange = (event, value) => {
-    setAPIdataLoading(true);
-    setPage(value);
-  };
-
   const url = urlService(endpoints.GetBusiness);
   const urlLocationSearch = urlService(endpoints.GetBusinessLocationSearch);
   const adminUrl = urlService(endpoints.GetBusinessAdmin);
@@ -79,21 +72,19 @@ function App() {
   const countUrl = urlService(endpoints.GetBusinessCount);
   const favouritesUrl = urlService(endpoints.GetFavourites);
 
-  const getBBs = async (page) => {
+  const getBBs = async () => {
 
     setAPIdataLoading(true);
     let getURL =
-      category === 0 ? `${url}/${page}` : `${url}/${page}/${category}`;
+      category === 0 ? `${url}/${1}` : `${url}/${1}/${category}`;
     if (searchField !== "") {
-      getURL = `${url}/${page}/0/${searchField}`;
+      getURL = `${url}/${1}/0/${searchField}`;
     }
     let list = [];
 
     if(searchLocation !== undefined) {
       setSearchLocation(true);
-      list = await getBusiness(`${urlLocationSearch}/${page}/${searchLocation}`);
-      const numberOfPages = Math.round(list.length / 12);
-      setPageCount(numberOfPages);
+      list = await getBusiness(`${urlLocationSearch}/${1}/${searchLocation}`);
       return list
     }
 
@@ -111,12 +102,6 @@ function App() {
     setFavouriteList(faves);
   };
 
-  const businessCount = async () => {
-    const count = await getBusinessCount(`${countUrl}/${filter}/${category}`);
-    const numberOfPages = Math.round(count / 12);
-    setPageCount(numberOfPages);
-  };
-
   const checkAdmin = () => {
     const admin = user && user.email === process.env.REACT_APP_ADMIN_EMAIL ? true : false;
     setAdmin(admin);
@@ -126,11 +111,10 @@ function App() {
   useEffect(() => {
     if (!isLoading) {
       const fetchData = setTimeout(async () => {
-        const [brazilianBusinsessList, favouriteBusinessList, pageCount] =
+        const [brazilianBusinsessList, favouriteBusinessList] =
           await Promise.all([
-            getBBs(page),
+            getBBs(1),
             favouritesList(user),
-            businessCount(),
           ]);
 
         let updatedFavesList = brazilianBusinsessList ? brazilianBusinsessList.map((business) => {
@@ -148,7 +132,7 @@ function App() {
 
       return () => clearTimeout(fetchData);
     }
-  }, [isLoading, page, category, searchField]);
+  }, [isLoading, category, searchField]);
 
   const [open, setOpen] = React.useState(false);
   const [openContactDialog, setOpenContactDialog] = React.useState(false);
@@ -178,13 +162,12 @@ function App() {
   const handleMenuItemClick = async (event, index) => {
     setAPIdataLoading(true);
     let listByCategory = businessList;
-    setPage(1);
     setCategory(index);
     setFilter("category");
     if (index === 0) {
       setFilteredList(listByCategory);
     } else {
-      listByCategory = await getBBs(page);
+      listByCategory = await getBBs(1);
       setFilteredList(listByCategory);
     }
   };
@@ -200,13 +183,10 @@ function App() {
         ? businessList
         : await getFavourites(favouritesUrl, favouriteList);
       setFilteredList(filterFaves);
-      const numOfPages = Math.round(favouriteList.length / 5);
-      setPageCount(numOfPages);
     }
   };
 
   const handleSearchField = (e) => {
-    setPage(1);
     setSearchField(e);
     setFilter("name");
     setCategory(e);
@@ -294,24 +274,6 @@ function App() {
           </Grid>
         </Grid>
         <BusinessList/>
-        <Grid item xs={12}>
-          <Grid
-            container
-            justifyContent="center"
-            style={{ marginTop: 30 + "px" }}
-          >
-            <Typography>Page: {page} </Typography>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Grid
-            container
-            justifyContent="center"
-            style={{ marginTop: 10 + "px" }}
-          >
-            <Pagination count={pageCount} page={page} onChange={handleChange} />
-          </Grid>
-        </Grid>
         <AddBusinessDialog open={open} handleClose={handleClose} user={user} />
         <ConfirmationDialog
           open={openConfirmation}
