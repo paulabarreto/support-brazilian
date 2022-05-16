@@ -11,14 +11,14 @@ import Container from "@material-ui/core/Container";
 const LIMIT = 6;
 
 export default function BusinessList({
-  category
+  category,
+  searchField
 }) {
   const [braBusList, setBraBusList] = useState([]);
   const [postData, setPostData] = useState([]);
   const [visible, setVisible] = useState(LIMIT);
   const [hasMore, setHasMore] = useState(true);
 
-  const [searchField, setSearchField] = React.useState("");
   const [filteredList, setFilteredList] = useState([]);
   const [isAPIdataLoading, setAPIdataLoading] = useState(true);
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -49,6 +49,17 @@ export default function BusinessList({
     if (!isLoading) {
       const fetchData2 = setTimeout(async () => {
         brazilianBusinsessList = await getBBs();
+
+        // TODO ADD ERROR HANDLING
+        if (!brazilianBusinsessList) {
+          return 
+        }
+
+        if(searchField !== '') {
+          brazilianBusinsessList = braBusList.filter(bus => {
+            return bus.name.toLowerCase().includes(searchField.toLowerCase())
+          })
+        }
 
         setBraBusList(brazilianBusinsessList);
         setPostData(brazilianBusinsessList.slice(0, LIMIT));

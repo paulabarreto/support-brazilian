@@ -76,9 +76,9 @@ function App() {
     setAPIdataLoading(true);
     let getURL =
       category === 0 ? `${url}` : `${url}/${category}`;
-    if (searchField !== "") {
-      getURL = `${url}/${1}/0/${searchField}`;
-    }
+    // if (searchField !== "") {
+    //   getURL = `${url}/${1}/0/${searchField}`;
+    // }
     let list = [];
 
     if(searchLocation !== undefined) {
@@ -112,7 +112,7 @@ function App() {
       const fetchData = setTimeout(async () => {
         const [brazilianBusinsessList, favouriteBusinessList] =
           await Promise.all([
-            getBBs(1),
+            // getBBs(1),
             favouritesList(user),
           ]);
 
@@ -188,7 +188,7 @@ function App() {
   const handleSearchField = (e) => {
     setSearchField(e);
     setFilter("name");
-    setCategory(e);
+    setCategory(0);
     const filtered = businessList.filter((business) => {
       return business.name.toLowerCase().includes(e.toLowerCase());
     });
@@ -264,15 +264,11 @@ function App() {
                   />
                 </Grid>
               ))} */}
-            {!isAPIdataLoading && filteredList.length === 0 && (
-              <Grid item>
-                <h3>No results to show</h3>
-              </Grid>
-            )}
           </Grid>
         </Grid>
         <BusinessList
           category={category}
+          searchField={searchField}
         />
         <AddBusinessDialog open={open} handleClose={handleClose} user={user} />
         <ConfirmationDialog
