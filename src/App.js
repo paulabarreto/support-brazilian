@@ -76,9 +76,9 @@ function App() {
     setAPIdataLoading(true);
     let getURL =
       category === 0 ? `${url}` : `${url}/${category}`;
-    // if (searchField !== "") {
-    //   getURL = `${url}/${1}/0/${searchField}`;
-    // }
+    if (searchField !== "") {
+      getURL = `${url}/${1}/0/${searchField}`;
+    }
     let list = [];
 
     if(searchLocation !== undefined) {
@@ -112,7 +112,7 @@ function App() {
       const fetchData = setTimeout(async () => {
         const [brazilianBusinsessList, favouriteBusinessList] =
           await Promise.all([
-            // getBBs(1),
+            getBBs(),
             favouritesList(user),
           ]);
 
@@ -267,8 +267,7 @@ function App() {
           </Grid>
         </Grid>
         <BusinessList
-          category={category}
-          searchField={searchField}
+          brazilianBusinessList={filteredList}
         />
         <AddBusinessDialog open={open} handleClose={handleClose} user={user} />
         <ConfirmationDialog
