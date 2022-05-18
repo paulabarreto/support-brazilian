@@ -12,15 +12,11 @@ const LIMIT = 6;
 
 export default function BusinessList({
   brazilianBusinessList,
-  category, 
 }) {
   const [braBusList, setBraBusList] = useState([]);
   const [postData, setPostData] = useState([]);
   const [visible, setVisible] = useState(LIMIT);
   const [hasMore, setHasMore] = useState(true);
-
-  const url = urlService(endpoints.GetBusiness);
-  const usersUrl = urlService(endpoints.GetUsers);
 
   const fetchData = () => {
     const newLimit = visible + LIMIT;
@@ -35,7 +31,7 @@ export default function BusinessList({
 
   useEffect(() => {
     setBraBusList(brazilianBusinessList)
-    setPostData(brazilianBusinessList)
+    setPostData(brazilianBusinessList.slice(0, LIMIT))
   }, [brazilianBusinessList]);
 
   return (
