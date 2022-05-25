@@ -174,16 +174,16 @@ function App() {
 
   const [favesSelected, setFavesSelected] = useState(false);
   const handleShowFavourites = async (selected) => {
-    // if (!isAuthenticated) {
-    //   handleOpenConfirmation();
-    // } else {
+    if (!isAuthenticated) {
+      handleOpenConfirmation();
+    } else {
       setFavesSelected(selected);
       // const filterFaves = !selected ? businessList : businessList.filter(business => business.favourite)
       const filterFaves = !selected
         ? businessList
         : await getFavourites(favouritesUrl, favouriteList);
       setFilteredList(filterFaves);
-    // }
+    }
   };
 
   const handleSearchField = (e) => {
@@ -267,7 +267,7 @@ function App() {
               ))} */}
           </Grid>
         </Grid>
-        {category === 0 ?
+        {category === 0 && !favesSelected ?
           <BusinessListInfiniteLoad
             brazilianBusinessList={filteredList}
           />

@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 
 export default function BusinessList({ brazilianBusinessList }) {
+  console.log("🚀 ~ file: BusinessList.js ~ line 7 ~ BusinessList ~ brazilianBusinessList", brazilianBusinessList)
   return (
     <Container maxWidth="lg" style={{ marginTop: "30px" }}>
       <Grid item xs={12}>
