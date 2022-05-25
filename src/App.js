@@ -11,6 +11,7 @@ import React, { useState, useEffect } from "react";
 import * as endpoints from "./endpoints";
 import ConfirmationDialog from "./components/ConfirmationDialog";
 import ContactDialog from "./components/ContactDialog";
+import BusinessListInfiniteLoad from "./components/BusinessListInfiniteLoad";
 import BusinessList from "./components/BusinessList";
 import Typography from "@material-ui/core/Typography";
 import Pagination from "@material-ui/lab/Pagination";
@@ -173,16 +174,16 @@ function App() {
 
   const [favesSelected, setFavesSelected] = useState(false);
   const handleShowFavourites = async (selected) => {
-    if (!isAuthenticated) {
-      handleOpenConfirmation();
-    } else {
+    // if (!isAuthenticated) {
+    //   handleOpenConfirmation();
+    // } else {
       setFavesSelected(selected);
       // const filterFaves = !selected ? businessList : businessList.filter(business => business.favourite)
       const filterFaves = !selected
         ? businessList
         : await getFavourites(favouritesUrl, favouriteList);
       setFilteredList(filterFaves);
-    }
+    // }
   };
 
   const handleSearchField = (e) => {
@@ -252,7 +253,7 @@ function App() {
                   </Stack>
                 </Grid>
               ))}
-            {/* {!isAPIdataLoading &&
+            {/* {favesSelected && !isAPIdataLoading &&
               filteredList.length > 0 &&
               filteredList.map((business, index) => (
                 <Grid item>
@@ -266,9 +267,15 @@ function App() {
               ))} */}
           </Grid>
         </Grid>
-        <BusinessList
-          brazilianBusinessList={filteredList}
-        />
+        {category === 0 ?
+          <BusinessListInfiniteLoad
+            brazilianBusinessList={filteredList}
+          />
+          :
+          <BusinessList
+            brazilianBusinessList={filteredList}
+          />
+        }
         <AddBusinessDialog open={open} handleClose={handleClose} user={user} />
         <ConfirmationDialog
           open={openConfirmation}

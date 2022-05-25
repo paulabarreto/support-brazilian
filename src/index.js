@@ -6,7 +6,6 @@ import MyMapComponent from './components/Map';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Auth0ProviderWithHistory from "./auth/auth0-provider-with-history";
-import InfiniteScroll from './components/BusinessList';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,7 +13,6 @@ ReactDOM.render(
       <Auth0ProviderWithHistory>
         <Routes>
           <Route exact path='/' element={<App/>} />
-          <Route path='/scroll' element={<InfiniteScroll/>} />
           <Route path='/:searchLocation' element={<App/>} />
           <Route path='map' element={<MyMapComponent authed={true}/>} />
         </Routes>
