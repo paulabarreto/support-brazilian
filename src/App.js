@@ -78,13 +78,13 @@ function App() {
     let getURL =
       category === 0 ? `${url}` : `${url}/${category}`;
     if (searchField !== "") {
-      getURL = `${url}/${1}/0/${searchField}`;
+      getURL = `${url}/0/${searchField}`;
     }
     let list = [];
 
     if(searchLocation !== undefined) {
       setSearchLocation(true);
-      list = await getBusiness(`${urlLocationSearch}/${1}/${searchLocation}`);
+      list = await getBusiness(`${urlLocationSearch}/${searchLocation}`);
       return list
     }
 
@@ -267,7 +267,7 @@ function App() {
               ))} */}
           </Grid>
         </Grid>
-        {category === 0 && !favesSelected ?
+        {category === 0 && !favesSelected && !searchLocation && !searchField ?
           <BusinessListInfiniteLoad
             brazilianBusinessList={filteredList}
           />
@@ -297,5 +297,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;
