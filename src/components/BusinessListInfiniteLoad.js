@@ -40,20 +40,10 @@ export default function BusinessListInfiniteLoad({
       dataLength={postData.length} //This is important field to render the next data
       next={fetchData}
       hasMore={hasMore}
-      endMessage={
-        <p style={{ textAlign: "center" }}>
-          <b>Yay! You have seen it all</b>
-        </p>
-      }
+      style={{ overflow: 'visible' }}
       refreshFunction={fetchData}
       pullDownToRefresh
       pullDownToRefreshThreshold={7}
-      pullDownToRefreshContent={
-        <h3 style={{ textAlign: "center" }}>&#8595; Pull down to refresh</h3>
-      }
-      releaseToRefreshContent={
-        <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
-      }
     >
       <Container maxWidth="lg" style={{ marginTop: "30px" }}>
         <Grid item xs={12}>
