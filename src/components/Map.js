@@ -222,14 +222,21 @@ export default function MyMapComponent() {
               {activeMarker === _ids[0] ? (
                 <InfoWindow onCloseClick={() => setActiveMarker(null)}>
                   <div>
-                    <Link to={`/${locations[0]}`}>
-                      See full list for {locations[0]}
-                    </Link>
-                    <div>
-                      There are {names.length} businesses in this location,
+                    <h4>{locations[0]}</h4>
+                    {names.length === 1 ? 
+                      <p>There is 1 Brazilian business in this locaction, but we don't
+                       have the complete address. 
+                      </p>
+                      :
+                      <p>There are {names.length} businesses in this location, but we don't have their complete address</p>
+                    }
+                    <div style={{marginBottom: 10 + 'px'}}>
+                      <Link to={`/${locations[0]}`}>
+                        Click to see full list
+                      </Link>
                     </div>
-                    <div>but we don't have their complete address</div>
                   </div>
+
                 </InfoWindow>
               ) : null}
             </Marker>
