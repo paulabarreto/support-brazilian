@@ -45,7 +45,6 @@ export default function MediaCard(props) {
 
   const classes = useStyles();
   const business = props.business;
-
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {

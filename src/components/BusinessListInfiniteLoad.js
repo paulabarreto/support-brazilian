@@ -12,6 +12,7 @@ const LIMIT = 6;
 
 export default function BusinessListInfiniteLoad({
   brazilianBusinessList,
+  isAdmin
 }) {
   const [braBusList, setBraBusList] = useState([]);
   const [postData, setPostData] = useState([]);
@@ -51,7 +52,7 @@ export default function BusinessListInfiniteLoad({
             {postData.map((card, index) => {
               return (
                 <Grid item>
-                  <MediaCard business={card} key={index} />
+                  <MediaCard isAdmin={isAdmin} business={card} key={index} />
                 </Grid>
               );
             })}

@@ -1,7 +1,6 @@
 import "@fontsource/roboto";
 import AppBarMobile from "./components/appBar/AppBarMobile";
 import AppBarDesktop from "./components/appBar/AppBarDesktop";
-import MediaCard from "./components/Card";
 import AddBusinessDialog from "./components/AddBusinessDialog";
 import { useAuth0 } from "@auth0/auth0-react";
 import Grid from "@material-ui/core/Grid";
@@ -242,7 +241,7 @@ function App() {
         />
       </div>
 
-      <Container maxWidth="lg" style={{marginTop: '100px'}}>
+      <Container maxWidth="lg" style={{marginTop: '100px', marginBottom: '50px'}}>
         <Grid item xs={12}>
           <Grid container justifyContent="center" spacing={spacing}>
             {isAPIdataLoading &&
@@ -253,23 +252,12 @@ function App() {
                   </Stack>
                 </Grid>
               ))}
-            {/* {favesSelected && !isAPIdataLoading &&
-              filteredList.length > 0 &&
-              filteredList.map((business, index) => (
-                <Grid item>
-                  <MediaCard
-                    business={business}
-                    key={index}
-                    isAdmin={isAdmin}
-                    openConfirmation={handleOpenConfirmation}
-                  />
-                </Grid>
-              ))} */}
           </Grid>
         </Grid>
         {category === 0 && !favesSelected && !searchLocation && !searchField ?
           <BusinessListInfiniteLoad
             brazilianBusinessList={filteredList}
+            isAdmin={isAdmin}
           />
           :
           <BusinessList
